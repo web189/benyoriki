@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BenyoRiki — Digital Universe 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon.png">
+</head>
+<body>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particles" style="position:fixed;top:0;left:0;z-index:0;pointer-events:none;opacity:.3"></canvas>
+
+<!-- NAV -->
+<nav class="navbar" id="navbar">
+  <div class="nav-logo">
+    <span class="logo-icon">◈</span>
+    <span>BenyoRiki</span>
+  </div>
+  <div class="nav-links" id="navLinks">
+    <a href="#social" class="nav-link active" data-section="social">Sosial</a>
+    <a href="#music" class="nav-link" data-section="music">Musik</a>
+    <a href="#tools" class="nav-link" data-section="tools">Tools</a>
+    <a href="#game" class="nav-link" data-section="game">Game</a>
+  </div>
+  <div class="nav-right">
+    <button class="auth-btn" id="navAuthBtn" onclick="openAuthModal()">
+      <span class="auth-icon">👤</span>
+      <span id="navAuthLabel">Login</span>
+    </button>
+    <button class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal-box" id="authBox">
+    <button class="modal-close" onclick="closeAuthModal()">✕</button>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Masuk</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Daftar</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="formLogin">
+      <div class="auth-header">
+        <div class="auth-avatar-big">◈</div>
+        <h2>Selamat Datang</h2>
+        <p>Masuk ke Digital Universe</p>
+      </div>
+      <div class="form-group">
+        <label>Username / Email</label>
+        <input type="text" id="loginUser" placeholder="Masukkan username...">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-pw">
+          <input type="password" id="loginPass" placeholder="Masukkan password...">
+          <button class="eye-btn" onclick="togglePw('loginPass',this)">👁</button>
+        </div>
+      </div>
+      <div class="form-check">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">Ingat saya</label>
+      </div>
+      <div class="auth-err" id="loginErr"></div>
+      <button class="auth-submit" onclick="doLogin()">Masuk <span>→</span></button>
+      <div class="auth-divider"><span>atau</span></div>
+      <div class="social-login-btns">
+        <button class="sl-btn google" onclick="socialLogin('Google')"><span>G</span> Google</button>
+        <button class="sl-btn github" onclick="socialLogin('GitHub')"><span>⚙</span> GitHub</button>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="formRegister" style="display:none">
+      <div class="auth-header">
+        <div class="auth-avatar-big">✦</div>
+        <h2>Buat Akun</h2>
+        <p>Bergabung di Digital Universe</p>
+      </div>
+      <div class="form-group">
+        <label>Nama Lengkap</label>
+        <input type="text" id="regName" placeholder="Nama kamu...">
+      </div>
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="regUser" placeholder="username unik...">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="email@kamu.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-pw">
+          <input type="password" id="regPass" placeholder="Min. 6 karakter...">
+          <button class="eye-btn" onclick="togglePw('regPass',this)">👁</button>
+        </div>
+        <div class="pw-strength" id="pwStrength"></div>
+      </div>
+      <div class="auth-err" id="regErr"></div>
+      <button class="auth-submit" onclick="doRegister()">Daftar Sekarang <span>→</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD MUSIC MODAL (Login Required) -->
+<div class="modal-overlay" id="addMusicModal">
+  <div class="modal-box wide-modal">
+    <button class="modal-close" onclick="closeAddMusic()">✕</button>
+    <div class="auth-header">
+      <div class="auth-avatar-big">🎵</div>
+      <h2>Tambah Musik</h2>
+      <p>Tambahkan lagu ke database</p>
+    </div>
+    <div class="add-music-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Judul Lagu <span class="req">*</span></label>
+          <input type="text" id="am_title" placeholder="Nama lagu...">
+        </div>
+        <div class="form-group">
+          <label>Artis / Band <span class="req">*</span></label>
+          <input type="text" id="am_artist" placeholder="Nama artis...">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Genre <span class="req">*</span></label>
+          <select id="am_genre">
+            <option value="">-- Pilih Genre --</option>
+            <option value="pop">Pop</option>
+            <option value="rock">Rock</option>
+            <option value="jazz">Jazz</option>
+            <option value="rnb">R&B / Soul</option>
+            <option value="hiphop">Hip-Hop / Rap</option>
+            <option value="dangdut">Dangdut</option>
+            <option value="keroncong">Keroncong</option>
+            <option value="indie">Indie</option>
+            <option value="electronic">Electronic / EDM</option>
+            <option value="classical">Klasik</option>
+            <option value="folk">Folk / Acoustic</option>
+            <option value="metal">Metal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Folder / Kategori</label>
+          <select id="am_folder">
+            <option value="Hits Indonesia">🇮🇩 Hits Indonesia</option>
+            <option value="Hits Dunia">🌍 Hits Dunia</option>
+            <option value="Old School">📼 Old School</option>
+            <option value="Viral 2025-2026">🔥 Viral 2025-2026</option>
+            <option value="Slow & Santai">🌙 Slow & Santai</option>
+            <option value="Semangat & Energi">⚡ Semangat & Energi</option>
+            <option value="Cinta & Galau">❤️ Cinta & Galau</option>
+            <option value="Rohani">🙏 Rohani</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tahun Rilis</label>
+          <input type="number" id="am_year" placeholder="2024" min="1900" max="2026">
+        </div>
+        <div class="form-group">
+          <label>Durasi (menit:detik)</label>
+          <input type="text" id="am_duration" placeholder="3:45">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>URL Audio (MP3 / Stream)</label>
+        <input type="url" id="am_url" placeholder="https://... atau kosongkan">
+      </div>
+      <div class="form-group">
+        <label>URL Cover Art</label>
+        <input type="url" id="am_cover" placeholder="https://...jpg (opsional)">
+      </div>
+      <div class="form-group">
+        <label>Deskripsi / Keterangan</label>
+        <textarea id="am_desc" rows="2" placeholder="Tentang lagu ini..."></textarea>
+      </div>
+      <div class="am-tags">
+        <label>Tag Tambahan</label>
+        <div class="tag-picker" id="tagPicker">
+          <span class="tag-opt" onclick="toggleTag(this,'#hits')"><span>#</span>hits</span>
+          <span class="tag-opt" onclick="toggleTag(this,'#santai')"><span>#</span>santai</span>
+          <span class="tag-opt" onclick="toggleTag(this,'#semangat')"><span>#</span>semangat</span>
+          <span class="tag-opt" onclick="toggleTag(this,'#galau')"><span>#</span>galau</span>
+          <span class="tag-opt" onclick="toggleTag(this,'#nostalgia')"><span>#</span>nostalgia</span>
+          <span class="tag-opt" onclick="toggleTag(this,'#viral')"><span>#</span>viral</span>
+          <span class="tag-opt" onclick="toggleTag(this,'#lofi')"><span>#</span>lofi</span>
+          <span class="tag-opt" onclick="toggleTag(this,'#upbeat')"><span>#</span>upbeat</span>
+        </div>
+      </div>
+      <div class="auth-err" id="amErr"></div>
+      <button class="auth-submit" onclick="submitAddMusic()">💾 Simpan ke Database <span>→</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="grid-lines"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Digital Universe 2026 ✦</div>
+    <h1 class="hero-title">Beny<span class="accent">o</span>Riki</h1>
+    <p class="hero-sub">Kreator Konten · Musisi · Inovator Digital</p>
+    <div class="hero-cta">
+      <a href="#social" class="hero-btn primary">Jelajahi ↓</a>
+      <a href="#music" class="hero-btn secondary">🎵 Dengarkan Musik</a>
+    </div>
+    <div class="hero-scroll">
+      <div class="scroll-dot"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SOSIAL MEDIA ===== -->
+<section class="section" id="social">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">01 / Sosial</span>
+      <h2 class="section-title">Media Sosial</h2>
+      <p class="section-desc">Ikuti perjalanan kreatif di berbagai platform</p>
+    </div>
+    <div class="social-grid">
+
+      <!-- Instagram -->
+      <div class="social-card ig-card" onclick="window.open('https://www.instagram.com/benyoriki','_blank')">
+        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
+        <div class="sc-top">
+          <div class="sc-platform-icon">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+          </div>
+          <span class="sc-platform-name">Instagram</span>
+          <span class="sc-live-badge">AKTIF</span>
+        </div>
+        <div class="sc-avatar"><div class="sc-avatar-ring"><div class="sc-avatar-inner"><span>📸</span></div></div></div>
+        <div class="sc-info">
+          <h3 class="sc-username">@benyoriki</h3>
+          <p class="sc-bio">Berbagi momen kehidupan, kreativitas, dan inspirasi setiap hari ✨</p>
+        </div>
+        <div class="sc-stats">
+          <div class="sc-stat"><span class="sc-stat-num">∞</span><span class="sc-stat-label">Posts</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">★</span><span class="sc-stat-label">Followers</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">♡</span><span class="sc-stat-label">Likes</span></div>
+        </div>
+        <div class="sc-preview">
+          <div class="sc-post" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743)"></div>
+          <div class="sc-post" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb)"></div>
+          <div class="sc-post" style="background:linear-gradient(135deg,#ffecd2,#fcb69f)"></div>
+          <div class="sc-post" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb)"></div>
+        </div>
+        <button class="sc-btn ig-btn">Kunjungi Profile <span>→</span></button>
+      </div>
+
+      <!-- TikTok -->
+      <div class="social-card tt-card" onclick="window.open('https://www.tiktok.com/@benyoriki','_blank')">
+        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
+        <div class="sc-top">
+          <div class="sc-platform-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg>
+          </div>
+          <span class="sc-platform-name">TikTok</span>
+          <span class="sc-live-badge tt-live">VIRAL</span>
+        </div>
+        <div class="sc-avatar"><div class="sc-avatar-ring tt-ring"><div class="sc-avatar-inner"><span>🎵</span></div></div></div>
+        <div class="sc-info">
+          <h3 class="sc-username">@benyoriki</h3>
+          <p class="sc-bio">Video kreatif, hiburan, dan konten viral yang menghibur setiap hari 🎬</p>
+        </div>
+        <div class="sc-stats">
+          <div class="sc-stat"><span class="sc-stat-num">▶</span><span class="sc-stat-label">Videos</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">★</span><span class="sc-stat-label">Followers</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">♡</span><span class="sc-stat-label">Likes</span></div>
+        </div>
+        <div class="sc-preview tt-preview">
+          <div class="sc-reel" style="background:linear-gradient(160deg,#000,#1a1a2e)"><div class="reel-play">▶</div></div>
+          <div class="sc-reel" style="background:linear-gradient(160deg,#0f0c29,#302b63)"><div class="reel-play">▶</div></div>
+          <div class="sc-reel" style="background:linear-gradient(160deg,#1a1a2e,#16213e)"><div class="reel-play">▶</div></div>
+        </div>
+        <button class="sc-btn tt-btn">Tonton Video <span>→</span></button>
+      </div>
+
+      <!-- Facebook -->
+      <div class="social-card fb-card" onclick="window.open('https://web.facebook.com/benyo.hermawan','_blank')">
+        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
+        <div class="sc-top">
+          <div class="sc-platform-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </div>
+          <span class="sc-platform-name">Facebook</span>
+          <span class="sc-live-badge fb-live">AKTIF</span>
+        </div>
+        <div class="sc-avatar"><div class="sc-avatar-ring fb-ring"><div class="sc-avatar-inner"><span>👤</span></div></div></div>
+        <div class="sc-info">
+          <h3 class="sc-username">Benyo Hermawan</h3>
+          <p class="sc-bio">Terhubung, berbagi cerita, dan membangun komunitas bersama 🤝</p>
+        </div>
+        <div class="sc-stats">
+          <div class="sc-stat"><span class="sc-stat-num">✦</span><span class="sc-stat-label">Posts</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">★</span><span class="sc-stat-label">Friends</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">♡</span><span class="sc-stat-label">Likes</span></div>
+        </div>
+        <div class="sc-timeline">
+          <div class="timeline-post"><div class="tl-dot"></div><div class="tl-content"><div class="tl-bar" style="width:80%"></div><div class="tl-bar" style="width:60%"></div></div></div>
+          <div class="timeline-post"><div class="tl-dot"></div><div class="tl-content"><div class="tl-bar" style="width:70%"></div><div class="tl-bar" style="width:45%"></div></div></div>
+        </div>
+        <button class="sc-btn fb-btn">Lihat Facebook <span>→</span></button>
+      </div>
+
+      <!-- YouTube -->
+      <div class="social-card yt-card" onclick="window.open('https://www.youtube.com/@rikihermawan8103','_blank')">
+        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
+        <div class="sc-top">
+          <div class="sc-platform-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff" opacity=".9"/></svg>
+          </div>
+          <span class="sc-platform-name">YouTube</span>
+          <span class="sc-live-badge yt-live">CHANNEL</span>
+        </div>
+        <div class="sc-avatar"><div class="sc-avatar-ring yt-ring"><div class="sc-avatar-inner"><span>🎬</span></div></div></div>
+        <div class="sc-info">
+          <h3 class="sc-username">@rikihermawan8103</h3>
+          <p class="sc-bio">Video berkualitas, tutorial, dan hiburan terbaik untuk semua kalangan 🎥</p>
+        </div>
+        <div class="sc-stats">
+          <div class="sc-stat"><span class="sc-stat-num">▶</span><span class="sc-stat-label">Videos</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">★</span><span class="sc-stat-label">Subs</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">♡</span><span class="sc-stat-label">Views</span></div>
+        </div>
+        <div class="sc-thumbnails">
+          <div class="sc-thumb" style="background:linear-gradient(135deg,#ff0000,#880000)"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:1.5rem;color:rgba(255,255,255,.8)">▶</div></div>
+          <div class="sc-thumb" style="background:linear-gradient(135deg,#cc0000,#ff4444)"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:1.5rem;color:rgba(255,255,255,.8)">▶</div></div>
+        </div>
+        <button class="sc-btn yt-btn">Tonton Channel <span>→</span></button>
+      </div>
+
+      <!-- Website Card -->
+      <div class="social-card web-card" onclick="window.open('https://jasadaud.online/','_blank')">
+        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
+        <div class="sc-top">
+          <div class="sc-platform-icon" style="color:#00d4aa">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <span class="sc-platform-name">Website</span>
+          <span class="sc-live-badge" style="background:#00d4aa22;color:#00d4aa">LIVE</span>
+        </div>
+        <div class="sc-avatar"><div class="sc-avatar-ring" style="background:linear-gradient(135deg,#00d4aa,#0066ff)"><div class="sc-avatar-inner"><span>🌐</span></div></div></div>
+        <div class="sc-info">
+          <h3 class="sc-username">jasadaud.online</h3>
+          <p class="sc-bio">Website resmi dengan berbagai fitur digital dan konten eksklusif 💻</p>
+        </div>
+        <div class="sc-stats">
+          <div class="sc-stat"><span class="sc-stat-num">✦</span><span class="sc-stat-label">Pages</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">⚡</span><span class="sc-stat-label">Speed</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">🔒</span><span class="sc-stat-label">Secure</span></div>
+        </div>
+        <div class="web-features">
+          <div class="wf-item">🎵 Music Player</div>
+          <div class="wf-item">🎮 Mini Games</div>
+          <div class="wf-item">🧮 Tools</div>
+          <div class="wf-item">📱 Responsive</div>
+        </div>
+        <button class="sc-btn" style="background:linear-gradient(135deg,#00d4aa,#0066ff);color:#fff">Kunjungi Website <span>→</span></button>
+      </div>
+
+      <!-- WhatsApp -->
+      <div class="social-card wa-card" onclick="window.open('https://wa.me/62','_blank')">
+        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
+        <div class="sc-top">
+          <div class="sc-platform-icon" style="color:#25d366">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </div>
+          <span class="sc-platform-name">WhatsApp</span>
+          <span class="sc-live-badge" style="background:#25d36622;color:#25d366">CHAT</span>
+        </div>
+        <div class="sc-avatar"><div class="sc-avatar-ring" style="background:linear-gradient(135deg,#25d366,#128c7e)"><div class="sc-avatar-inner"><span>💬</span></div></div></div>
+        <div class="sc-info">
+          <h3 class="sc-username">Benyo Riki</h3>
+          <p class="sc-bio">Hubungi langsung via WhatsApp untuk kolaborasi dan kerjasama 🤝</p>
+        </div>
+        <div class="sc-stats">
+          <div class="sc-stat"><span class="sc-stat-num">💬</span><span class="sc-stat-label">Chat</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">⚡</span><span class="sc-stat-label">Respon</span></div>
+          <div class="sc-stat"><span class="sc-stat-num">✓</span><span class="sc-stat-label">Online</span></div>
+        </div>
+        <div class="wa-status">
+          <div class="wa-dot"></div>
+          <span>Biasanya membalas dalam 1 jam</span>
+        </div>
+        <button class="sc-btn" style="background:linear-gradient(135deg,#25d366,#128c7e);color:#fff">Kirim Pesan <span>→</span></button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== MUSIC PLAYER ===== -->
+<section class="section music-section" id="music">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">02 / Musik</span>
+      <h2 class="section-title">Music Universe</h2>
+      <p class="section-desc">Database musik online · Dengarkan kapan saja</p>
+    </div>
+
+    <!-- Music Toolbar -->
+    <div class="music-toolbar">
+      <div class="music-search-wrap">
+        <span class="ms-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Cari judul, artis, genre...">
+      </div>
+      <div class="folder-tabs" id="folderTabs">
+        <button class="ft active" onclick="filterFolder('all',this)">🎵 Semua</button>
+        <button class="ft" onclick="filterFolder('Hits Indonesia',this)">🇮🇩 Indonesia</button>
+        <button class="ft" onclick="filterFolder('Hits Dunia',this)">🌍 Dunia</button>
+        <button class="ft" onclick="filterFolder('Old School',this)">📼 Old School</button>
+        <button class="ft" onclick="filterFolder('Viral 2025-2026',this)">🔥 Viral</button>
+        <button class="ft" onclick="filterFolder('Slow & Santai',this)">🌙 Santai</button>
+        <button class="ft" onclick="filterFolder('Cinta & Galau',this)">❤️ Galau</button>
+      </div>
+      <div class="genre-filter">
+        <button class="pt active" onclick="filterPlaylist('all')">All</button>
+        <button class="pt" onclick="filterPlaylist('pop')">Pop</button>
+        <button class="pt" onclick="filterPlaylist('rock')">Rock</button>
+        <button class="pt" onclick="filterPlaylist('jazz')">Jazz</button>
+        <button class="pt" onclick="filterPlaylist('rnb')">R&B</button>
+        <button class="pt" onclick="filterPlaylist('hiphop')">HipHop</button>
+        <button class="pt" onclick="filterPlaylist('dangdut')">Dangdut</button>
+        <button class="pt" onclick="filterPlaylist('indie')">Indie</button>
+      </div>
+      <button class="add-music-btn" onclick="requireLoginForMusic()" id="addMusicBtn">
+        <span>+</span> Tambah Musik
+      </button>
+    </div>
+
+    <div class="music-wrapper">
+      <!-- Sidebar: Playlist -->
+      <div class="music-sidebar">
+        <div class="sidebar-header">
+          <span>Playlist</span>
+          <span class="track-count" id="trackCount">0 lagu</span>
+        </div>
+        <div class="track-list" id="trackList"></div>
+      </div>
+
+      <!-- Main Player -->
+      <div class="music-main">
+        <div class="now-playing">
+          <div class="np-cover" id="npCover">
+            <div class="np-cover-inner" id="npCoverInner">
+              <span id="npEmoji">🎵</span>
+            </div>
+            <div class="np-cover-glow" id="npGlow"></div>
+            <div class="vinyl-ring"></div>
+          </div>
+          <div class="np-info">
+            <div class="np-tag">Sedang Diputar</div>
+            <h3 id="npTitle">Pilih Lagu</h3>
+            <p id="npArtist">—</p>
+            <div class="np-badges">
+              <span class="np-badge" id="npGenre">—</span>
+              <span class="np-badge" id="npYear">—</span>
+              <span class="np-badge folder-badge" id="npFolder">—</span>
+            </div>
+            <div class="np-likes">
+              <button class="like-btn" id="likeBtn" onclick="toggleLike()">♡ Suka</button>
+              <button class="share-btn" onclick="shareTrack()">⟳ Bagikan</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="player-controls">
+          <div class="progress-area">
+            <span class="time" id="currentTime">0:00</span>
+            <div class="progress-bar" id="progressBar" onclick="seekTo(event)">
+              <div class="progress-fill" id="progressFill"></div>
+              <div class="progress-thumb" id="progressThumb"></div>
+            </div>
+            <span class="time" id="totalTime">0:00</span>
+          </div>
+          <div class="ctrl-buttons">
+            <button class="ctrl-btn" id="shuffleBtn" onclick="toggleShuffle()" title="Acak">⇄</button>
+            <button class="ctrl-btn" onclick="prevTrack()" title="Sebelumnya">⏮</button>
+            <button class="ctrl-play" id="playBtn" onclick="togglePlay()">▶</button>
+            <button class="ctrl-btn" onclick="nextTrack()" title="Berikutnya">⏭</button>
+            <button class="ctrl-btn" id="repeatBtn" onclick="toggleRepeat()" title="Ulangi">↺</button>
+          </div>
+          <div class="volume-area">
+            <button class="mute-btn" onclick="toggleMute()" id="muteBtn">🔈</button>
+            <div class="volume-bar">
+              <input type="range" id="volumeSlider" min="0" max="100" value="70" oninput="setVolume(this.value)">
+            </div>
+            <span>🔊</span>
+          </div>
+        </div>
+
+        <!-- URL / Stream Input -->
+        <div class="stream-box">
+          <div class="stream-title">📻 Tambah Stream / Radio Online</div>
+          <div class="stream-input-row">
+            <input type="url" id="urlInput" placeholder="URL audio stream atau radio online...">
+            <button onclick="addFromUrl()" class="stream-btn">Putar</button>
+          </div>
+          <div class="stream-presets">
+            <button class="sp-btn" onclick="playRadio('https://stream.rri.co.id/rri-proV1/live','RRI Pro 1')">📻 RRI Pro 1</button>
+            <button class="sp-btn" onclick="playRadio('https://stream.rri.co.id/rri-proV2/live','RRI Pro 2')">📻 RRI Pro 2</button>
+            <button class="sp-btn" onclick="playRadio('','Prambors')">🎵 Prambors</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Panel -->
+      <div class="music-visual">
+        <div class="vis-section">
+          <div class="vis-header">
+            <span>⚡ Equalizer</span>
+            <div class="eq-mode-btns">
+              <button class="eq-mode active" onclick="setEqMode('bars',this)">Bars</button>
+              <button class="eq-mode" onclick="setEqMode('wave',this)">Wave</button>
+              <button class="eq-mode" onclick="setEqMode('circle',this)">Circle</button>
+            </div>
+          </div>
+          <div class="equalizer" id="equalizer"></div>
+          <canvas id="waveCanvas" style="display:none;width:100%;height:80px"></canvas>
+        </div>
+
+        <div class="vis-section">
+          <div class="vis-header">⏭ Antrian Berikutnya</div>
+          <div class="queue-list" id="queueList"></div>
+        </div>
+
+        <div class="vis-section">
+          <div class="vis-header">🏆 Top Diputar</div>
+          <div class="top-played" id="topPlayed"></div>
+        </div>
+
+        <div class="vis-section">
+          <div class="vis-header">❤️ Disukai</div>
+          <div class="liked-list" id="likedList"><div style="color:var(--text2);font-size:.8rem;padding:.5rem">Belum ada lagu yang disukai</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TOOLS ===== -->
+<section class="section tools-section" id="tools">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">03 / Tools</span>
+      <h2 class="section-title">Kalkulator & Kalender</h2>
+      <p class="section-desc">Alat bantu sehari-hari yang selalu kamu butuhkan</p>
+    </div>
+    <div class="tools-grid">
+      <!-- KALKULATOR -->
+      <div class="tool-box calc-box">
+        <div class="tool-title">🧮 Kalkulator Scientific</div>
+        <div class="calc-display">
+          <div class="calc-expr" id="calcExpr"></div>
+          <div class="calc-result" id="calcResult">0</div>
+        </div>
+        <div class="calc-mode-tabs">
+          <button class="calc-mode active" onclick="setCalcMode('basic',this)">Basic</button>
+          <button class="calc-mode" onclick="setCalcMode('sci',this)">Scientific</button>
+        </div>
+        <div class="calc-buttons" id="calcButtons">
+          <button class="cb func" onclick="calcFunc('AC')">AC</button>
+          <button class="cb func" onclick="calcFunc('+/-')">+/-</button>
+          <button class="cb func" onclick="calcFunc('%')">%</button>
+          <button class="cb op" onclick="calcOp('÷')">÷</button>
+          <button class="cb num" onclick="calcNum('7')">7</button>
+          <button class="cb num" onclick="calcNum('8')">8</button>
+          <button class="cb num" onclick="calcNum('9')">9</button>
+          <button class="cb op" onclick="calcOp('×')">×</button>
+          <button class="cb num" onclick="calcNum('4')">4</button>
+          <button class="cb num" onclick="calcNum('5')">5</button>
+          <button class="cb num" onclick="calcNum('6')">6</button>
+          <button class="cb op" onclick="calcOp('-')">−</button>
+          <button class="cb num" onclick="calcNum('1')">1</button>
+          <button class="cb num" onclick="calcNum('2')">2</button>
+          <button class="cb num" onclick="calcNum('3')">3</button>
+          <button class="cb op" onclick="calcOp('+')">+</button>
+          <button class="cb num zero" onclick="calcNum('0')">0</button>
+          <button class="cb num" onclick="calcNum('.')">.</button>
+          <button class="cb eq" onclick="calcEquals()">=</button>
+        </div>
+        <div class="calc-history" id="calcHistory"><div class="ch-label">Riwayat</div></div>
+      </div>
+
+      <!-- KALENDER -->
+      <div class="tool-box cal-box">
+        <div class="tool-title">📅 Kalender Indonesia 2026</div>
+        <div class="calendar-nav">
+          <button onclick="changeMonth(-1)">‹</button>
+          <div>
+            <select id="monthSelect" onchange="changeMonthSelect()"></select>
+            <select id="yearSelect" onchange="changeYearSelect()"></select>
+          </div>
+          <button onclick="changeMonth(1)">›</button>
+        </div>
+        <div class="calendar-grid">
+          <div class="cal-day-header">Min</div>
+          <div class="cal-day-header">Sen</div>
+          <div class="cal-day-header">Sel</div>
+          <div class="cal-day-header">Rab</div>
+          <div class="cal-day-header">Kam</div>
+          <div class="cal-day-header">Jum</div>
+          <div class="cal-day-header">Sab</div>
+          <div id="calendarDays"></div>
+        </div>
+        <div class="holiday-list" id="holidayList"></div>
+        <!-- Add event -->
+        <div class="cal-add-event">
+          <input type="text" id="eventInput" placeholder="Tambah pengingat tanggal ini...">
+          <button onclick="addEvent()">+ Tambah</button>
+        </div>
+        <div class="event-list" id="eventList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GAME ===== -->
+<section class="section game-section" id="game">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">04 / Game</span>
+      <h2 class="section-title">Onet Klasik</h2>
+      <p class="section-desc">Temukan dan cocokkan pasangan gambar yang sama</p>
+    </div>
+    <div class="game-wrapper">
+      <div class="game-hud">
+        <div class="hud-item"><span class="hud-label">Skor</span><span class="hud-value" id="gameScore">0</span></div>
+        <div class="hud-item"><span class="hud-label">Waktu</span><span class="hud-value" id="gameTimer">120</span></div>
+        <div class="hud-item"><span class="hud-label">Level</span><span class="hud-value" id="gameLevel">1</span></div>
+        <div class="hud-item"><span class="hud-label">Hint</span><span class="hud-value" id="gameHints">3</span></div>
+        <div class="hud-item"><span class="hud-label">Best</span><span class="hud-value" id="gameBest">0</span></div>
+      </div>
+      <div class="game-controls">
+        <button class="game-btn" onclick="startGame()">▶ Mulai</button>
+        <button class="game-btn secondary" onclick="useHint()">💡 Hint</button>
+        <button class="game-btn secondary" onclick="shuffleBoard()">🔀 Acak</button>
+        <button class="game-btn secondary" onclick="pauseGame()">⏸ Pause</button>
+      </div>
+      <div class="game-board" id="gameBoard"></div>
+      <div class="game-msg" id="gameMsg"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-logo">◈ BenyoRiki</div>
+    <p class="footer-sub">Digital Universe — 2026</p>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/benyoriki" target="_blank">IG</a>
+      <a href="https://www.tiktok.com/@benyoriki" target="_blank">TT</a>
+      <a href="https://web.facebook.com/benyo.hermawan" target="_blank">FB</a>
+      <a href="https://www.youtube.com/@rikihermawan8103" target="_blank">YT</a>
+      <a href="https://jasadaud.online/" target="_blank">🌐</a>
+    </div>
+    <div class="footer-stats">
+      <span>🎵 <span id="totalSongs">0</span> Lagu</span>
+      <span>👥 <span id="onlineUsers">—</span> Online</span>
+      <span>⚡ Digital Universe v2026</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<!-- LINE CANVAS for Onet -->
+<canvas id="lineCanvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:9999;"></canvas>
+<audio id="audioPlayer"></audio>
+
+<script src="app.js"></script>
+</body>
+</html>
