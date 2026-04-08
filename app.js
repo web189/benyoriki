@@ -324,13 +324,64 @@ function renderLiked(){ const ll=document.getElementById('likedList');if(!ll)ret
 window.shareTrack=function(){ const t=TRACKS[currentTrackIdx];if(!t)return;const text=`🎵 Dengerin "${t.title}" by ${t.artist} di BenyoRiki!\n🌐 https://jasadaud.online/`;if(navigator.clipboard)navigator.clipboard.writeText(text).then(()=>showToast('🔗 Link disalin!','success'));else showToast('🎵 '+t.title,'success'); };
 
 // ===== FILE UPLOAD HANDLERS =====
-window.handleAudioFile=function(input){ const file=input.files[0];if(!file)return;if(file.size>50*1024*1024){setAudioStatus('❌ File terlalu besar! Maks 50MB','error');input.value='';return;} const ext=file.name.split('.').pop().toLowerCase();const allowedExt=['mp3','ogg','wav','m4a'];if(!allowedExt.includes(ext)&&!file.type.startsWith('audio/')){setAudioStatus('❌ Format tidak didukung! MP3/OGG/WAV/M4A','error');input.value='';return;} pendingAudioFile=file;uploadedAudioUrl='';setAudioStatus(`✅ Siap: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB)`,'success');const tmpA=new Audio();tmpA.src=URL.createObjectURL(file);tmpA.addEventListener('loadedmetadata',()=>{const m=Math.floor(tmpA.duration/60),s=Math.floor(tmpA.duration%60);const di=document.getElementById('am_duration');if(di&&!di.value)di.value=`${m}:${s.toString().padStart(2,'0')}`;URL.revokeObjectURL(tmpA.src);});const ti=document.getElementById('am_title');if(ti&&!ti.value)ti.value=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' '); };
+window.handleAudioFile=function(input){
+  const file=input.files[0];if(!file)return;
+  if(file.size>50*1024*1024){setAudioStatus('❌ File terlalu besar! Maks 50MB','error');input.value='';return;}
+  const ext=file.name.split('.').pop().toLowerCase();
+  const allowedExt=['mp3','ogg','wav','m4a','aac','flac','opus'];
+  // Accept if extension matches OR if MIME type starts with audio/
+  if(!allowedExt.includes(ext)&&!file.type.startsWith('audio/')){
+    setAudioStatus('❌ Format tidak didukung! Gunakan MP3/OGG/WAV/M4A','error');input.value='';return;
+  }
+  pendingAudioFile=file;uploadedAudioUrl='';
+  setUploadProgress(0);
+  setAudioStatus(`📁 File dipilih: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB) — Siap upload`,'success');
+  // Read duration via blob URL
+  const blobUrl=URL.createObjectURL(file);
+  const tmpA=new Audio();
+  tmpA.preload='metadata';
+  tmpA.src=blobUrl;
+  tmpA.addEventListener('loadedmetadata',()=>{
+    const m=Math.floor(tmpA.duration/60),s=Math.floor(tmpA.duration%60);
+    const di=document.getElementById('am_duration');
+    if(di&&!di.value)di.value=`${m}:${s.toString().padStart(2,'0')}`;
+    URL.revokeObjectURL(blobUrl);
+  });
+  tmpA.addEventListener('error',()=>URL.revokeObjectURL(blobUrl));
+  const ti=document.getElementById('am_title');
+  if(ti&&!ti.value)ti.value=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();
+};
 window.handleCoverFile=function(input){ const file=input.files[0];if(!file)return;if(!file.type.startsWith('image/')){showToast('❌ File harus gambar!','error');input.value='';return;}if(file.size>5*1024*1024){showToast('❌ Gambar maks 5MB','error');input.value='';return;} pendingCoverFile=file;uploadedCoverUrl='';const reader=new FileReader();reader.onload=(e)=>{const p=document.getElementById('coverPreview'),l=document.querySelector('.cover-label');if(p){p.src=e.target.result;p.style.display='block';}if(l)l.textContent=file.name;};reader.readAsDataURL(file); };
 function setAudioStatus(msg,type=''){ const el=document.getElementById('audioStatus');if(!el)return;el.textContent=msg;el.className='fuz-status '+type; }
-function setUploadProgress(pct){ const bar=document.getElementById('audioProgress'),fill=document.getElementById('audioProgressBar');if(bar)bar.style.display='block';if(fill)fill.style.width=pct+'%'; }
+function setUploadProgress(pct,label){
+  const bar=document.getElementById('audioProgress'),fill=document.getElementById('audioProgressBar'),lbl=document.getElementById('audioProgressLabel');
+  if(bar){bar.style.display= pct>0?'block':'none';}
+  if(fill){fill.style.width=Math.min(100,pct)+'%';fill.style.transition=pct===0?'none':'width .3s ease';}
+  if(lbl){lbl.textContent=label||'';}
+}
 async function uploadAudioToStorage(file,trackId){
   const ext=file.name.split('.').pop().toLowerCase(), refPath=`tracks/${trackId}/audio.${ext}`, storageRef=storage.ref(refPath);
-  return new Promise((resolve,reject)=>{ const task=storageRef.put(file); task.on('state_changed',(snap)=>{ const pct=(snap.bytesTransferred/snap.totalBytes)*100; setUploadProgress(pct); setAudioStatus(`⬆️ Mengupload... ${Math.round(pct)}%`); },(err)=>reject(err),async()=>{ const url=await task.snapshot.ref.getDownloadURL(); resolve({url,refPath}); }); });
+  return new Promise((resolve,reject)=>{
+    const task=storageRef.put(file);
+    task.on('state_changed',
+      (snap)=>{
+        const pct=Math.round((snap.bytesTransferred/snap.totalBytes)*100);
+        setUploadProgress(pct,`Mengupload audio... ${pct}%`);
+        setAudioStatus(`⬆️ Mengupload... ${pct}% (${(snap.bytesTransferred/1024/1024).toFixed(1)}/${(snap.totalBytes/1024/1024).toFixed(1)}MB)`,'');
+      },
+      (err)=>{
+        setUploadProgress(0);
+        setAudioStatus('❌ Upload gagal: '+(err.message||err.code||'Error jaringan'),'error');
+        reject(err);
+      },
+      async()=>{
+        const url=await task.snapshot.ref.getDownloadURL();
+        setUploadProgress(100,'✅ Upload selesai!');
+        setAudioStatus('✅ Audio berhasil diupload!','success');
+        resolve({url,refPath});
+      }
+    );
+  });
 }
 async function uploadCoverToStorage(file,trackId){ const ext=file.name.split('.').pop().toLowerCase(),refPath=`tracks/${trackId}/cover.${ext}`,snap=await storage.ref(refPath).put(file);return snap.ref.getDownloadURL(); }
 
@@ -345,7 +396,15 @@ window.toggleTag=function(el,tag){ el.classList.toggle('selected');if(selectedTa
 
 window.submitAddMusic=async function(){
   if(!currentUser){showToast('🔐 Login diperlukan!','error');return;}
-  const title=document.getElementById('am_title').value.trim(),artist=document.getElementById('am_artist').value.trim(),genre=document.getElementById('am_genre').value,folder=document.getElementById('am_folder').value,year=document.getElementById('am_year').value.trim()||new Date().getFullYear()+'',duration=document.getElementById('am_duration').value.trim()||'3:00',manualUrl=document.getElementById('am_url').value.trim(),manualCover=document.getElementById('am_cover').value.trim(),err=document.getElementById('amErr');
+  const title=document.getElementById('am_title').value.trim(),
+        artist=document.getElementById('am_artist').value.trim(),
+        genre=document.getElementById('am_genre').value,
+        folder=document.getElementById('am_folder').value,
+        year=document.getElementById('am_year').value.trim()||new Date().getFullYear()+'',
+        duration=document.getElementById('am_duration').value.trim()||'3:00',
+        manualUrl=document.getElementById('am_url').value.trim(),
+        manualCover=document.getElementById('am_cover').value.trim(),
+        err=document.getElementById('amErr');
   err.textContent='';
   if(!title){err.textContent='Judul lagu wajib diisi!';return;}
   if(!artist){err.textContent='Nama artis wajib diisi!';return;}
@@ -355,16 +414,60 @@ window.submitAddMusic=async function(){
   const emojis=['🎵','🎶','🎸','🎹','🎤','🎼','🎺','🎻','🥁','🎷','✨','💫','🌟','⭐','🌙','☀️'];
   const colors=['#4facfe','#a18cd1','#fbc2eb','#43e97b','#f7971e','#f85032','#12c2e9','#ee0979','#b8e994','#ff6b6b','#6c5ce7','#fd79a8','#00cec9','#e17055'];
   const tempId='track_'+Date.now();
+  // Create blob URL for immediate local playback before Firebase upload
+  let localBlobUrl='';
+  if(pendingAudioFile) localBlobUrl=URL.createObjectURL(pendingAudioFile);
   try{
-    let finalAudioUrl=manualUrl,audioStorageRef='',finalCoverUrl=manualCover;
-    if(pendingAudioFile){ btn.textContent='⬆️ Mengupload audio...';const res=await uploadAudioToStorage(pendingAudioFile,tempId);finalAudioUrl=res.url;audioStorageRef=res.refPath;setAudioStatus('✅ Audio berhasil diupload!','success'); }
-    if(pendingCoverFile){ btn.textContent='🖼 Mengupload cover...';finalCoverUrl=await uploadCoverToStorage(pendingCoverFile,tempId); }
-    const newTrack={title,artist,genre,year,duration,url:finalAudioUrl,cover:finalCoverUrl,folder,emoji:emojis[Math.floor(Math.random()*emojis.length)],color:colors[Math.floor(Math.random()*colors.length)],tags:selectedTags,addedBy:currentUser.username,addedAt:new Date().toLocaleDateString('id-ID'),storageRef:audioStorageRef,timestamp:Date.now()};
-    btn.textContent='💾 Menyimpan...';
+    let finalAudioUrl=manualUrl, audioStorageRef='', finalCoverUrl=manualCover;
+    // Upload audio to Firebase Storage
+    if(pendingAudioFile){
+      btn.textContent='⬆️ Mengupload audio...';
+      setUploadProgress(1,'Memulai upload...');
+      setAudioStatus('⏳ Memulai upload ke Firebase...','');
+      const res=await uploadAudioToStorage(pendingAudioFile,tempId);
+      finalAudioUrl=res.url;
+      audioStorageRef=res.refPath;
+    }
+    // Upload cover if any
+    if(pendingCoverFile){
+      btn.textContent='🖼 Mengupload cover...';
+      finalCoverUrl=await uploadCoverToStorage(pendingCoverFile,tempId);
+    }
+    const newTrack={title,artist,genre,year,duration,
+      url:finalAudioUrl,
+      cover:finalCoverUrl,
+      folder,
+      emoji:emojis[Math.floor(Math.random()*emojis.length)],
+      color:colors[Math.floor(Math.random()*colors.length)],
+      tags:selectedTags,
+      addedBy:currentUser.username,
+      addedAt:new Date().toLocaleDateString('id-ID'),
+      storageRef:audioStorageRef,
+      timestamp:Date.now()
+    };
+    btn.textContent='💾 Menyimpan ke database...';
     await saveTrackToFirebase(newTrack);
-    setUploadProgress(100); closeAddMusic(); showToast(`🎵 "${title}" berhasil ditambahkan!`,'success');
-  }catch(e){ console.error(e); err.textContent='❌ Gagal: '+(e.message||'Coba lagi'); setAudioStatus('❌ Upload gagal','error'); }
-  finally{ btn.disabled=false; btn.innerHTML='💾 Upload & Simpan ke Firebase <span>→</span>'; }
+    setUploadProgress(100,'✅ Tersimpan!');
+    // If blob URL was created, revoke it now that we have the Firebase URL
+    if(localBlobUrl) URL.revokeObjectURL(localBlobUrl);
+    showToast(`🎵 "${title}" berhasil ditambahkan!`,'success');
+    closeAddMusic();
+  }catch(e){
+    console.error('submitAddMusic error:',e);
+    // Show user-friendly error
+    let errMsg='❌ Gagal menambahkan lagu. ';
+    if(e.code==='storage/unauthorized')errMsg+='Tidak punya izin ke Firebase Storage.';
+    else if(e.code==='storage/canceled')errMsg+='Upload dibatalkan.';
+    else if(e.message&&e.message.includes('network'))errMsg+='Periksa koneksi internet.';
+    else errMsg+=(e.message||'Coba lagi.');
+    err.textContent=errMsg;
+    setAudioStatus('❌ Upload gagal — '+errMsg,'error');
+    setUploadProgress(0);
+    if(localBlobUrl) URL.revokeObjectURL(localBlobUrl);
+  }finally{
+    btn.disabled=false;
+    btn.innerHTML='💾 Upload & Simpan ke Firebase <span>→</span>';
+  }
 };
 
 // ===== INIT MUSIC =====

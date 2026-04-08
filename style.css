@@ -211,9 +211,13 @@ body::before{
 .fuz-label strong{color:var(--accent);font-weight:700}
 .fuz-sub{font-size:.7rem;color:var(--text2);margin-top:.3rem;font-family:'JetBrains Mono',monospace}
 .fuz-progress{
-  margin-top:.8rem;height:4px;background:var(--card3);border-radius:2px;overflow:hidden;display:none;
+  margin-top:.8rem;background:var(--card3);border-radius:4px;overflow:hidden;display:none;
+  position:relative;
 }
-.fuz-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--pink));border-radius:2px;transition:width .3s ease;width:0%}
+.fuz-progress-bar{height:8px;background:linear-gradient(90deg,var(--accent2),var(--pink));border-radius:4px;transition:width .3s ease;width:0%;position:relative;overflow:hidden;}
+.fuz-progress-bar::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:shimmer 1.2s infinite;}
+@keyframes shimmer{to{left:150%}}
+.fuz-progress-label{font-size:.68rem;color:var(--text3);font-family:'JetBrains Mono',monospace;margin-top:.3rem;text-align:center;min-height:1em;}
 .fuz-status{font-size:.72rem;margin-top:.4rem;color:var(--text2);font-family:'JetBrains Mono',monospace;min-height:1em}
 .fuz-status.success{color:var(--green)}
 .fuz-status.error{color:var(--red)}
