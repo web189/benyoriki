@@ -193,6 +193,48 @@ body::before{
 .am-tags{margin-bottom:1rem}
 .add-music-form .form-row{margin-bottom:0}
 
+/* === FILE UPLOAD ZONE === */
+.file-upload-zone{
+  border:2px dashed var(--border2);border-radius:var(--radius-sm);
+  padding:1.5rem;text-align:center;cursor:pointer;
+  transition:all var(--trans);background:var(--bg2);position:relative;
+  overflow:hidden;
+}
+.file-upload-zone:hover,.file-upload-zone.drag-over{
+  border-color:var(--accent2);background:rgba(124,58,237,.08);
+}
+.file-upload-zone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.fuz-icon{font-size:2rem;margin-bottom:.5rem;display:block}
+.fuz-label{font-size:.82rem;color:var(--text2);font-weight:500}
+.fuz-label strong{color:var(--accent);font-weight:700}
+.fuz-sub{font-size:.7rem;color:var(--text2);margin-top:.3rem;font-family:'JetBrains Mono',monospace}
+.fuz-progress{
+  margin-top:.8rem;height:4px;background:var(--card3);border-radius:2px;overflow:hidden;display:none;
+}
+.fuz-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent2),var(--pink));border-radius:2px;transition:width .3s ease;width:0%}
+.fuz-status{font-size:.72rem;margin-top:.4rem;color:var(--text2);font-family:'JetBrains Mono',monospace;min-height:1em}
+.fuz-status.success{color:var(--green)}
+.fuz-status.error{color:var(--red)}
+.cover-upload-zone{
+  border:1.5px dashed var(--border2);border-radius:var(--radius-xs);
+  padding:.8rem;text-align:center;cursor:pointer;
+  transition:all var(--trans);background:var(--bg2);position:relative;
+  overflow:hidden;min-height:70px;display:flex;align-items:center;justify-content:center;gap:.5rem;
+}
+.cover-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.cover-upload-zone:hover{border-color:var(--accent2);background:rgba(124,58,237,.06)}
+.cover-preview{width:50px;height:50px;border-radius:8px;object-fit:cover;display:none}
+.cover-label{font-size:.75rem;color:var(--text2)}
+.ti-del{
+  background:none;border:none;color:var(--text2);cursor:pointer;
+  font-size:.75rem;padding:.15rem .3rem;border-radius:4px;
+  opacity:0;transition:all var(--trans);flex-shrink:0;
+}
+.track-item:hover .ti-del{opacity:1}
+.ti-del:hover{background:rgba(244,63,94,.15);color:var(--red)}
+
 /* ===== HERO ===== */
 .hero{
   min-height:100vh;display:flex;align-items:center;
@@ -200,25 +242,139 @@ body::before{
   position:relative;overflow:hidden;
 }
 .hero-bg{position:absolute;inset:0;z-index:0}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35}
-.orb1{width:500px;height:500px;background:radial-gradient(circle,#7c3aed,transparent);top:-15%;left:-10%;animation:float1 18s ease infinite}
-.orb2{width:400px;height:400px;background:radial-gradient(circle,#ec4899,transparent);bottom:-10%;right:-8%;animation:float2 22s ease infinite}
-.orb3{width:350px;height:350px;background:radial-gradient(circle,#06b6d4,transparent);top:40%;left:50%;transform:translate(-50%,-50%);animation:float3 16s ease infinite}
-@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,40px)}}
-@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-40px,-50px)}}
-@keyframes float3{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-45%,-55%)}}
+
+/* === NEON ORBS === */
+.orb{position:absolute;border-radius:50%;opacity:.45}
+.orb1{
+  width:600px;height:600px;
+  background:radial-gradient(circle,#7c3aed 0%,#4f1896 40%,transparent 70%);
+  filter:blur(60px);
+  top:-20%;left:-12%;
+  animation:float1 18s ease infinite;
+}
+.orb2{
+  width:480px;height:480px;
+  background:radial-gradient(circle,#ec4899 0%,#be185d 40%,transparent 70%);
+  filter:blur(55px);
+  bottom:-12%;right:-10%;
+  animation:float2 22s ease infinite;
+}
+.orb3{
+  width:380px;height:380px;
+  background:radial-gradient(circle,#06b6d4 0%,#0e7490 40%,transparent 70%);
+  filter:blur(50px);
+  top:40%;left:50%;transform:translate(-50%,-50%);
+  animation:float3 16s ease infinite;
+}
+@keyframes float1{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,50px)}}
+@keyframes float2{0%,100%{transform:translate(0,0)}50%{transform:translate(-50px,-60px)}}
+@keyframes float3{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-45%,-58%)}}
+
+/* === NEON GRID === */
 .grid-lines{
   position:absolute;inset:0;
   background-image:
-    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
-  background-size:60px 60px;
+    linear-gradient(rgba(124,58,237,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(124,58,237,.04) 1px,transparent 1px);
+  background-size:70px 70px;
+  animation:gridShift 20s linear infinite;
 }
-.hero-content{position:relative;z-index:1;padding:0 1.5rem;max-width:900px;margin:0 auto}
+@keyframes gridShift{0%{background-position:0 0}100%{background-position:70px 70px}}
+
+/* === NEON LIGHTNING CANVAS === */
+#neonCanvas{position:absolute;inset:0;z-index:1;pointer-events:none;width:100%;height:100%}
+
+/* === NEON BOLTS (SVG lines) === */
+.neon-bolts{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+
+/* === NEON FLICKER RAYS === */
+.neon-ray{
+  position:absolute;
+  height:1px;
+  background:linear-gradient(90deg,transparent,rgba(196,181,253,.8),rgba(124,58,237,1),rgba(196,181,253,.8),transparent);
+  border-radius:1px;
+  filter:blur(.5px);
+  box-shadow:0 0 6px 2px rgba(124,58,237,.6),0 0 16px 4px rgba(124,58,237,.3);
+  pointer-events:none;
+}
+.neon-ray.pink{
+  background:linear-gradient(90deg,transparent,rgba(251,113,133,.8),rgba(236,72,153,1),rgba(251,113,133,.8),transparent);
+  box-shadow:0 0 6px 2px rgba(236,72,153,.6),0 0 16px 4px rgba(236,72,153,.3);
+}
+.neon-ray.cyan{
+  background:linear-gradient(90deg,transparent,rgba(103,232,249,.8),rgba(6,182,212,1),rgba(103,232,249,.8),transparent);
+  box-shadow:0 0 6px 2px rgba(6,182,212,.6),0 0 16px 4px rgba(6,182,212,.3);
+}
+
+/* === NEON SPARKS === */
+.neon-spark{
+  position:absolute;
+  width:3px;height:3px;
+  border-radius:50%;
+  background:#c4b5fd;
+  box-shadow:0 0 6px 3px rgba(196,181,253,.9),0 0 18px 6px rgba(124,58,237,.6);
+  pointer-events:none;
+  animation:sparkLife var(--dur,1.2s) ease-out forwards;
+}
+@keyframes sparkLife{
+  0%{opacity:1;transform:scale(1) translate(0,0)}
+  100%{opacity:0;transform:scale(0) translate(var(--tx,20px),var(--ty,-30px))}
+}
+
+/* === NEON RING PULSE === */
+.neon-ring{
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(124,58,237,.6);
+  box-shadow:0 0 20px rgba(124,58,237,.4),inset 0 0 20px rgba(124,58,237,.1);
+  pointer-events:none;
+  animation:ringExpand var(--dur,2.5s) ease-out forwards;
+}
+@keyframes ringExpand{
+  0%{transform:translate(-50%,-50%) scale(.1);opacity:.9}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:0}
+}
+
+/* === NEON CORNER ACCENTS === */
+.neon-corner{position:absolute;z-index:2;pointer-events:none}
+.neon-corner.tl{top:5%;left:2%;width:80px;height:80px;border-top:1px solid rgba(124,58,237,.5);border-left:1px solid rgba(124,58,237,.5);animation:cornerFlicker 3s ease infinite}
+.neon-corner.tr{top:5%;right:2%;width:80px;height:80px;border-top:1px solid rgba(236,72,153,.5);border-right:1px solid rgba(236,72,153,.5);animation:cornerFlicker 3.5s .5s ease infinite}
+.neon-corner.bl{bottom:8%;left:2%;width:60px;height:60px;border-bottom:1px solid rgba(6,182,212,.5);border-left:1px solid rgba(6,182,212,.5);animation:cornerFlicker 4s 1s ease infinite}
+.neon-corner.br{bottom:8%;right:2%;width:60px;height:60px;border-bottom:1px solid rgba(124,58,237,.5);border-right:1px solid rgba(124,58,237,.5);animation:cornerFlicker 3.2s 1.5s ease infinite}
+@keyframes cornerFlicker{
+  0%,100%{opacity:.5;box-shadow:0 0 8px rgba(124,58,237,.3)}
+  25%{opacity:1;box-shadow:0 0 20px rgba(124,58,237,.7),0 0 40px rgba(124,58,237,.3)}
+  50%{opacity:.3}
+  75%{opacity:.9;box-shadow:0 0 15px rgba(124,58,237,.5)}
+}
+
+/* === NEON SCAN LINE === */
+.neon-scanline{
+  position:absolute;left:0;right:0;height:2px;z-index:2;
+  background:linear-gradient(90deg,transparent 0%,rgba(124,58,237,.3) 20%,rgba(196,181,253,.8) 50%,rgba(124,58,237,.3) 80%,transparent 100%);
+  filter:blur(1px);
+  box-shadow:0 0 12px rgba(124,58,237,.5);
+  animation:scanMove 8s linear infinite;
+  pointer-events:none;
+}
+@keyframes scanMove{
+  0%{top:-2px;opacity:0}
+  5%{opacity:1}
+  95%{opacity:.6}
+  100%{top:100%;opacity:0}
+}
+
+/* === NEON TITLE GLOW === */
+@keyframes neonTitlePulse{
+  0%,100%{text-shadow:0 0 20px rgba(196,181,253,.4),0 0 60px rgba(124,58,237,.2)}
+  50%{text-shadow:0 0 40px rgba(196,181,253,.7),0 0 100px rgba(124,58,237,.4),0 0 160px rgba(124,58,237,.15)}
+}
+
+.hero-content{position:relative;z-index:3;padding:0 1.5rem;max-width:900px;margin:0 auto}
 .hero-badge{
   display:inline-block;
   padding:.35rem 1.1rem;
-  border:1px solid rgba(196,181,253,.3);
+  border:1px solid rgba(196,181,253,.35);
   border-radius:50px;
   color:var(--accent);
   font-size:.72rem;
@@ -226,36 +382,58 @@ body::before{
   letter-spacing:.18em;
   margin-bottom:1.8rem;
   animation:fadeUp .8s ease both;
-  background:rgba(124,58,237,.08);
+  background:rgba(124,58,237,.12);
+  box-shadow:0 0 20px rgba(124,58,237,.2),inset 0 0 10px rgba(124,58,237,.05);
+  position:relative;
 }
+.hero-badge::before{
+  content:'';position:absolute;inset:-1px;border-radius:50px;
+  background:linear-gradient(90deg,transparent,rgba(196,181,253,.3),transparent);
+  animation:badgeSweep 3s ease infinite;
+}
+@keyframes badgeSweep{0%{transform:translateX(-100%)}100%{transform:translateX(200%)}}
 .hero-title{
   font-family:'Clash Display',sans-serif;
   font-size:clamp(4.5rem,13vw,10rem);
   font-weight:700;
   line-height:.95;
   letter-spacing:-0.04em;
-  animation:fadeUp .8s .15s ease both;
+  animation:fadeUp .8s .15s ease both, neonTitlePulse 4s 1s ease infinite;
 }
 .hero-title .accent{
-  background:linear-gradient(135deg,var(--accent),var(--pink));
+  background:linear-gradient(135deg,var(--accent),var(--pink),var(--cyan));
+  background-size:200% 200%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;
   text-shadow:none;
+  animation:accentFlow 5s ease infinite;
 }
-.hero-sub{font-size:1.05rem;color:var(--text2);margin-top:1.2rem;animation:fadeUp .8s .3s ease both;font-weight:500;letter-spacing:.02em}
+@keyframes accentFlow{
+  0%,100%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+}
+.hero-sub{font-size:1.05rem;color:var(--text3);margin-top:1.2rem;animation:fadeUp .8s .3s ease both;font-weight:500;letter-spacing:.04em}
 .hero-cta{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2.2rem;animation:fadeUp .8s .45s ease both}
 .hero-btn{
   padding:.78rem 1.8rem;border-radius:50px;
   text-decoration:none;font-family:'Clash Display',sans-serif;
   font-weight:600;font-size:.88rem;transition:all var(--trans);
-  letter-spacing:.02em;
+  letter-spacing:.02em;position:relative;overflow:hidden;
 }
-.hero-btn.primary{background:linear-gradient(135deg,var(--accent2),#9333ea);color:#fff}
-.hero-btn.primary:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(124,58,237,.5)}
-.hero-btn.secondary{background:transparent;border:1px solid var(--border3);color:var(--text3)}
-.hero-btn.secondary:hover{background:var(--card2);color:var(--text)}
+.hero-btn::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.08);opacity:0;transition:opacity var(--trans)}
+.hero-btn:hover::before{opacity:1}
+.hero-btn.primary{
+  background:linear-gradient(135deg,var(--accent2),#9333ea);color:#fff;
+  box-shadow:0 0 20px rgba(124,58,237,.4),0 0 60px rgba(124,58,237,.15);
+}
+.hero-btn.primary:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(124,58,237,.6),0 0 80px rgba(124,58,237,.25)}
+.hero-btn.secondary{
+  background:rgba(255,255,255,.04);border:1px solid rgba(196,181,253,.25);color:var(--text3);
+  backdrop-filter:blur(10px);
+}
+.hero-btn.secondary:hover{background:rgba(124,58,237,.15);border-color:rgba(196,181,253,.5);color:var(--text);box-shadow:0 0 30px rgba(124,58,237,.2)}
 .hero-scroll{display:flex;justify-content:center;margin-top:3.5rem;animation:fadeUp .8s .6s ease both}
-.scroll-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:bounce 1.5s ease infinite}
+.scroll-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:bounce 1.5s ease infinite;box-shadow:0 0 10px rgba(196,181,253,.8)}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
 

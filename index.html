@@ -17,7 +17,7 @@
 <nav class="navbar" id="navbar">
   <div class="nav-logo">
     <span class="logo-icon">◈</span>
-    <span>BenyoRiki</span>
+    <span>@benyoriki</span>
   </div>
   <div class="nav-links" id="navLinks">
     <a href="#social" class="nav-link active" data-section="social">Sosial</a>
@@ -116,7 +116,7 @@
     <div class="auth-header">
       <div class="auth-avatar-big">🎵</div>
       <h2>Tambah Musik</h2>
-      <p>Tambahkan lagu ke database</p>
+      <p>Upload file audio ke database Firebase</p>
     </div>
     <div class="add-music-form">
       <div class="form-row">
@@ -172,14 +172,33 @@
           <input type="text" id="am_duration" placeholder="3:45">
         </div>
       </div>
+
+      <!-- AUDIO FILE UPLOAD -->
       <div class="form-group">
-        <label>URL Audio (MP3 / Stream)</label>
-        <input type="url" id="am_url" placeholder="https://... atau kosongkan">
+        <label>🎵 Upload File Audio <span class="req">*</span></label>
+        <div class="file-upload-zone" id="audioDropZone">
+          <input type="file" id="am_audio_file" accept="audio/mp3,audio/mpeg,audio/ogg,audio/wav,audio/m4a,.mp3,.ogg,.wav,.m4a" onchange="handleAudioFile(this)">
+          <span class="fuz-icon">🎧</span>
+          <div class="fuz-label"><strong>Klik atau seret file audio</strong></div>
+          <div class="fuz-sub">MP3, OGG, WAV, M4A · Maks 50MB</div>
+          <div class="fuz-progress" id="audioProgress"><div class="fuz-progress-bar" id="audioProgressBar"></div></div>
+          <div class="fuz-status" id="audioStatus"></div>
+        </div>
+        <div style="margin-top:.5rem;font-size:.72rem;color:var(--text2)">— atau gunakan URL stream —</div>
+        <input type="url" id="am_url" placeholder="https://... URL audio (opsional jika upload file)" style="margin-top:.4rem">
       </div>
+
+      <!-- COVER IMAGE UPLOAD -->
       <div class="form-group">
-        <label>URL Cover Art</label>
-        <input type="url" id="am_cover" placeholder="https://...jpg (opsional)">
+        <label>🖼 Cover Art</label>
+        <div class="cover-upload-zone" id="coverDropZone">
+          <input type="file" id="am_cover_file" accept="image/*" onchange="handleCoverFile(this)">
+          <img class="cover-preview" id="coverPreview" alt="cover">
+          <span class="cover-label">📷 Upload gambar cover (opsional)</span>
+        </div>
+        <input type="url" id="am_cover" placeholder="https://... URL cover (alternatif)" style="margin-top:.4rem">
       </div>
+
       <div class="form-group">
         <label>Deskripsi / Keterangan</label>
         <textarea id="am_desc" rows="2" placeholder="Tentang lagu ini..."></textarea>
@@ -198,7 +217,7 @@
         </div>
       </div>
       <div class="auth-err" id="amErr"></div>
-      <button class="auth-submit" onclick="submitAddMusic()">💾 Simpan ke Database <span>→</span></button>
+      <button class="auth-submit" id="amSubmitBtn" onclick="submitAddMusic()">💾 Upload & Simpan ke Firebase <span>→</span></button>
     </div>
   </div>
 </div>
@@ -210,6 +229,13 @@
     <div class="orb orb2"></div>
     <div class="orb orb3"></div>
     <div class="grid-lines"></div>
+    <canvas id="neonCanvas"></canvas>
+    <div class="neon-scanline"></div>
+    <div class="neon-corner tl"></div>
+    <div class="neon-corner tr"></div>
+    <div class="neon-corner bl"></div>
+    <div class="neon-corner br"></div>
+    <div class="neon-bolts" id="neonBolts"></div>
   </div>
   <div class="hero-content">
     <div class="hero-badge">✦ Digital Universe 2026 ✦</div>
@@ -387,7 +413,7 @@
         </div>
         <div class="sc-avatar"><div class="sc-avatar-ring" style="background:linear-gradient(135deg,#25d366,#128c7e)"><div class="sc-avatar-inner"><span>💬</span></div></div></div>
         <div class="sc-info">
-          <h3 class="sc-username">Benyo Riki</h3>
+          <h3 class="sc-username">Riki Hermawan S.Kom</h3>
           <p class="sc-bio">Hubungi langsung via WhatsApp untuk kolaborasi dan kerjasama 🤝</p>
         </div>
         <div class="sc-stats">
@@ -686,6 +712,29 @@
 <!-- LINE CANVAS for Onet -->
 <canvas id="lineCanvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:9999;"></canvas>
 <audio id="audioPlayer"></audio>
+
+
+<!-- Firebase Compat SDK (v9 compat mode) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC1qjVmz94BNs2MO0KiUFMByS4qo8hYKRU",
+  authDomain: "benyoriki-b7006.firebaseapp.com",
+  databaseURL: "https://benyoriki-b7006-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "benyoriki-b7006",
+  storageBucket: "benyoriki-b7006.firebasestorage.app",
+  messagingSenderId: "279665663367",
+  appId: "1:279665663367:web:a0ac6c5596a3e750394722"
+};
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+const db = firebase.database();
+const storage = firebase.storage();
+</script>
 
 <script src="app.js"></script>
 </body>
