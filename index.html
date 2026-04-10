@@ -58,73 +58,119 @@
 
 <!-- AUTH MODAL -->
 <div class="modal-overlay" id="authModal">
-  <div class="modal-box" id="authBox">
-    <button class="modal-close" onclick="closeAuthModal()">✕</button>
-    <div class="auth-tabs">
-      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Masuk</button>
-      <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Daftar</button>
-    </div>
-
-    <!-- Login Form -->
-    <div id="formLogin">
-      <div class="auth-header">
-        <div class="auth-avatar-big">◈</div>
-        <h2>Selamat Datang</h2>
-        <p>Masuk ke Digital Universe</p>
+  <div class="auth-modal-new" id="authBox">
+    <!-- Left Panel -->
+    <div class="auth-left-panel">
+      <div class="auth-left-bg">
+        <div class="auth-orb ao1"></div>
+        <div class="auth-orb ao2"></div>
+        <div class="auth-grid-lines"></div>
       </div>
-      <div class="form-group">
-        <label>Username / Email</label>
-        <input type="text" id="loginUser" placeholder="Masukkan username...">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <div class="input-pw">
-          <input type="password" id="loginPass" placeholder="Masukkan password...">
-          <button class="eye-btn" onclick="togglePw('loginPass',this)">👁</button>
+      <div class="auth-left-content">
+        <div class="auth-brand">
+          <span class="auth-brand-icon">◈</span>
+          <span class="auth-brand-name">BenyoRiki</span>
+        </div>
+        <h2 class="auth-left-title">Digital<br><span class="auth-left-accent">Universe</span><br>2026</h2>
+        <p class="auth-left-sub">Masuk dan jelajahi dunia kreativitas, musik, dan inovasi digital</p>
+        <div class="auth-feat-list">
+          <div class="auth-feat"><span class="auth-feat-icon">🎵</span><span>Akses ratusan musik</span></div>
+          <div class="auth-feat"><span class="auth-feat-icon">📱</span><span>Konten eksklusif</span></div>
+          <div class="auth-feat"><span class="auth-feat-icon">⚡</span><span>Upload &amp; berbagi</span></div>
         </div>
       </div>
-      <div class="form-check">
-        <input type="checkbox" id="rememberMe">
-        <label for="rememberMe">Ingat saya</label>
-      </div>
-      <div class="auth-err" id="loginErr"></div>
-      <button class="auth-submit" onclick="doLogin()">Masuk <span>→</span></button>
-      <div class="auth-divider"><span>atau</span></div>
-      <div class="social-login-btns">
-        <button class="sl-btn google" onclick="socialLogin('Google')"><span>G</span> Google</button>
-        <button class="sl-btn github" onclick="socialLogin('GitHub')"><span>⚙</span> GitHub</button>
-      </div>
     </div>
-
-    <!-- Register Form -->
-    <div id="formRegister" style="display:none">
-      <div class="auth-header">
-        <div class="auth-avatar-big">✦</div>
-        <h2>Buat Akun</h2>
-        <p>Bergabung di Digital Universe</p>
+    <!-- Right Panel -->
+    <div class="auth-right-panel">
+      <button class="auth-close-new" onclick="closeAuthModal()">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <div class="auth-tabs-new">
+        <button class="auth-tab-new active" id="tabLogin" onclick="switchTab('login')">Masuk</button>
+        <button class="auth-tab-new" id="tabRegister" onclick="switchTab('register')">Daftar</button>
+        <div class="auth-tab-slider" id="authTabSlider"></div>
       </div>
-      <div class="form-group">
-        <label>Nama Lengkap</label>
-        <input type="text" id="regName" placeholder="Nama kamu...">
-      </div>
-      <div class="form-group">
-        <label>Username</label>
-        <input type="text" id="regUser" placeholder="username unik...">
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="regEmail" placeholder="email@kamu.com">
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <div class="input-pw">
-          <input type="password" id="regPass" placeholder="Min. 6 karakter...">
-          <button class="eye-btn" onclick="togglePw('regPass',this)">👁</button>
+      <!-- Login -->
+      <div id="formLogin" class="auth-form-panel">
+        <div class="auth-form-header">
+          <h3>Selamat Datang 👋</h3>
+          <p>Masuk ke akun Digital Universe kamu</p>
         </div>
-        <div class="pw-strength" id="pwStrength"></div>
+        <div class="auth-field">
+          <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <input type="text" id="loginUser" placeholder="Username atau Email" autocomplete="username">
+          <div class="auth-field-line"></div>
+        </div>
+        <div class="auth-field">
+          <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
+          <button class="auth-eye-new" onclick="togglePw('loginPass',this)" type="button"><svg class="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <div class="auth-field-line"></div>
+        </div>
+        <div class="auth-row-between">
+          <label class="auth-remember">
+            <input type="checkbox" id="rememberMe">
+            <span class="auth-check-box"></span>
+            <span>Ingat saya</span>
+          </label>
+          <span class="auth-forgot">Lupa password?</span>
+        </div>
+        <div class="auth-err" id="loginErr"></div>
+        <button class="auth-submit-new" onclick="doLogin()">
+          <span>Masuk Sekarang</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+        <div class="auth-divider-new"><span>atau lanjutkan dengan</span></div>
+        <div class="social-login-new">
+          <button class="sln-btn" onclick="socialLogin('Google')">
+            <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Google
+          </button>
+          <button class="sln-btn" onclick="socialLogin('GitHub')">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+          </button>
+        </div>
       </div>
-      <div class="auth-err" id="regErr"></div>
-      <button class="auth-submit" onclick="doRegister()">Daftar Sekarang <span>→</span></button>
+      <!-- Register -->
+      <div id="formRegister" style="display:none" class="auth-form-panel">
+        <div class="auth-form-header">
+          <h3>Buat Akun Baru ✦</h3>
+          <p>Bergabung bersama Digital Universe</p>
+        </div>
+        <div class="auth-fields-grid">
+          <div class="auth-field">
+            <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+            <input type="text" id="regName" placeholder="Nama Lengkap" autocomplete="name">
+            <div class="auth-field-line"></div>
+          </div>
+          <div class="auth-field">
+            <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 006 0v-1a10 10 0 10-3.92 7.94"/></svg></div>
+            <input type="text" id="regUser" placeholder="Username unik" autocomplete="username">
+            <div class="auth-field-line"></div>
+          </div>
+          <div class="auth-field">
+            <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <input type="email" id="regEmail" placeholder="email@kamu.com" autocomplete="email">
+            <div class="auth-field-line"></div>
+          </div>
+          <div class="auth-field">
+            <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+            <input type="password" id="regPass" placeholder="Min. 6 karakter" autocomplete="new-password">
+            <button class="auth-eye-new" onclick="togglePw('regPass',this)" type="button"><svg class="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+            <div class="auth-field-line"></div>
+          </div>
+        </div>
+        <div class="pw-strength-wrap">
+          <div class="pw-strength" id="pwStrength"></div>
+          <span class="pw-strength-label" id="pwStrengthLabel"></span>
+        </div>
+        <div class="auth-err" id="regErr"></div>
+        <button class="auth-submit-new" onclick="doRegister()">
+          <span>Daftar Sekarang</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -197,7 +243,7 @@
       <div class="form-group">
         <label>🎵 Upload File Audio <span class="req">*</span></label>
         <div class="file-upload-zone" id="audioDropZone">
-          <input type="file" id="am_audio_file" accept="audio/mp3,audio/mpeg,audio/ogg,audio/wav,audio/m4a,.mp3,.ogg,.wav,.m4a" onchange="handleAudioFile(this)">
+          <input type="file" id="am_audio_file" accept="audio/*,.mp3,.ogg,.wav,.m4a,.aac,.flac,.opus" onchange="handleAudioFile(this)">
           <span class="fuz-icon">🎧</span>
           <div class="fuz-label"><strong>Klik atau seret file audio</strong></div>
           <div class="fuz-sub">MP3, OGG, WAV, M4A · Maks 50MB</div>
@@ -279,174 +325,270 @@
       <h2 class="section-title">Media Sosial</h2>
       <p class="section-desc">Ikuti perjalanan kreatif di berbagai platform</p>
     </div>
-    <div class="social-grid">
+    <div class="social-grid-new">
 
       <!-- Instagram -->
-      <div class="social-card ig-card" onclick="window.open('https://www.instagram.com/benyoriki','_blank')">
-        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
-        <div class="sc-top">
-          <div class="sc-platform-icon">
-            <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      <div class="scard ig" onclick="window.open('https://www.instagram.com/benyoriki','_blank')">
+        <div class="scard-glow"></div>
+        <div class="scard-inner">
+          <div class="scard-top">
+            <div class="scard-plat">
+              <div class="scard-plat-icon ig-icon">
+                <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="url(#ig-grad)" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="url(#ig-grad)" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1" fill="url(#ig-grad)"/><defs><linearGradient id="ig-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f09433"/><stop offset="50%" stop-color="#e6683c"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs></svg>
+              </div>
+              <div class="scard-plat-info">
+                <span class="scard-plat-name">Instagram</span>
+                <span class="scard-status ig-status">● Aktif</span>
+              </div>
+            </div>
+            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
           </div>
-          <span class="sc-platform-name">Instagram</span>
-          <span class="sc-live-badge">AKTIF</span>
+          <div class="scard-profile">
+            <div class="scard-avatar-wrap ig-avatar-wrap">
+              <div class="scard-avatar">📸</div>
+              <div class="scard-avatar-ring ig-ring"></div>
+            </div>
+            <div class="scard-profile-info">
+              <h3>@benyoriki</h3>
+              <p>Kreator konten · Fotografer</p>
+            </div>
+          </div>
+          <p class="scard-bio">Berbagi momen kehidupan, kreativitas, dan inspirasi setiap hari ✨ #photography #lifestyle</p>
+          <div class="scard-stats-row">
+            <div class="scard-stat-item"><div class="scard-stat-val">∞</div><div class="scard-stat-key">Posts</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">★</div><div class="scard-stat-key">Followers</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">♡</div><div class="scard-stat-key">Likes</div></div>
+          </div>
+          <div class="scard-posts-grid">
+            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743)"></div>
+            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb)"></div>
+            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#ffecd2,#fcb69f)"></div>
+            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb)"></div>
+            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#d299c2,#fef9d7)"></div>
+            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#ee9ca7,#ffdde1)"></div>
+          </div>
+          <button class="scard-btn ig-btn-new">Kunjungi Profile <span>→</span></button>
         </div>
-        <div class="sc-avatar"><div class="sc-avatar-ring"><div class="sc-avatar-inner"><span>📸</span></div></div></div>
-        <div class="sc-info">
-          <h3 class="sc-username">@benyoriki</h3>
-          <p class="sc-bio">Berbagi momen kehidupan, kreativitas, dan inspirasi setiap hari ✨</p>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-num">∞</span><span class="sc-stat-label">Posts</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">★</span><span class="sc-stat-label">Followers</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">♡</span><span class="sc-stat-label">Likes</span></div>
-        </div>
-        <div class="sc-preview">
-          <div class="sc-post" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743)"></div>
-          <div class="sc-post" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb)"></div>
-          <div class="sc-post" style="background:linear-gradient(135deg,#ffecd2,#fcb69f)"></div>
-          <div class="sc-post" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb)"></div>
-        </div>
-        <button class="sc-btn ig-btn">Kunjungi Profile <span>→</span></button>
       </div>
 
       <!-- TikTok -->
-      <div class="social-card tt-card" onclick="window.open('https://www.tiktok.com/@benyoriki','_blank')">
-        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
-        <div class="sc-top">
-          <div class="sc-platform-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg>
+      <div class="scard tt" onclick="window.open('https://www.tiktok.com/@benyoriki','_blank')">
+        <div class="scard-glow"></div>
+        <div class="scard-inner">
+          <div class="scard-top">
+            <div class="scard-plat">
+              <div class="scard-plat-icon tt-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg>
+              </div>
+              <div class="scard-plat-info">
+                <span class="scard-plat-name">TikTok</span>
+                <span class="scard-status tt-status">🔥 Viral</span>
+              </div>
+            </div>
+            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
           </div>
-          <span class="sc-platform-name">TikTok</span>
-          <span class="sc-live-badge tt-live">VIRAL</span>
+          <div class="scard-profile">
+            <div class="scard-avatar-wrap tt-avatar-wrap">
+              <div class="scard-avatar">🎵</div>
+              <div class="scard-avatar-ring tt-ring"></div>
+            </div>
+            <div class="scard-profile-info">
+              <h3>@benyoriki</h3>
+              <p>Kreator Video · Entertainer</p>
+            </div>
+          </div>
+          <p class="scard-bio">Video kreatif, hiburan, dan konten viral yang menghibur setiap hari 🎬 #viral #fyp</p>
+          <div class="scard-stats-row">
+            <div class="scard-stat-item"><div class="scard-stat-val">▶</div><div class="scard-stat-key">Videos</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">★</div><div class="scard-stat-key">Followers</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">♡</div><div class="scard-stat-key">Likes</div></div>
+          </div>
+          <div class="scard-reels-grid">
+            <div class="scard-reel" style="background:linear-gradient(160deg,#000,#1a1a2e)"><div class="reel-play-new">▶</div><div class="reel-overlay"></div></div>
+            <div class="scard-reel" style="background:linear-gradient(160deg,#0f0c29,#302b63)"><div class="reel-play-new">▶</div><div class="reel-overlay"></div></div>
+            <div class="scard-reel" style="background:linear-gradient(160deg,#1a1a2e,#16213e)"><div class="reel-play-new">▶</div><div class="reel-overlay"></div></div>
+            <div class="scard-reel" style="background:linear-gradient(160deg,#16213e,#0f3460)"><div class="reel-play-new">▶</div><div class="reel-overlay"></div></div>
+          </div>
+          <button class="scard-btn tt-btn-new">Tonton Video <span>→</span></button>
         </div>
-        <div class="sc-avatar"><div class="sc-avatar-ring tt-ring"><div class="sc-avatar-inner"><span>🎵</span></div></div></div>
-        <div class="sc-info">
-          <h3 class="sc-username">@benyoriki</h3>
-          <p class="sc-bio">Video kreatif, hiburan, dan konten viral yang menghibur setiap hari 🎬</p>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-num">▶</span><span class="sc-stat-label">Videos</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">★</span><span class="sc-stat-label">Followers</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">♡</span><span class="sc-stat-label">Likes</span></div>
-        </div>
-        <div class="sc-preview tt-preview">
-          <div class="sc-reel" style="background:linear-gradient(160deg,#000,#1a1a2e)"><div class="reel-play">▶</div></div>
-          <div class="sc-reel" style="background:linear-gradient(160deg,#0f0c29,#302b63)"><div class="reel-play">▶</div></div>
-          <div class="sc-reel" style="background:linear-gradient(160deg,#1a1a2e,#16213e)"><div class="reel-play">▶</div></div>
-        </div>
-        <button class="sc-btn tt-btn">Tonton Video <span>→</span></button>
       </div>
 
       <!-- Facebook -->
-      <div class="social-card fb-card" onclick="window.open('https://web.facebook.com/benyo.hermawan','_blank')">
-        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
-        <div class="sc-top">
-          <div class="sc-platform-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+      <div class="scard fb" onclick="window.open('https://web.facebook.com/benyo.hermawan','_blank')">
+        <div class="scard-glow"></div>
+        <div class="scard-inner">
+          <div class="scard-top">
+            <div class="scard-plat">
+              <div class="scard-plat-icon fb-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+              </div>
+              <div class="scard-plat-info">
+                <span class="scard-plat-name">Facebook</span>
+                <span class="scard-status fb-status">● Aktif</span>
+              </div>
+            </div>
+            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
           </div>
-          <span class="sc-platform-name">Facebook</span>
-          <span class="sc-live-badge fb-live">AKTIF</span>
+          <div class="scard-profile">
+            <div class="scard-avatar-wrap fb-avatar-wrap">
+              <div class="scard-avatar">👤</div>
+              <div class="scard-avatar-ring fb-ring"></div>
+            </div>
+            <div class="scard-profile-info">
+              <h3>Benyo Hermawan</h3>
+              <p>Kreator Digital · Musisi</p>
+            </div>
+          </div>
+          <p class="scard-bio">Terhubung, berbagi cerita, dan membangun komunitas bersama 🤝 #community #digital</p>
+          <div class="scard-stats-row">
+            <div class="scard-stat-item"><div class="scard-stat-val">✦</div><div class="scard-stat-key">Posts</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">★</div><div class="scard-stat-key">Friends</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">♡</div><div class="scard-stat-key">Likes</div></div>
+          </div>
+          <div class="scard-timeline-new">
+            <div class="scard-tl-item"><div class="scard-tl-avatar">🤝</div><div class="scard-tl-body"><div class="scard-tl-bar" style="width:85%"></div><div class="scard-tl-bar short" style="width:55%"></div></div><span class="scard-tl-time">2j</span></div>
+            <div class="scard-tl-item"><div class="scard-tl-avatar">📸</div><div class="scard-tl-body"><div class="scard-tl-bar" style="width:70%"></div><div class="scard-tl-bar short" style="width:40%"></div></div><span class="scard-tl-time">5j</span></div>
+            <div class="scard-tl-item"><div class="scard-tl-avatar">🎵</div><div class="scard-tl-body"><div class="scard-tl-bar" style="width:90%"></div><div class="scard-tl-bar short" style="width:60%"></div></div><span class="scard-tl-time">1h</span></div>
+          </div>
+          <button class="scard-btn fb-btn-new">Lihat Facebook <span>→</span></button>
         </div>
-        <div class="sc-avatar"><div class="sc-avatar-ring fb-ring"><div class="sc-avatar-inner"><span>👤</span></div></div></div>
-        <div class="sc-info">
-          <h3 class="sc-username">Benyo Hermawan</h3>
-          <p class="sc-bio">Terhubung, berbagi cerita, dan membangun komunitas bersama 🤝</p>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-num">✦</span><span class="sc-stat-label">Posts</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">★</span><span class="sc-stat-label">Friends</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">♡</span><span class="sc-stat-label">Likes</span></div>
-        </div>
-        <div class="sc-timeline">
-          <div class="timeline-post"><div class="tl-dot"></div><div class="tl-content"><div class="tl-bar" style="width:80%"></div><div class="tl-bar" style="width:60%"></div></div></div>
-          <div class="timeline-post"><div class="tl-dot"></div><div class="tl-content"><div class="tl-bar" style="width:70%"></div><div class="tl-bar" style="width:45%"></div></div></div>
-        </div>
-        <button class="sc-btn fb-btn">Lihat Facebook <span>→</span></button>
       </div>
 
       <!-- YouTube -->
-      <div class="social-card yt-card" onclick="window.open('https://www.youtube.com/@rikihermawan8103','_blank')">
-        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
-        <div class="sc-top">
-          <div class="sc-platform-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff" opacity=".9"/></svg>
+      <div class="scard yt" onclick="window.open('https://www.youtube.com/@rikihermawan8103','_blank')">
+        <div class="scard-glow"></div>
+        <div class="scard-inner">
+          <div class="scard-top">
+            <div class="scard-plat">
+              <div class="scard-plat-icon yt-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff"/></svg>
+              </div>
+              <div class="scard-plat-info">
+                <span class="scard-plat-name">YouTube</span>
+                <span class="scard-status yt-status">▶ Channel</span>
+              </div>
+            </div>
+            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
           </div>
-          <span class="sc-platform-name">YouTube</span>
-          <span class="sc-live-badge yt-live">CHANNEL</span>
+          <div class="scard-profile">
+            <div class="scard-avatar-wrap yt-avatar-wrap">
+              <div class="scard-avatar">🎬</div>
+              <div class="scard-avatar-ring yt-ring"></div>
+            </div>
+            <div class="scard-profile-info">
+              <h3>@rikihermawan8103</h3>
+              <p>YouTuber · Content Creator</p>
+            </div>
+          </div>
+          <p class="scard-bio">Video berkualitas, tutorial, dan hiburan terbaik untuk semua kalangan 🎥 #youtube #tutorial</p>
+          <div class="scard-stats-row">
+            <div class="scard-stat-item"><div class="scard-stat-val">▶</div><div class="scard-stat-key">Videos</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">★</div><div class="scard-stat-key">Subs</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">♡</div><div class="scard-stat-key">Views</div></div>
+          </div>
+          <div class="scard-thumbs-grid">
+            <div class="scard-yt-thumb" style="background:linear-gradient(135deg,#ff0000,#880000)">
+              <div class="yt-thumb-play">▶</div>
+              <div class="yt-thumb-bar"><div class="yt-thumb-bar-fill" style="width:65%"></div></div>
+            </div>
+            <div class="scard-yt-thumb" style="background:linear-gradient(135deg,#cc0000,#ff4444)">
+              <div class="yt-thumb-play">▶</div>
+              <div class="yt-thumb-bar"><div class="yt-thumb-bar-fill" style="width:80%"></div></div>
+            </div>
+          </div>
+          <button class="scard-btn yt-btn-new">Tonton Channel <span>→</span></button>
         </div>
-        <div class="sc-avatar"><div class="sc-avatar-ring yt-ring"><div class="sc-avatar-inner"><span>🎬</span></div></div></div>
-        <div class="sc-info">
-          <h3 class="sc-username">@rikihermawan8103</h3>
-          <p class="sc-bio">Video berkualitas, tutorial, dan hiburan terbaik untuk semua kalangan 🎥</p>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-num">▶</span><span class="sc-stat-label">Videos</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">★</span><span class="sc-stat-label">Subs</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">♡</span><span class="sc-stat-label">Views</span></div>
-        </div>
-        <div class="sc-thumbnails">
-          <div class="sc-thumb" style="background:linear-gradient(135deg,#ff0000,#880000)"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:1.5rem;color:rgba(255,255,255,.8)">▶</div></div>
-          <div class="sc-thumb" style="background:linear-gradient(135deg,#cc0000,#ff4444)"><div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:1.5rem;color:rgba(255,255,255,.8)">▶</div></div>
-        </div>
-        <button class="sc-btn yt-btn">Tonton Channel <span>→</span></button>
       </div>
 
-      <!-- Website Card -->
-      <div class="social-card web-card" onclick="window.open('https://jasadaud.online/','_blank')">
-        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
-        <div class="sc-top">
-          <div class="sc-platform-icon" style="color:#00d4aa">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+      <!-- Website -->
+      <div class="scard web" onclick="window.open('https://jasadaud.online/','_blank')">
+        <div class="scard-glow"></div>
+        <div class="scard-inner">
+          <div class="scard-top">
+            <div class="scard-plat">
+              <div class="scard-plat-icon web-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              </div>
+              <div class="scard-plat-info">
+                <span class="scard-plat-name">Website</span>
+                <span class="scard-status web-status">🌐 Live</span>
+              </div>
+            </div>
+            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
           </div>
-          <span class="sc-platform-name">Website</span>
-          <span class="sc-live-badge" style="background:#00d4aa22;color:#00d4aa">LIVE</span>
+          <div class="scard-profile">
+            <div class="scard-avatar-wrap web-avatar-wrap">
+              <div class="scard-avatar">🌐</div>
+              <div class="scard-avatar-ring web-ring"></div>
+            </div>
+            <div class="scard-profile-info">
+              <h3>jasadaud.online</h3>
+              <p>Web Developer · Designer</p>
+            </div>
+          </div>
+          <p class="scard-bio">Platform digital modern dengan berbagai layanan, portofolio, dan karya terbaik 💻</p>
+          <div class="scard-stats-row">
+            <div class="scard-stat-item"><div class="scard-stat-val">∞</div><div class="scard-stat-key">Pages</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">⚡</div><div class="scard-stat-key">Speed</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">🔒</div><div class="scard-stat-key">Secure</div></div>
+          </div>
+          <div class="scard-tech-tags">
+            <span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>Firebase</span><span>PWA</span>
+          </div>
+          <button class="scard-btn web-btn-new">Kunjungi Website <span>→</span></button>
         </div>
-        <div class="sc-avatar"><div class="sc-avatar-ring" style="background:linear-gradient(135deg,#00d4aa,#0066ff)"><div class="sc-avatar-inner"><span>🌐</span></div></div></div>
-        <div class="sc-info">
-          <h3 class="sc-username">jasadaud.online</h3>
-          <p class="sc-bio">Website resmi dengan berbagai fitur digital dan konten eksklusif 💻</p>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-num">✦</span><span class="sc-stat-label">Pages</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">⚡</span><span class="sc-stat-label">Speed</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">🔒</span><span class="sc-stat-label">Secure</span></div>
-        </div>
-        <div class="web-features">
-          <div class="wf-item">🎵 Music Player</div>
-          <div class="wf-item">🎮 Mini Games</div>
-          <div class="wf-item">🧮 Tools</div>
-          <div class="wf-item">📱 Responsive</div>
-        </div>
-        <button class="sc-btn" style="background:linear-gradient(135deg,#00d4aa,#0066ff);color:#fff">Kunjungi Website <span>→</span></button>
       </div>
 
       <!-- WhatsApp -->
-      <div class="social-card wa-card" onclick="window.open('https://wa.me/628988995637','_blank')">
-        <div class="sc-bg"><div class="sc-blur b1"></div><div class="sc-blur b2"></div></div>
-        <div class="sc-top">
-          <div class="sc-platform-icon" style="color:#25d366">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <div class="scard wa" onclick="window.open('https://wa.me/6285156318963','_blank')">
+        <div class="scard-glow"></div>
+        <div class="scard-inner">
+          <div class="scard-top">
+            <div class="scard-plat">
+              <div class="scard-plat-icon wa-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              </div>
+              <div class="scard-plat-info">
+                <span class="scard-plat-name">WhatsApp</span>
+                <span class="scard-status wa-status">🟢 Online</span>
+              </div>
+            </div>
+            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
           </div>
-          <span class="sc-platform-name">WhatsApp</span>
-          <span class="sc-live-badge" style="background:#25d36622;color:#25d366">CHAT</span>
+          <div class="scard-profile">
+            <div class="scard-avatar-wrap wa-avatar-wrap">
+              <div class="scard-avatar">💬</div>
+              <div class="scard-avatar-ring wa-ring"></div>
+            </div>
+            <div class="scard-profile-info">
+              <h3>Riki Hermawan</h3>
+              <p>+62 851-5631-8963</p>
+            </div>
+          </div>
+          <p class="scard-bio">Hubungi untuk kolaborasi, pertanyaan, atau sekadar ngobrol santai 😊</p>
+          <div class="scard-stats-row">
+            <div class="scard-stat-item"><div class="scard-stat-val">✓✓</div><div class="scard-stat-key">Dibaca</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">⚡</div><div class="scard-stat-key">Respon</div></div>
+            <div class="scard-stat-divider"></div>
+            <div class="scard-stat-item"><div class="scard-stat-val">24/7</div><div class="scard-stat-key">Aktif</div></div>
+          </div>
+          <div class="scard-wa-chat">
+            <div class="wa-bubble recv">Halo! Ada yang bisa saya bantu? 👋</div>
+            <div class="wa-bubble sent">Siap berkolaborasi! ✨</div>
+          </div>
+          <button class="scard-btn wa-btn-new">Chat Sekarang <span>→</span></button>
         </div>
-        <div class="sc-avatar"><div class="sc-avatar-ring" style="background:linear-gradient(135deg,#25d366,#128c7e)"><div class="sc-avatar-inner"><span>💬</span></div></div></div>
-        <div class="sc-info">
-          <h3 class="sc-username">Riki Hermawan S.Kom</h3>
-          <p class="sc-bio">Hubungi langsung via WhatsApp untuk kolaborasi dan kerjasama 🤝</p>
-        </div>
-        <div class="sc-stats">
-          <div class="sc-stat"><span class="sc-stat-num">💬</span><span class="sc-stat-label">Chat</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">⚡</span><span class="sc-stat-label">Respon</span></div>
-          <div class="sc-stat"><span class="sc-stat-num">✓</span><span class="sc-stat-label">Online</span></div>
-        </div>
-        <div class="wa-status">
-          <div class="wa-dot"></div>
-          <span>Biasanya membalas dalam 1 jam</span>
-        </div>
-        <div class="wa-number" style="font-size:.75rem;color:#25d366;margin:.3rem 0;font-family:'Space Mono',monospace">+62 898-899-5637</div>
-        <button class="sc-btn" style="background:linear-gradient(135deg,#25d366,#128c7e);color:#fff">Kirim Pesan <span>→</span></button>
       </div>
 
     </div>
