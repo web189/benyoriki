@@ -176,6 +176,10 @@ const audioEl=document.getElementById('audioPlayer');
 
 // ===== FIREBASE REALTIME SYNC =====
 function initFirebaseSync(){
+  // Muat lagu lokal (dari localStorage) terlebih dahulu agar langsung tersedia
+  loadLocalTracksIntoPlaylist();
+  renderTracks(); updateTotalSongs();
+
   try{
     db.ref('tracks').on('value',(snapshot)=>{
       const data=snapshot.val();
@@ -183,11 +187,24 @@ function initFirebaseSync(){
         const fbTracks=Object.entries(data).map(([key,val])=>({...val,firebaseKey:key}));
         const defaultIds=new Set(DEFAULT_TRACKS.map(t=>t.id));
         const newFb=fbTracks.filter(t=>!defaultIds.has(t.id));
-        TRACKS=[...DEFAULT_TRACKS,...newFb];
-      } else { TRACKS=[...DEFAULT_TRACKS]; }
+        const fbIds=new Set(newFb.map(t=>t.id));
+        const localOnly=loadLocalTracks().filter(t=>!fbIds.has(t.id)&&!defaultIds.has(t.id));
+        TRACKS=[...DEFAULT_TRACKS,...newFb,...localOnly];
+      } else {
+        TRACKS=[...DEFAULT_TRACKS];
+        loadLocalTracksIntoPlaylist();
+      }
       renderTracks(); updateTotalSongs(); renderTopPlayed(); renderLiked();
-    },(err)=>{ console.warn('Firebase sync error:',err); TRACKS=[...DEFAULT_TRACKS]; renderTracks(); updateTotalSongs(); });
-  }catch(e){ console.warn('Firebase unavailable'); renderTracks(); updateTotalSongs(); }
+    },(err)=>{
+      console.warn('Firebase sync error:',err);
+      TRACKS=[...DEFAULT_TRACKS]; loadLocalTracksIntoPlaylist();
+      renderTracks(); updateTotalSongs();
+    });
+  }catch(e){
+    console.warn('Firebase unavailable');
+    TRACKS=[...DEFAULT_TRACKS]; loadLocalTracksIntoPlaylist();
+    renderTracks(); updateTotalSongs();
+  }
 }
 function updateTotalSongs(){ const el=document.getElementById('totalSongs'); if(el)el.textContent=TRACKS.length; }
 async function saveTrackToFirebase(track){
@@ -228,16 +245,24 @@ if(searchInput) searchInput.addEventListener('input',e=>{ currentFilter.search=e
 window.deleteTrack=async function(e,firebaseKey,trackId){
   e.stopPropagation();
   if(!currentUser){showToast('🔐 Login diperlukan','error');return;}
-  if(!confirm('Hapus lagu ini dari database?'))return;
+  if(!confirm('Hapus lagu ini?'))return;
   const track=TRACKS.find(t=>t.id===trackId||t.firebaseKey===firebaseKey);
   if(!track||track.addedBy==='system'){showToast('❌ Lagu tidak bisa dihapus','error');return;}
   if(currentUser.username!==track.addedBy&&currentUser.role!=='admin'){showToast('❌ Tidak punya izin','error');return;}
+  // Hapus dari TRACKS lokal
+  const idx=TRACKS.indexOf(track); if(idx>-1)TRACKS.splice(idx,1);
+  // Hapus dari localStorage lokal
+  removeLocalTrack(track.id);
+  // Revoke blob URL jika ada
+  if(track.url&&track.url.startsWith('blob:'))try{URL.revokeObjectURL(track.url);}catch(e){}
+  renderTracks(); updateTotalSongs();
+  showToast(`🗑 "${track.title}" berhasil dihapus`,'success');
+  // Hapus dari Firebase jika ada
   try{
     const key=track.firebaseKey||firebaseKey;
-    await deleteTrackFromFirebase(key);
+    if(key&&key!==track.id) await deleteTrackFromFirebase(key);
     if(track.storageRef){try{await storage.ref(track.storageRef).delete();}catch(e){}}
-    showToast(`🗑 "${track.title}" berhasil dihapus`,'success');
-  }catch(err){ showToast('❌ Gagal menghapus: '+(err.message||'error'),'error'); }
+  }catch(err){ console.warn('Firebase delete error:',err); }
 };
 
 // ===== LOAD & PLAY =====
@@ -384,21 +409,45 @@ function setUploadProgress(pct,label){
   if(fill){fill.style.width=Math.min(100,pct)+'%';fill.style.transition=pct===0?'none':'width .3s ease';}
   if(lbl){lbl.textContent=label||'';}
 }
+// ===== LOCAL STORAGE TRACKS (fallback tanpa Firebase Storage) =====
+const LOCAL_TRACKS_KEY = 'br_local_tracks_v2';
+
+function loadLocalTracks(){
+  try{ return JSON.parse(localStorage.getItem(LOCAL_TRACKS_KEY)||'[]'); }catch{ return []; }
+}
+function saveLocalTrack(track){
+  const tracks = loadLocalTracks();
+  tracks.unshift(track);
+  // Simpan maks 50 lagu lokal supaya tidak membebani localStorage
+  try{ localStorage.setItem(LOCAL_TRACKS_KEY, JSON.stringify(tracks.slice(0,50))); }catch(e){
+    // Jika storage penuh, hapus yang lama dan coba lagi
+    try{ localStorage.setItem(LOCAL_TRACKS_KEY, JSON.stringify(tracks.slice(0,10))); }catch(e2){}
+  }
+}
+function removeLocalTrack(trackId){
+  const tracks = loadLocalTracks().filter(t=>t.id!==trackId);
+  try{ localStorage.setItem(LOCAL_TRACKS_KEY, JSON.stringify(tracks)); }catch(e){}
+}
+
+// Inisialisasi: gabungkan local tracks ke TRACKS saat startup
+function loadLocalTracksIntoPlaylist(){
+  const localTracks = loadLocalTracks();
+  if(!localTracks.length) return;
+  const existingIds = new Set(TRACKS.map(t=>t.id));
+  localTracks.forEach(t=>{ if(!existingIds.has(t.id)){ TRACKS.push(t); existingIds.add(t.id); } });
+}
+
 async function uploadAudioToStorage(file,trackId){
   const ext=file.name.split('.').pop().toLowerCase(), refPath=`tracks/${trackId}/audio.${ext}`, storageRef=storage.ref(refPath);
   return new Promise((resolve,reject)=>{
-    const task=storageRef.put(file);
+    const task=storageRef.put(file,{contentType: file.type||'audio/mpeg'});
     task.on('state_changed',
       (snap)=>{
         const pct=Math.round((snap.bytesTransferred/snap.totalBytes)*100);
         setUploadProgress(pct,`Mengupload audio... ${pct}%`);
         setAudioStatus(`⬆️ Mengupload... ${pct}% (${(snap.bytesTransferred/1024/1024).toFixed(1)}/${(snap.totalBytes/1024/1024).toFixed(1)}MB)`,'');
       },
-      (err)=>{
-        setUploadProgress(0);
-        setAudioStatus('❌ Upload gagal: '+(err.message||err.code||'Error jaringan'),'error');
-        reject(err);
-      },
+      (err)=>{ reject(err); },
       async()=>{
         const url=await task.snapshot.ref.getDownloadURL();
         setUploadProgress(100,'✅ Upload selesai!');
@@ -439,59 +488,97 @@ window.submitAddMusic=async function(){
   const emojis=['🎵','🎶','🎸','🎹','🎤','🎼','🎺','🎻','🥁','🎷','✨','💫','🌟','⭐','🌙','☀️'];
   const colors=['#4facfe','#a18cd1','#fbc2eb','#43e97b','#f7971e','#f85032','#12c2e9','#ee0979','#b8e994','#ff6b6b','#6c5ce7','#fd79a8','#00cec9','#e17055'];
   const tempId='track_'+Date.now();
-  // Create blob URL for immediate local playback before Firebase upload
+
+  // ── LANGKAH 1: Buat blob URL lokal untuk diputar SEKARANG ──
   let localBlobUrl='';
+  let coverDataUrl='';
   if(pendingAudioFile) localBlobUrl=URL.createObjectURL(pendingAudioFile);
-  try{
-    let finalAudioUrl=manualUrl, audioStorageRef='', finalCoverUrl=manualCover;
-    // Upload audio to Firebase Storage
-    if(pendingAudioFile){
-      btn.textContent='⬆️ Mengupload audio...';
-      setUploadProgress(1,'Memulai upload...');
-      setAudioStatus('⏳ Memulai upload ke Firebase...','');
-      const res=await uploadAudioToStorage(pendingAudioFile,tempId);
-      finalAudioUrl=res.url;
-      audioStorageRef=res.refPath;
-    }
-    // Upload cover if any
-    if(pendingCoverFile){
-      btn.textContent='🖼 Mengupload cover...';
-      finalCoverUrl=await uploadCoverToStorage(pendingCoverFile,tempId);
-    }
-    const newTrack={title,artist,genre,year,duration,
-      url:finalAudioUrl,
-      cover:finalCoverUrl,
-      folder,
-      emoji:emojis[Math.floor(Math.random()*emojis.length)],
-      color:colors[Math.floor(Math.random()*colors.length)],
-      tags:selectedTags,
-      addedBy:currentUser.username,
-      addedAt:new Date().toLocaleDateString('id-ID'),
-      storageRef:audioStorageRef,
-      timestamp:Date.now()
-    };
-    btn.textContent='💾 Menyimpan ke database...';
-    await saveTrackToFirebase(newTrack);
-    setUploadProgress(100,'✅ Tersimpan!');
-    // If blob URL was created, revoke it now that we have the Firebase URL
-    if(localBlobUrl) URL.revokeObjectURL(localBlobUrl);
-    showToast(`🎵 "${title}" berhasil ditambahkan!`,'success');
-    closeAddMusic();
-  }catch(e){
-    console.error('submitAddMusic error:',e);
-    // Show user-friendly error
-    let errMsg='❌ Gagal menambahkan lagu. ';
-    if(e.code==='storage/unauthorized')errMsg+='Tidak punya izin ke Firebase Storage.';
-    else if(e.code==='storage/canceled')errMsg+='Upload dibatalkan.';
-    else if(e.message&&e.message.includes('network'))errMsg+='Periksa koneksi internet.';
-    else errMsg+=(e.message||'Coba lagi.');
-    err.textContent=errMsg;
-    setAudioStatus('❌ Upload gagal — '+errMsg,'error');
-    setUploadProgress(0);
-    if(localBlobUrl) URL.revokeObjectURL(localBlobUrl);
-  }finally{
-    btn.disabled=false;
-    btn.innerHTML='💾 Upload & Simpan ke Firebase <span>→</span>';
+
+  // Baca cover sebagai data URL agar bisa disimpan di localStorage
+  if(pendingCoverFile){
+    try{
+      coverDataUrl = await new Promise((res,rej)=>{
+        const r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsDataURL(pendingCoverFile);
+      });
+    }catch(e){ coverDataUrl=''; }
+  }
+
+  // ── LANGKAH 2: Simpan lagu ke TRACKS (lokal) dan langsung bisa diputar ──
+  const newTrack={
+    id: tempId,
+    title, artist, genre, year, duration,
+    url: localBlobUrl || manualUrl,
+    cover: coverDataUrl || manualCover,
+    folder,
+    emoji: emojis[Math.floor(Math.random()*emojis.length)],
+    color: colors[Math.floor(Math.random()*colors.length)],
+    tags: selectedTags,
+    addedBy: currentUser.username,
+    addedAt: new Date().toLocaleDateString('id-ID'),
+    timestamp: Date.now(),
+    isLocal: !!pendingAudioFile,   // tandai sebagai lokal
+    storageRef: ''
+  };
+
+  // Tambahkan ke playlist sekarang (tanpa tunggu Firebase)
+  TRACKS.push(newTrack);
+
+  // Simpan ke localStorage (tanpa blob URL karena tidak bisa diserialisasi)
+  const trackForStorage={...newTrack, url: manualUrl||'', cover: coverDataUrl||manualCover};
+  saveLocalTrack(trackForStorage);
+
+  setUploadProgress(60,'✅ Lagu siap diputar!');
+  setAudioStatus('✅ Lagu berhasil ditambahkan dan siap diputar!','success');
+  renderTracks(); updateTotalSongs();
+
+  showToast(`🎵 "${title}" berhasil ditambahkan!`,'success');
+  closeAddMusic();
+
+  // Pilih dan putar lagu yang baru ditambahkan
+  currentTrackIdx = TRACKS.length - 1;
+  loadTrack(currentTrackIdx);
+  playTrack();
+
+  btn.disabled=false;
+  btn.innerHTML='💾 Upload & Simpan ke Firebase <span>→</span>';
+
+  // ── LANGKAH 3: Coba upload ke Firebase di background (opsional) ──
+  if(pendingAudioFile){
+    (async()=>{
+      try{
+        setAudioStatus('☁️ Mencoba sync ke Firebase (background)...','');
+        setUploadProgress(1,'Memulai upload Firebase...');
+        const res=await uploadAudioToStorage(pendingAudioFile,tempId);
+        // Update URL ke Firebase URL
+        newTrack.url=res.url; newTrack.storageRef=res.refPath; newTrack.isLocal=false;
+
+        let finalCoverUrl=coverDataUrl||manualCover;
+        if(pendingCoverFile){ try{ finalCoverUrl=await uploadCoverToStorage(pendingCoverFile,tempId); newTrack.cover=finalCoverUrl; }catch(e){} }
+
+        const trackForFb={...newTrack, url:res.url, cover:finalCoverUrl||''};
+        delete trackForFb.firebaseKey;
+        await saveTrackToFirebase(trackForFb);
+
+        // Update localStorage entry dengan URL Firebase
+        const locals=loadLocalTracks().map(t=>t.id===tempId?{...t,url:res.url,cover:finalCoverUrl||t.cover,storageRef:res.refPath}:t);
+        try{localStorage.setItem(LOCAL_TRACKS_KEY,JSON.stringify(locals));}catch(e){}
+
+        setUploadProgress(100,'✅ Tersimpan ke Firebase!');
+        setAudioStatus('✅ Tersinkron ke Firebase!','success');
+        showToast('☁️ Lagu tersinkron ke Firebase!','success');
+      }catch(e){
+        console.warn('Firebase upload background failed:',e);
+        setUploadProgress(0);
+        setAudioStatus('⚠️ Firebase gagal — lagu tetap tersimpan lokal','');
+        // Tidak tampilkan error ke user karena lagu sudah bisa diputar
+      }
+    })();
+  } else {
+    // Hanya URL — langsung simpan ke Firebase
+    try{
+      await saveTrackToFirebase({...newTrack, cover: manualCover});
+      setUploadProgress(100,'✅ Tersimpan!');
+    }catch(e){ console.warn('Firebase save failed:',e); }
   }
 };
 
