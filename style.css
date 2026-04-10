@@ -205,6 +205,7 @@ body::before{
 }
 .file-upload-zone input[type=file]{
   position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+  z-index:10;font-size:0;
 }
 .fuz-icon{font-size:2rem;margin-bottom:.5rem;display:block}
 .fuz-label{font-size:.82rem;color:var(--text2);font-weight:500}

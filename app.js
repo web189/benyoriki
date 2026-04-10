@@ -325,31 +325,56 @@ window.shareTrack=function(){ const t=TRACKS[currentTrackIdx];if(!t)return;const
 
 // ===== FILE UPLOAD HANDLERS =====
 window.handleAudioFile=function(input){
-  const file=input.files[0];if(!file)return;
-  if(file.size>50*1024*1024){setAudioStatus('❌ File terlalu besar! Maks 50MB','error');input.value='';return;}
-  const ext=file.name.split('.').pop().toLowerCase();
-  const allowedExt=['mp3','ogg','wav','m4a','aac','flac','opus'];
-  // Accept if extension matches OR if MIME type starts with audio/
-  if(!allowedExt.includes(ext)&&!file.type.startsWith('audio/')){
-    setAudioStatus('❌ Format tidak didukung! Gunakan MP3/OGG/WAV/M4A','error');input.value='';return;
+  // Support both real input element and synthetic object from drop
+  const file = input.files ? input.files[0] : input;
+  if(!file){ setAudioStatus('❌ Tidak ada file yang dipilih','error'); return; }
+
+  // Validate size
+  if(file.size > 50*1024*1024){
+    setAudioStatus('❌ File terlalu besar! Maksimal 50MB','error');
+    if(input.value !== undefined) try{ input.value=''; }catch(e){}
+    return;
   }
-  pendingAudioFile=file;uploadedAudioUrl='';
+
+  // Validate by extension ONLY — do NOT rely on file.type
+  // because MP3 MIME type ("audio/mpeg") can be empty string on some browsers/OS
+  const ext = file.name.split('.').pop().toLowerCase().trim();
+  const allowedExt = ['mp3','ogg','wav','m4a','aac','flac','opus','weba','webm'];
+  if(!allowedExt.includes(ext)){
+    // Secondary check: if MIME has 'audio' in it, still allow
+    if(!file.type || !file.type.includes('audio')){
+      setAudioStatus('❌ Format tidak didukung! Gunakan MP3, OGG, WAV, M4A, AAC, FLAC','error');
+      if(input.value !== undefined) try{ input.value=''; }catch(e){}
+      return;
+    }
+  }
+
+  // Accepted!
+  pendingAudioFile = file;
+  uploadedAudioUrl = '';
   setUploadProgress(0);
-  setAudioStatus(`📁 File dipilih: ${file.name} (${(file.size/1024/1024).toFixed(1)}MB) — Siap upload`,'success');
+  setAudioStatus(`✅ File dipilih: ${file.name} (${(file.size/1024/1024).toFixed(1)} MB) — Siap diupload`, 'success');
+
+  // Auto-fill title from filename
+  const ti = document.getElementById('am_title');
+  if(ti && !ti.value){
+    ti.value = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
   // Read duration via blob URL
-  const blobUrl=URL.createObjectURL(file);
-  const tmpA=new Audio();
-  tmpA.preload='metadata';
-  tmpA.src=blobUrl;
-  tmpA.addEventListener('loadedmetadata',()=>{
-    const m=Math.floor(tmpA.duration/60),s=Math.floor(tmpA.duration%60);
-    const di=document.getElementById('am_duration');
-    if(di&&!di.value)di.value=`${m}:${s.toString().padStart(2,'0')}`;
-    URL.revokeObjectURL(blobUrl);
-  });
-  tmpA.addEventListener('error',()=>URL.revokeObjectURL(blobUrl));
-  const ti=document.getElementById('am_title');
-  if(ti&&!ti.value)ti.value=file.name.replace(/\.[^.]+$/,'').replace(/[-_]/g,' ').replace(/\s+/g,' ').trim();
+  try {
+    const blobUrl = URL.createObjectURL(file);
+    const tmpA = new Audio();
+    tmpA.preload = 'metadata';
+    tmpA.onloadedmetadata = () => {
+      const m = Math.floor(tmpA.duration/60), s = Math.floor(tmpA.duration%60);
+      const di = document.getElementById('am_duration');
+      if(di && !di.value) di.value = `${m}:${s.toString().padStart(2,'0')}`;
+      URL.revokeObjectURL(blobUrl);
+    };
+    tmpA.onerror = () => URL.revokeObjectURL(blobUrl);
+    tmpA.src = blobUrl;
+  } catch(e) { /* non-critical */ }
 };
 window.handleCoverFile=function(input){ const file=input.files[0];if(!file)return;if(!file.type.startsWith('image/')){showToast('❌ File harus gambar!','error');input.value='';return;}if(file.size>5*1024*1024){showToast('❌ Gambar maks 5MB','error');input.value='';return;} pendingCoverFile=file;uploadedCoverUrl='';const reader=new FileReader();reader.onload=(e)=>{const p=document.getElementById('coverPreview'),l=document.querySelector('.cover-label');if(p){p.src=e.target.result;p.style.display='block';}if(l)l.textContent=file.name;};reader.readAsDataURL(file); };
 function setAudioStatus(msg,type=''){ const el=document.getElementById('audioStatus');if(!el)return;el.textContent=msg;el.className='fuz-status '+type; }
@@ -391,7 +416,7 @@ function openAddMusic(){ document.getElementById('addMusicModal').classList.add(
 window.closeAddMusic=function(){ document.getElementById('addMusicModal').classList.remove('open');document.body.style.overflow=''; };
 document.getElementById('addMusicModal').addEventListener('click',function(e){if(e.target===this)closeAddMusic();});
 const audioZone=document.getElementById('audioDropZone');
-if(audioZone){ audioZone.addEventListener('dragover',e=>{e.preventDefault();audioZone.classList.add('drag-over');});audioZone.addEventListener('dragleave',()=>audioZone.classList.remove('drag-over'));audioZone.addEventListener('drop',e=>{e.preventDefault();audioZone.classList.remove('drag-over');const file=e.dataTransfer.files[0];if(file)window.handleAudioFile({files:[file],value:''});}); }
+if(audioZone){ audioZone.addEventListener('dragover',e=>{e.preventDefault();audioZone.classList.add('drag-over');});audioZone.addEventListener('dragleave',()=>audioZone.classList.remove('drag-over'));audioZone.addEventListener('drop',e=>{e.preventDefault();audioZone.classList.remove('drag-over');const file=e.dataTransfer.files[0];if(file){pendingAudioFile=null;window.handleAudioFile({files:e.dataTransfer.files});}}); }
 window.toggleTag=function(el,tag){ el.classList.toggle('selected');if(selectedTags.includes(tag))selectedTags=selectedTags.filter(t=>t!==tag);else selectedTags.push(tag); };
 
 window.submitAddMusic=async function(){
