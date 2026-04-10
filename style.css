@@ -1347,3 +1347,106 @@ body::before{
 /* Ensure auth modal overlay centers properly */
 #authModal { display:none;align-items:center;justify-content:center;padding:1rem; }
 #authModal.open { display:flex; }
+
+/* ============================================================
+   KALENDER — Update Style Lengkap
+   ============================================================ */
+
+/* Hari libur nasional = merah */
+.cal-day.holiday {
+  background: rgba(244,63,94,.18) !important;
+  color: #f87171 !important;
+  font-weight: 700;
+  border-radius: 8px;
+}
+/* Cuti bersama = oranye/kuning */
+.cal-day.cuti-bersama {
+  background: rgba(245,158,11,.15) !important;
+  color: #fbbf24 !important;
+  font-weight: 600;
+  border-radius: 8px;
+}
+/* Hari peringatan = biru/ungu */
+.cal-day.peringatan {
+  background: rgba(124,58,237,.15) !important;
+  color: #a78bfa !important;
+  font-weight: 600;
+  border-radius: 8px;
+}
+/* Sabtu = warna berbeda */
+.cal-day.saturday {
+  color: #60a5fa;
+}
+/* Dot indikator kecil di bawah tanggal */
+.cal-dot {
+  display: block;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  margin: 1px auto 0;
+}
+.cal-dot-libur     { background: #f43f5e; }
+.cal-dot-cuti      { background: #f59e0b; }
+.cal-dot-peringatan{ background: #7c3aed; }
+
+/* Holiday list - grup */
+.hol-group { margin-bottom: 1rem; }
+.hol-group-title {
+  font-size: .65rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; margin-bottom: .45rem;
+  padding: .2rem .5rem; border-radius: 4px;
+  display: inline-block;
+}
+.title-libur      { background: rgba(244,63,94,.12); color: #f87171; }
+.title-cuti       { background: rgba(245,158,11,.12); color: #fbbf24; }
+.title-peringatan { background: rgba(124,58,237,.12); color: #a78bfa; }
+
+/* Tiap item di holiday list */
+.hol-item {
+  display: flex; align-items: flex-start; gap: .55rem;
+  padding: .45rem .55rem; border-radius: 8px;
+  margin-bottom: .3rem; transition: background var(--trans);
+  border-left: 2.5px solid transparent;
+}
+.hol-item:hover { background: var(--card2); }
+.hol-item-libur      { border-left-color: #f43f5e; }
+.hol-item-cuti       { border-left-color: #f59e0b; }
+.hol-item-peringatan { border-left-color: #7c3aed; }
+
+.hol-icon {
+  font-size: 1rem; flex-shrink: 0;
+  width: 24px; text-align: center; margin-top: .05rem;
+}
+.hol-detail {
+  display: flex; flex-direction: column; gap: .1rem; min-width: 0;
+}
+.hol-date {
+  font-size: .64rem; color: var(--text2);
+  font-family: 'JetBrains Mono', monospace;
+}
+.hol-name {
+  font-size: .78rem; font-weight: 600; color: var(--text);
+  line-height: 1.35;
+}
+.hol-empty {
+  font-size: .78rem; color: var(--text2);
+  text-align: center; padding: .8rem;
+  font-style: italic;
+}
+
+/* Legend di bawah kalender */
+.cal-legend {
+  display: flex; flex-wrap: wrap; gap: .4rem .8rem;
+  margin-top: .6rem; padding-top: .6rem;
+  border-top: 1px solid var(--border);
+}
+.cal-legend-item {
+  display: flex; align-items: center; gap: .35rem;
+  font-size: .65rem; color: var(--text2);
+}
+.cal-legend-dot {
+  width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0;
+}
+.leg-libur      { background: #f43f5e; }
+.leg-cuti       { background: #f59e0b; }
+.leg-peringatan { background: #7c3aed; }
+.leg-sun        { background: #f87171; }

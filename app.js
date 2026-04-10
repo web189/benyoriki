@@ -510,9 +510,320 @@ document.addEventListener('keydown',function(e){ if(e.target.tagName==='INPUT'||
 
 // ===== CALENDAR =====
 const MONTHS_ID=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
-const HOLIDAYS_2026={'1-1':'Tahun Baru Masehi','1-27':'Isra Miraj','2-9':'Tahun Baru Imlek','3-22':'Hari Raya Nyepi','3-20':'Wafat Isa Al Masih','3-31':'Hari Raya Idul Fitri','4-1':'Hari Raya Idul Fitri','5-1':'Hari Buruh','5-14':'Kenaikan Isa Al Masih','5-29':'Hari Raya Waisak','6-1':'Hari Pancasila','6-6':'Hari Raya Idul Adha','6-26':'Tahun Baru Hijriyah','8-17':'HUT RI','9-4':'Maulid Nabi','12-25':'Hari Natal','12-26':'Cuti Bersama Natal'};
+const DAYS_ID=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+// ============================================================
+// DATA HARI LIBUR NASIONAL & PERINGATAN INDONESIA
+// Sumber: Kepres / SKB 3 Menteri resmi
+// Tipe: 'libur'=Libur Nasional, 'cuti'=Cuti Bersama, 'peringatan'=Hari Peringatan
+// ============================================================
+const CALENDAR_DATA = {
+  2024: {
+    // JANUARI
+    '1-1':  { nama:'Tahun Baru Masehi 2024', tipe:'libur', icon:'🎉' },
+    '1-2':  { nama:'Cuti Bersama Tahun Baru', tipe:'cuti', icon:'📅' },
+    '1-15': { nama:'Hari Tritura', tipe:'peringatan', icon:'📢' },
+    // FEBRUARI
+    '2-10': { nama:'Tahun Baru Imlek 2575 Kongzili', tipe:'libur', icon:'🧧' },
+    '2-14': { nama:'Hari Valentine (Internasional)', tipe:'peringatan', icon:'💝' },
+    // MARET
+    '3-11': { nama:'Hari Supersemar', tipe:'peringatan', icon:'📜' },
+    '3-11': { nama:'Hari Supersemar', tipe:'peringatan', icon:'📜' },
+    '3-12': { nama:'Isra Miraj Nabi Muhammad SAW 1445 H', tipe:'libur', icon:'🌙' },
+    '3-22': { nama:'Hari Air Sedunia', tipe:'peringatan', icon:'💧' },
+    '3-29': { nama:'Wafat Isa Al Masih (Good Friday)', tipe:'libur', icon:'✝️' },
+    '3-31': { nama:'Hari Raya Paskah', tipe:'peringatan', icon:'🐣' },
+    // APRIL
+    '4-9':  { nama:'Hari Raya Idul Fitri 1 Syawal 1445 H', tipe:'libur', icon:'🌙' },
+    '4-10': { nama:'Hari Raya Idul Fitri 2 Syawal 1445 H', tipe:'libur', icon:'🌙' },
+    '4-8':  { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '4-11': { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '4-12': { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '4-21': { nama:'Hari Kartini', tipe:'peringatan', icon:'👩' },
+    // MEI
+    '5-1':  { nama:'Hari Buruh Internasional', tipe:'libur', icon:'⚒️' },
+    '5-2':  { nama:'Hari Pendidikan Nasional', tipe:'peringatan', icon:'🎓' },
+    '5-9':  { nama:'Kenaikan Isa Al Masih', tipe:'libur', icon:'✝️' },
+    '5-10': { nama:'Cuti Bersama Kenaikan Isa Al Masih', tipe:'cuti', icon:'📅' },
+    '5-16': { nama:'Hari Raya Waisak 2568 BE', tipe:'libur', icon:'☸️' },
+    '5-20': { nama:'Hari Kebangkitan Nasional', tipe:'peringatan', icon:'🇮🇩' },
+    // JUNI
+    '6-1':  { nama:'Hari Lahir Pancasila', tipe:'libur', icon:'🦅' },
+    '6-17': { nama:'Hari Raya Idul Adha 1445 H', tipe:'libur', icon:'🐑' },
+    '6-18': { nama:'Cuti Bersama Idul Adha', tipe:'cuti', icon:'📅' },
+    // JULI
+    '7-7':  { nama:'Tahun Baru Islam 1 Muharram 1446 H', tipe:'libur', icon:'🌙' },
+    // AGUSTUS
+    '8-17': { nama:'Hari Kemerdekaan RI ke-79', tipe:'libur', icon:'🇮🇩' },
+    // SEPTEMBER
+    '9-16': { nama:'Maulid Nabi Muhammad SAW 1446 H', tipe:'libur', icon:'🌙' },
+    // OKTOBER
+    '10-1': { nama:'Hari Kesaktian Pancasila', tipe:'peringatan', icon:'🦅' },
+    '10-5': { nama:'Hari TNI', tipe:'peringatan', icon:'🎖️' },
+    '10-28':{ nama:'Hari Sumpah Pemuda', tipe:'peringatan', icon:'✊' },
+    // NOVEMBER
+    '11-10':{ nama:'Hari Pahlawan', tipe:'peringatan', icon:'🎖️' },
+    '11-25':{ nama:'Hari Guru Nasional', tipe:'peringatan', icon:'📚' },
+    // DESEMBER
+    '12-12':{ nama:'Hari Bela Negara', tipe:'peringatan', icon:'🛡️' },
+    '12-22':{ nama:'Hari Ibu Nasional', tipe:'peringatan', icon:'👩‍👧' },
+    '12-25':{ nama:'Hari Raya Natal', tipe:'libur', icon:'🎄' },
+    '12-26':{ nama:'Cuti Bersama Natal', tipe:'cuti', icon:'📅' },
+  },
+  2025: {
+    // JANUARI
+    '1-1':  { nama:'Tahun Baru Masehi 2025', tipe:'libur', icon:'🎉' },
+    '1-15': { nama:'Hari Tritura', tipe:'peringatan', icon:'📢' },
+    '1-27': { nama:'Isra Miraj Nabi Muhammad SAW 1446 H', tipe:'libur', icon:'🌙' },
+    '1-28': { nama:'Tahun Baru Imlek 2576 Kongzili', tipe:'libur', icon:'🧧' },
+    '1-29': { nama:'Cuti Bersama Tahun Baru Imlek', tipe:'cuti', icon:'📅' },
+    // FEBRUARI
+    '2-14': { nama:'Hari Valentine (Internasional)', tipe:'peringatan', icon:'💝' },
+    // MARET
+    '3-4':  { nama:'Hari Raya Nyepi (Tahun Baru Saka 1947)', tipe:'libur', icon:'🕯️' },
+    '3-28': { nama:'Wafat Isa Al Masih (Good Friday)', tipe:'libur', icon:'✝️' },
+    '3-30': { nama:'Hari Raya Paskah', tipe:'peringatan', icon:'🐣' },
+    // MARET-APRIL (Idul Fitri)
+    '3-31': { nama:'Hari Raya Idul Fitri 1 Syawal 1446 H', tipe:'libur', icon:'🌙' },
+    '4-1':  { nama:'Hari Raya Idul Fitri 2 Syawal 1446 H', tipe:'libur', icon:'🌙' },
+    '3-28': { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '4-2':  { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '4-3':  { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '4-4':  { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    // APRIL
+    '4-21': { nama:'Hari Kartini', tipe:'peringatan', icon:'👩' },
+    // MEI
+    '5-1':  { nama:'Hari Buruh Internasional', tipe:'libur', icon:'⚒️' },
+    '5-2':  { nama:'Hari Pendidikan Nasional', tipe:'peringatan', icon:'🎓' },
+    '5-12': { nama:'Hari Raya Waisak 2569 BE', tipe:'libur', icon:'☸️' },
+    '5-13': { nama:'Cuti Bersama Waisak', tipe:'cuti', icon:'📅' },
+    '5-20': { nama:'Hari Kebangkitan Nasional', tipe:'peringatan', icon:'🇮🇩' },
+    '5-29': { nama:'Kenaikan Isa Al Masih', tipe:'libur', icon:'✝️' },
+    // JUNI
+    '6-1':  { nama:'Hari Lahir Pancasila', tipe:'libur', icon:'🦅' },
+    '6-6':  { nama:'Hari Raya Idul Adha 1446 H', tipe:'libur', icon:'🐑' },
+    '6-9':  { nama:'Tahun Baru Islam 1 Muharram 1447 H', tipe:'libur', icon:'🌙' },
+    // AGUSTUS
+    '8-17': { nama:'Hari Kemerdekaan RI ke-80', tipe:'libur', icon:'🇮🇩' },
+    '8-18': { nama:'Cuti Bersama HUT RI', tipe:'cuti', icon:'📅' },
+    // SEPTEMBER
+    '9-5':  { nama:'Maulid Nabi Muhammad SAW 1447 H', tipe:'libur', icon:'🌙' },
+    // OKTOBER
+    '10-1': { nama:'Hari Kesaktian Pancasila', tipe:'peringatan', icon:'🦅' },
+    '10-5': { nama:'Hari TNI', tipe:'peringatan', icon:'🎖️' },
+    '10-28':{ nama:'Hari Sumpah Pemuda', tipe:'peringatan', icon:'✊' },
+    // NOVEMBER
+    '11-10':{ nama:'Hari Pahlawan', tipe:'peringatan', icon:'🎖️' },
+    '11-25':{ nama:'Hari Guru Nasional', tipe:'peringatan', icon:'📚' },
+    // DESEMBER
+    '12-12':{ nama:'Hari Bela Negara', tipe:'peringatan', icon:'🛡️' },
+    '12-22':{ nama:'Hari Ibu Nasional', tipe:'peringatan', icon:'👩‍👧' },
+    '12-25':{ nama:'Hari Raya Natal', tipe:'libur', icon:'🎄' },
+    '12-26':{ nama:'Cuti Bersama Natal', tipe:'cuti', icon:'📅' },
+  },
+  2026: {
+    // JANUARI
+    '1-1':  { nama:'Tahun Baru Masehi 2026', tipe:'libur', icon:'🎉' },
+    '1-2':  { nama:'Cuti Bersama Tahun Baru', tipe:'cuti', icon:'📅' },
+    '1-15': { nama:'Hari Tritura', tipe:'peringatan', icon:'📢' },
+    '1-17': { nama:'Tahun Baru Imlek 2577 Kongzili', tipe:'libur', icon:'🧧' },
+    '1-19': { nama:'Isra Miraj Nabi Muhammad SAW 1447 H', tipe:'libur', icon:'🌙' },
+    // FEBRUARI
+    '2-14': { nama:'Hari Valentine (Internasional)', tipe:'peringatan', icon:'💝' },
+    // MARET
+    '3-21': { nama:'Hari Raya Nyepi (Tahun Baru Saka 1948)', tipe:'libur', icon:'🕯️' },
+    '3-20': { nama:'Wafat Isa Al Masih (Good Friday)', tipe:'libur', icon:'✝️' },
+    '3-22': { nama:'Hari Raya Paskah', tipe:'peringatan', icon:'🐣' },
+    // Idul Fitri 2026 (perkiraan 20-21 Maret 2026)
+    '3-20': { nama:'Hari Raya Idul Fitri 1 Syawal 1447 H', tipe:'libur', icon:'🌙' },
+    '3-21': { nama:'Hari Raya Idul Fitri 2 Syawal 1447 H', tipe:'libur', icon:'🌙' },
+    '3-18': { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '3-19': { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '3-23': { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '3-24': { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    // APRIL
+    '4-21': { nama:'Hari Kartini', tipe:'peringatan', icon:'👩' },
+    // MEI
+    '5-1':  { nama:'Hari Buruh Internasional', tipe:'libur', icon:'⚒️' },
+    '5-2':  { nama:'Hari Pendidikan Nasional', tipe:'peringatan', icon:'🎓' },
+    '5-14': { nama:'Kenaikan Isa Al Masih', tipe:'libur', icon:'✝️' },
+    '5-20': { nama:'Hari Kebangkitan Nasional', tipe:'peringatan', icon:'🇮🇩' },
+    '5-27': { nama:'Hari Raya Idul Adha 1447 H', tipe:'libur', icon:'🐑' },
+    '5-28': { nama:'Cuti Bersama Idul Adha', tipe:'cuti', icon:'📅' },
+    '5-29': { nama:'Hari Raya Waisak 2570 BE', tipe:'libur', icon:'☸️' },
+    // JUNI
+    '6-1':  { nama:'Hari Lahir Pancasila', tipe:'libur', icon:'🦅' },
+    '6-27': { nama:'Tahun Baru Islam 1 Muharram 1448 H', tipe:'libur', icon:'🌙' },
+    // AGUSTUS
+    '8-17': { nama:'Hari Kemerdekaan RI ke-81', tipe:'libur', icon:'🇮🇩' },
+    // SEPTEMBER
+    '9-5':  { nama:'Maulid Nabi Muhammad SAW 1448 H', tipe:'libur', icon:'🌙' },
+    // OKTOBER
+    '10-1': { nama:'Hari Kesaktian Pancasila', tipe:'peringatan', icon:'🦅' },
+    '10-5': { nama:'Hari TNI', tipe:'peringatan', icon:'🎖️' },
+    '10-28':{ nama:'Hari Sumpah Pemuda', tipe:'peringatan', icon:'✊' },
+    // NOVEMBER
+    '11-10':{ nama:'Hari Pahlawan', tipe:'peringatan', icon:'🎖️' },
+    '11-25':{ nama:'Hari Guru Nasional', tipe:'peringatan', icon:'📚' },
+    // DESEMBER
+    '12-12':{ nama:'Hari Bela Negara', tipe:'peringatan', icon:'🛡️' },
+    '12-22':{ nama:'Hari Ibu Nasional', tipe:'peringatan', icon:'👩‍👧' },
+    '12-25':{ nama:'Hari Raya Natal', tipe:'libur', icon:'🎄' },
+    '12-26':{ nama:'Cuti Bersama Natal', tipe:'cuti', icon:'📅' },
+  },
+  2027: {
+    // JANUARI
+    '1-1':  { nama:'Tahun Baru Masehi 2027', tipe:'libur', icon:'🎉' },
+    '1-15': { nama:'Hari Tritura', tipe:'peringatan', icon:'📢' },
+    '1-8':  { nama:'Isra Miraj Nabi Muhammad SAW 1448 H', tipe:'libur', icon:'🌙' },
+    '1-26': { nama:'Tahun Baru Imlek 2578 Kongzili', tipe:'libur', icon:'🧧' },
+    // MARET
+    '3-10': { nama:'Hari Raya Nyepi (Tahun Baru Saka 1949)', tipe:'libur', icon:'🕯️' },
+    '3-10': { nama:'Hari Raya Idul Fitri 1 Syawal 1448 H', tipe:'libur', icon:'🌙' },
+    '3-11': { nama:'Hari Raya Idul Fitri 2 Syawal 1448 H', tipe:'libur', icon:'🌙' },
+    '3-8':  { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '3-9':  { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    '3-12': { nama:'Cuti Bersama Idul Fitri', tipe:'cuti', icon:'📅' },
+    // APRIL
+    '4-2':  { nama:'Wafat Isa Al Masih (Good Friday)', tipe:'libur', icon:'✝️' },
+    '4-4':  { nama:'Hari Raya Paskah', tipe:'peringatan', icon:'🐣' },
+    '4-21': { nama:'Hari Kartini', tipe:'peringatan', icon:'👩' },
+    // MEI
+    '5-1':  { nama:'Hari Buruh Internasional', tipe:'libur', icon:'⚒️' },
+    '5-2':  { nama:'Hari Pendidikan Nasional', tipe:'peringatan', icon:'🎓' },
+    '5-17': { nama:'Hari Raya Idul Adha 1448 H', tipe:'libur', icon:'🐑' },
+    '5-18': { nama:'Hari Raya Waisak 2571 BE', tipe:'libur', icon:'☸️' },
+    '5-20': { nama:'Hari Kebangkitan Nasional', tipe:'peringatan', icon:'🇮🇩' },
+    '5-13': { nama:'Kenaikan Isa Al Masih', tipe:'libur', icon:'✝️' },
+    // JUNI
+    '6-1':  { nama:'Hari Lahir Pancasila', tipe:'libur', icon:'🦅' },
+    '6-16': { nama:'Tahun Baru Islam 1 Muharram 1449 H', tipe:'libur', icon:'🌙' },
+    // AGUSTUS
+    '8-17': { nama:'Hari Kemerdekaan RI ke-82', tipe:'libur', icon:'🇮🇩' },
+    '8-25': { nama:'Maulid Nabi Muhammad SAW 1449 H', tipe:'libur', icon:'🌙' },
+    // OKTOBER
+    '10-1': { nama:'Hari Kesaktian Pancasila', tipe:'peringatan', icon:'🦅' },
+    '10-5': { nama:'Hari TNI', tipe:'peringatan', icon:'🎖️' },
+    '10-28':{ nama:'Hari Sumpah Pemuda', tipe:'peringatan', icon:'✊' },
+    // NOVEMBER
+    '11-10':{ nama:'Hari Pahlawan', tipe:'peringatan', icon:'🎖️' },
+    '11-25':{ nama:'Hari Guru Nasional', tipe:'peringatan', icon:'📚' },
+    // DESEMBER
+    '12-12':{ nama:'Hari Bela Negara', tipe:'peringatan', icon:'🛡️' },
+    '12-22':{ nama:'Hari Ibu Nasional', tipe:'peringatan', icon:'👩‍👧' },
+    '12-25':{ nama:'Hari Raya Natal', tipe:'libur', icon:'🎄' },
+    '12-26':{ nama:'Cuti Bersama Natal', tipe:'cuti', icon:'📅' },
+  }
+};
+
+// Helper: get data hari ini dari tahun aktif
+function getHariData(year, key){ return (CALENDAR_DATA[year]||{})[key] || null; }
+function isLiburNasional(year, key){ const d=getHariData(year,key); return d&&d.tipe==='libur'; }
+function isCutiBersama(year, key){ const d=getHariData(year,key); return d&&d.tipe==='cuti'; }
+function isPeringatan(year, key){ const d=getHariData(year,key); return d&&d.tipe==='peringatan'; }
+
 let calYear=2026,calMonth=new Date().getMonth();
-function renderCalendar(){ const ms=document.getElementById('monthSelect'),ys=document.getElementById('yearSelect');ms.innerHTML=MONTHS_ID.map((m,i)=>`<option value="${i}" ${i===calMonth?'selected':''}>${m}</option>`).join('');ys.innerHTML=[2024,2025,2026,2027].map(y=>`<option value="${y}" ${y===calYear?'selected':''}>${y}</option>`).join('');const firstDay=new Date(calYear,calMonth,1).getDay(),daysInMonth=new Date(calYear,calMonth+1,0).getDate(),prevDays=new Date(calYear,calMonth,0).getDate(),today=new Date(),container=document.getElementById('calendarDays');container.innerHTML='';for(let i=firstDay-1;i>=0;i--){const d=document.createElement('div');d.className='cal-day other-month';d.textContent=prevDays-i;container.appendChild(d);}for(let d=1;d<=daysInMonth;d++){const el=document.createElement('div'),key=`${calMonth+1}-${d}`,isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d,isHol=HOLIDAYS_2026[key],isSun=new Date(calYear,calMonth,d).getDay()===0;el.className='cal-day'+(isToday?' today':'')+(isHol?' holiday':'')+(isSun&&!isToday?' sunday':'');el.textContent=d;if(isHol)el.title=HOLIDAYS_2026[key];container.appendChild(el);}const rem=(7-((firstDay+daysInMonth)%7))%7;for(let i=1;i<=rem&&rem<7;i++){const d=document.createElement('div');d.className='cal-day other-month';d.textContent=i;container.appendChild(d);}const hl=document.getElementById('holidayList');hl.innerHTML='';Object.entries(HOLIDAYS_2026).filter(([k])=>k.startsWith(`${calMonth+1}-`)).forEach(([k,name])=>{const day=k.split('-')[1],el=document.createElement('div');el.className='hol-item';el.innerHTML=`<div class="hol-dot red"></div><span class="hol-date">${day} ${MONTHS_ID[calMonth]}</span><span class="hol-name">${name}</span>`;hl.appendChild(el);}); }
+function renderCalendar(){
+  const ms=document.getElementById('monthSelect'),ys=document.getElementById('yearSelect');
+  ms.innerHTML=MONTHS_ID.map((m,i)=>`<option value="${i}" ${i===calMonth?'selected':''}>${m}</option>`).join('');
+  ys.innerHTML=[2024,2025,2026,2027].map(y=>`<option value="${y}" ${y===calYear?'selected':''}>${y}</option>`).join('');
+
+  const firstDay=new Date(calYear,calMonth,1).getDay();
+  const daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  const prevDays=new Date(calYear,calMonth,0).getDate();
+  const today=new Date();
+  const container=document.getElementById('calendarDays');
+  container.innerHTML='';
+
+  // Hari dari bulan sebelumnya
+  for(let i=firstDay-1;i>=0;i--){
+    const d=document.createElement('div');
+    d.className='cal-day other-month';
+    d.textContent=prevDays-i;
+    container.appendChild(d);
+  }
+
+  // Hari di bulan ini
+  for(let d=1;d<=daysInMonth;d++){
+    const el=document.createElement('div');
+    const key=`${calMonth+1}-${d}`;
+    const hariData=getHariData(calYear,key);
+    const isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    const dayOfWeek=new Date(calYear,calMonth,d).getDay();
+    const isSun=dayOfWeek===0;
+    const isSat=dayOfWeek===6;
+
+    let cls='cal-day';
+    if(isToday) cls+=' today';
+    if(hariData){
+      if(hariData.tipe==='libur') cls+=' holiday';
+      else if(hariData.tipe==='cuti') cls+=' cuti-bersama';
+      else if(hariData.tipe==='peringatan') cls+=' peringatan';
+    }
+    if(isSun&&!isToday&&!hariData) cls+=' sunday';
+    if(isSat&&!isToday&&!hariData) cls+=' saturday';
+
+    el.className=cls;
+    el.textContent=d;
+    if(hariData) el.title=`${hariData.icon} ${hariData.nama}`;
+
+    // Tambah tooltip dot
+    if(hariData){
+      const dot=document.createElement('span');
+      dot.className='cal-dot cal-dot-'+hariData.tipe;
+      el.appendChild(dot);
+    }
+    container.appendChild(el);
+  }
+
+  // Hari dari bulan berikutnya
+  const rem=(7-((firstDay+daysInMonth)%7))%7;
+  for(let i=1;i<=rem&&rem<7;i++){
+    const d=document.createElement('div');
+    d.className='cal-day other-month';
+    d.textContent=i;
+    container.appendChild(d);
+  }
+
+  // Daftar hari spesial bulan ini
+  const hl=document.getElementById('holidayList');
+  hl.innerHTML='';
+
+  const yearData=CALENDAR_DATA[calYear]||{};
+  const bulanIni=Object.entries(yearData)
+    .filter(([k])=>k.startsWith(`${calMonth+1}-`))
+    .sort((a,b)=>parseInt(a[0].split('-')[1])-parseInt(b[0].split('-')[1]));
+
+  if(bulanIni.length===0){
+    hl.innerHTML='<div class="hol-empty">Tidak ada hari khusus bulan ini</div>';
+    return;
+  }
+
+  // Pisahkan libur nasional, cuti bersama, peringatan
+  const liburList=bulanIni.filter(([,v])=>v.tipe==='libur');
+  const cutiList=bulanIni.filter(([,v])=>v.tipe==='cuti');
+  const peringatanList=bulanIni.filter(([,v])=>v.tipe==='peringatan');
+
+  function renderHolGroup(title, list, colorClass){
+    if(!list.length) return;
+    const grp=document.createElement('div');
+    grp.className='hol-group';
+    grp.innerHTML=`<div class="hol-group-title ${colorClass}">${title}</div>`;
+    list.forEach(([k,v])=>{
+      const day=k.split('-')[1];
+      const dayName=DAYS_ID[new Date(calYear,calMonth,parseInt(day)).getDay()];
+      const item=document.createElement('div');
+      item.className='hol-item hol-item-'+v.tipe;
+      item.innerHTML=`<span class="hol-icon">${v.icon}</span><div class="hol-detail"><span class="hol-date">${dayName}, ${day} ${MONTHS_ID[calMonth]} ${calYear}</span><span class="hol-name">${v.nama}</span></div>`;
+      grp.appendChild(item);
+    });
+    hl.appendChild(grp);
+  }
+
+  renderHolGroup('🔴 Libur Nasional', liburList, 'title-libur');
+  renderHolGroup('🟡 Cuti Bersama', cutiList, 'title-cuti');
+  renderHolGroup('🔵 Hari Peringatan', peringatanList, 'title-peringatan');
+}
 window.changeMonth=(n)=>{calMonth+=n;if(calMonth<0){calMonth=11;calYear--;}if(calMonth>11){calMonth=0;calYear++;}renderCalendar();};
 window.changeMonthSelect=()=>{calMonth=+document.getElementById('monthSelect').value;renderCalendar();};
 window.changeYearSelect=()=>{calYear=+document.getElementById('yearSelect').value;renderCalendar();};

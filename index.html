@@ -809,7 +809,13 @@
           <div class="cal-day-header">Sab</div>
           <div id="calendarDays"></div>
         </div>
-        <div class="holiday-list" id="holidayList"></div>
+        <div class="cal-legend">
+          <div class="cal-legend-item"><div class="cal-legend-dot leg-libur"></div>Libur Nasional</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot leg-cuti"></div>Cuti Bersama</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot leg-peringatan"></div>Hari Peringatan</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot leg-sun"></div>Minggu</div>
+        </div>
+        <div class="holiday-list" id="holidayList" style="max-height:220px;overflow-y:auto;margin-top:.5rem"></div>
         <!-- Add event -->
         <div class="cal-add-event">
           <input type="text" id="eventInput" placeholder="Tambah pengingat tanggal ini...">
