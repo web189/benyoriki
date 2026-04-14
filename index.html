@@ -1,909 +1,684 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
-
-<!-- Primary Meta -->
-<meta name="title" content="@benyoriki — Digital Universe 2026 | Kreator, Musik & Inovasi">
-<meta name="description" content="BenyoRiki adalah platform digital modern berisi karya kreatif, musik, tools, dan inovasi teknologi. Jelajahi universe digital masa depan dengan pengalaman interaktif 2026.">
-
-<!-- Open Graph (WA / Facebook) -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://benyoriki.com/">
-<meta property="og:title" content="@benyoriki — Digital Universe 2026 ✦">
-<meta property="og:description" content="Masuk ke dunia digital BenyoRiki — tempat kreativitas, musik, dan teknologi bertemu dalam pengalaman futuristik yang interaktif.">
-<meta property="og:image" content="https://benyoriki.com/preview.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:title" content="@benyoriki — Kreator Digital & Musik 2026">
-<meta property="twitter:description" content="Eksplorasi karya digital, musik, dan inovasi modern dalam satu platform futuristik. Experience the Digital Universe.">
-<meta property="twitter:image" content="https://benyoriki.com/preview.jpg">
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@benyoriki — Digital Universe 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<meta name="description" content="Jasa profesional pembuatan sistem website dengan real-time database. Firebase, WebSocket, live dashboard, dan aplikasi web modern 2026.">
+<title>Riki Hermawan S.Kom — Real-Time Web System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="favicon.png">
 </head>
 <body>
 
-<!-- PARTICLE CANVAS -->
-<canvas id="particles" style="position:fixed;top:0;left:0;z-index:0;pointer-events:none;opacity:.3"></canvas>
+<!-- ══ CURSOR TRAIL ══ -->
+<div id="cursorGlow"></div>
 
-<!-- NAV -->
+<!-- ══ AURORA BACKGROUND ══ -->
+<div class="bg-wrap" aria-hidden="true">
+  <canvas id="bgCanvas"></canvas>
+  <div class="aurora a1"></div>
+  <div class="aurora a2"></div>
+  <div class="aurora a3"></div>
+  <div class="aurora a4"></div>
+  <div class="flash fl1"></div>
+  <div class="flash fl2"></div>
+  <div class="flash fl3"></div>
+  <div class="shoot sh1"></div>
+  <div class="shoot sh2"></div>
+  <div class="shoot sh3"></div>
+  <div class="grid-mesh"></div>
+  <div class="vignette"></div>
+</div>
+
+<!-- ══ NAVBAR ══ -->
 <nav class="navbar" id="navbar">
-  <div class="nav-logo">
-    <span class="logo-icon">◈</span>
-    <span>Riki Hermawan S.Kom</span>
-  </div>
-  <div class="nav-links" id="navLinks">
-    <a href="#social" class="nav-link active" data-section="social">Sosial</a>
-    <a href="#music" class="nav-link" data-section="music">Musik</a>
-    <a href="#tools" class="nav-link" data-section="tools">Tools</a>
-    <a href="#game" class="nav-link" data-section="game">Game</a>
-  </div>
+  <a href="#home" class="nav-brand">
+    <div class="brand-orb"></div>
+    <span>Riki<b>Dev</b></span>
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home"        class="nl">Beranda</a></li>
+    <li><a href="#layanan"     class="nl">Layanan</a></li>
+    <li><a href="#portofolio"  class="nl">Portofolio</a></li>
+    <li><a href="#teknologi"   class="nl">Teknologi</a></li>
+    <li><a href="#kontak"      class="nl">Kontak</a></li>
+  </ul>
   <div class="nav-right">
-    <button class="auth-btn" id="navAuthBtn" onclick="openAuthModal()">
-      <span class="auth-icon">👤</span>
-      <span id="navAuthLabel">Login</span>
+    <button class="btn-theme" id="themeBtn" aria-label="Toggle tema">
+      <svg class="ico-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="ico-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
     </button>
-    <button class="hamburger" id="hamburger">
+    <a href="#kontak" class="cta-btn">Konsultasi Gratis</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
 
-<!-- AUTH MODAL -->
-<div class="modal-overlay" id="authModal">
-  <div class="auth-modal-new" id="authBox">
-    <!-- Left Panel -->
-    <div class="auth-left-panel">
-      <div class="auth-left-bg">
-        <div class="auth-orb ao1"></div>
-        <div class="auth-orb ao2"></div>
-        <div class="auth-grid-lines"></div>
-      </div>
-      <div class="auth-left-content">
-        <div class="auth-brand">
-          <span class="auth-brand-icon">◈</span>
-          <span class="auth-brand-name">BenyoRiki</span>
-        </div>
-        <h2 class="auth-left-title">Digital<br><span class="auth-left-accent">Universe</span><br>2026</h2>
-        <p class="auth-left-sub">Masuk dan jelajahi dunia kreativitas, musik, dan inovasi digital</p>
-        <div class="auth-feat-list">
-          <div class="auth-feat"><span class="auth-feat-icon">🎵</span><span>Akses ratusan musik</span></div>
-          <div class="auth-feat"><span class="auth-feat-icon">📱</span><span>Konten eksklusif</span></div>
-          <div class="auth-feat"><span class="auth-feat-icon">⚡</span><span>Upload &amp; berbagi</span></div>
-        </div>
-      </div>
-    </div>
-    <!-- Right Panel -->
-    <div class="auth-right-panel">
-      <button class="auth-close-new" onclick="closeAuthModal()">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
-      <div class="auth-tabs-new">
-        <button class="auth-tab-new active" id="tabLogin" onclick="switchTab('login')">Masuk</button>
-        <button class="auth-tab-new" id="tabRegister" onclick="switchTab('register')">Daftar</button>
-        <div class="auth-tab-slider" id="authTabSlider"></div>
-      </div>
-      <!-- Login -->
-      <div id="formLogin" class="auth-form-panel">
-        <div class="auth-form-header">
-          <h3>Selamat Datang 👋</h3>
-          <p>Masuk ke akun Digital Universe kamu</p>
-        </div>
-        <div class="auth-field">
-          <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-          <input type="text" id="loginUser" placeholder="Username atau Email" autocomplete="username">
-          <div class="auth-field-line"></div>
-        </div>
-        <div class="auth-field">
-          <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-          <input type="password" id="loginPass" placeholder="Password" autocomplete="current-password">
-          <button class="auth-eye-new" onclick="togglePw('loginPass',this)" type="button"><svg class="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-          <div class="auth-field-line"></div>
-        </div>
-        <div class="auth-row-between">
-          <label class="auth-remember">
-            <input type="checkbox" id="rememberMe">
-            <span class="auth-check-box"></span>
-            <span>Ingat saya</span>
-          </label>
-          <span class="auth-forgot">Lupa password?</span>
-        </div>
-        <div class="auth-err" id="loginErr"></div>
-        <button class="auth-submit-new" onclick="doLogin()">
-          <span>Masuk Sekarang</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-        <div class="auth-divider-new"><span>atau lanjutkan dengan</span></div>
-        <div class="social-login-new">
-          <button class="sln-btn" onclick="socialLogin('Google')">
-            <svg width="17" height="17" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google
-          </button>
-          <button class="sln-btn" onclick="socialLogin('GitHub')">
-            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            GitHub
-          </button>
-        </div>
-      </div>
-      <!-- Register -->
-      <div id="formRegister" style="display:none" class="auth-form-panel">
-        <div class="auth-form-header">
-          <h3>Buat Akun Baru ✦</h3>
-          <p>Bergabung bersama Digital Universe</p>
-        </div>
-        <div class="auth-fields-grid">
-          <div class="auth-field">
-            <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-            <input type="text" id="regName" placeholder="Nama Lengkap" autocomplete="name">
-            <div class="auth-field-line"></div>
-          </div>
-          <div class="auth-field">
-            <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 006 0v-1a10 10 0 10-3.92 7.94"/></svg></div>
-            <input type="text" id="regUser" placeholder="Username unik" autocomplete="username">
-            <div class="auth-field-line"></div>
-          </div>
-          <div class="auth-field">
-            <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-            <input type="email" id="regEmail" placeholder="email@kamu.com" autocomplete="email">
-            <div class="auth-field-line"></div>
-          </div>
-          <div class="auth-field">
-            <div class="auth-field-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-            <input type="password" id="regPass" placeholder="Min. 6 karakter" autocomplete="new-password">
-            <button class="auth-eye-new" onclick="togglePw('regPass',this)" type="button"><svg class="eye-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
-            <div class="auth-field-line"></div>
-          </div>
-        </div>
-        <div class="pw-strength-wrap">
-          <div class="pw-strength" id="pwStrength"></div>
-          <span class="pw-strength-label" id="pwStrengthLabel"></span>
-        </div>
-        <div class="auth-err" id="regErr"></div>
-        <button class="auth-submit-new" onclick="doRegister()">
-          <span>Daftar Sekarang</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
-      </div>
-    </div>
-  </div>
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu">
+  <a href="#home"       onclick="closeMob()">Beranda</a>
+  <a href="#layanan"    onclick="closeMob()">Layanan</a>
+  <a href="#portofolio" onclick="closeMob()">Portofolio</a>
+  <a href="#teknologi"  onclick="closeMob()">Teknologi</a>
+  <a href="#kontak"     onclick="closeMob()">Kontak</a>
 </div>
 
-<!-- ADD MUSIC MODAL (Login Required) -->
-<div class="modal-overlay" id="addMusicModal">
-  <div class="modal-box wide-modal">
-    <button class="modal-close" onclick="closeAddMusic()">✕</button>
-    <div class="auth-header">
-      <div class="auth-avatar-big">🎵</div>
-      <h2>Tambah Musik</h2>
-      <p>Upload file audio ke database Firebase</p>
+<!-- ══ HERO ══ -->
+<section id="home" class="hero">
+  <div class="hero-left">
+    <div class="hero-pill">
+      <span class="pulse-ring"></span>
+      <span class="pulse-dot"></span>
+      Available for Project · 2026
     </div>
-    <div class="add-music-form">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Judul Lagu <span class="req">*</span></label>
-          <input type="text" id="am_title" placeholder="Nama lagu...">
+    <h1 class="hero-h1">
+      Sistem Website<br>
+      <span class="txt-shine">Real-Time Database</span><br>
+      <span class="txt-dim">Yang Mengubah Bisnis</span>
+    </h1>
+    <p class="hero-p">Kami membangun sistem web berbasis real-time database — dari live dashboard, inventory otomatis, hingga kasir online yang sync instan di semua perangkat.</p>
+    <div class="hero-stats">
+      <div class="hs-item"><span class="hs-n" data-count="50">0</span><span class="hs-u">+</span><span class="hs-l">Proyek Selesai</span></div>
+      <div class="hs-sep"></div>
+      <div class="hs-item"><span class="hs-n" data-count="100">0</span><span class="hs-u">%</span><span class="hs-l">Realtime Sync</span></div>
+      <div class="hs-sep"></div>
+      <div class="hs-item"><span class="hs-n" data-count="6">0</span><span class="hs-u"></span><span class="hs-l">Portofolio Live</span></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#kontak" class="btn-solid">
+        Mulai Proyek
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#portofolio" class="btn-ghost">
+        Lihat Portofolio Live
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <!-- Realtime DB Card -->
+    <div class="db-card">
+      <div class="db-topbar">
+        <div class="db-dots"><s></s><s></s><s></s></div>
+        <div class="db-url">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          realtime.database.app
         </div>
-        <div class="form-group">
-          <label>Artis / Band <span class="req">*</span></label>
-          <input type="text" id="am_artist" placeholder="Nama artis...">
-        </div>
+        <div class="db-badge"><span class="live-dot"></span>LIVE</div>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Genre <span class="req">*</span></label>
-          <select id="am_genre">
-            <option value="">-- Pilih Genre --</option>
-            <option value="pop">Pop</option>
-            <option value="rock">Rock</option>
-            <option value="jazz">Jazz</option>
-            <option value="rnb">R&B / Soul</option>
-            <option value="hiphop">Hip-Hop / Rap</option>
-            <option value="dangdut">Dangdut</option>
-            <option value="keroncong">Keroncong</option>
-            <option value="indie">Indie</option>
-            <option value="electronic">Electronic / EDM</option>
-            <option value="classical">Klasik</option>
-            <option value="folk">Folk / Acoustic</option>
-            <option value="metal">Metal</option>
+      <div class="db-rows">
+        <div class="db-row" style="--i:0"><span class="db-k">orders</span><span class="db-v blink" id="dbO">#1247</span></div>
+        <div class="db-row" style="--i:1"><span class="db-k">stock</span><span class="db-v">487 unit</span></div>
+        <div class="db-row" style="--i:2"><span class="db-k">revenue</span><span class="db-v blink" id="dbR">Rp 2.4M</span></div>
+        <div class="db-row" style="--i:3"><span class="db-k">users_online</span><span class="db-v">24 aktif</span></div>
+        <div class="db-row" style="--i:4"><span class="db-k">last_sync</span><span class="db-v" id="dbS">0ms ago</span></div>
+      </div>
+      <div class="db-bar"><div class="db-prog"></div></div>
+      <!-- Floating metric badges -->
+      <div class="float-badge f-top">⚡ Sync 0ms</div>
+      <div class="float-badge f-bot">🔥 Firebase</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LAYANAN ══ -->
+<section id="layanan" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Layanan Kami</div>
+    <h2 class="sec-h2">Solusi Digital Real-Time<br>untuk Bisnis Modern</h2>
+    <div class="srv-grid">
+      <div class="srv-card featured">
+        <div class="srv-ico">⚡</div>
+        <h3>Real-Time Database System</h3>
+        <p>Database sinkron instan di semua perangkat. Data berubah = semua user langsung update tanpa refresh.</p>
+        <ul><li>Firebase Realtime DB</li><li>WebSocket Integration</li><li>Multi-user Sync Live</li><li>Auto-backup</li></ul>
+        <div class="srv-badge">PALING POPULER</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">📊</div>
+        <h3>Live Dashboard & Analitik</h3>
+        <p>Dashboard grafik real-time. Pantau bisnis dari mana saja, kapan saja.</p>
+        <ul><li>Chart Realtime</li><li>KPI Tracking Live</li><li>Export Laporan</li><li>Mobile Responsive</li></ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">🛒</div>
+        <h3>Sistem Kasir & Inventory</h3>
+        <p>Kasir online dengan stok terupdate otomatis. Tidak perlu input manual.</p>
+        <ul><li>Kasir Multi-Cabang</li><li>Stok Auto-Update</li><li>Laporan Harian</li><li>Riwayat Transaksi</li></ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">🔐</div>
+        <h3>Sistem Login & Auth</h3>
+        <p>Autentikasi multi-level dengan role management lengkap.</p>
+        <ul><li>Multi-Role Access</li><li>Google OAuth</li><li>Session Management</li><li>Activity Log</li></ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">💬</div>
+        <h3>Chat & Notifikasi Live</h3>
+        <p>Chat internal, notifikasi push, dan sistem pesan instan.</p>
+        <ul><li>Live Chat System</li><li>Push Notification</li><li>Read Receipt</li><li>File Sharing</li></ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">🌐</div>
+        <h3>Preseller & Toko Online</h3>
+        <p>Toko online lengkap dengan katalog, cart, dan order terintegrasi.</p>
+        <ul><li>Katalog Produk</li><li>Cart & Checkout</li><li>Tracking Order</li><li>WhatsApp Integration</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PORTOFOLIO — EMBED WEBVIEW ══ -->
+<section id="portofolio" class="section porto-section">
+  <div class="wrap wide">
+    <div class="sec-label">— Hasil Karya Nyata</div>
+    <h2 class="sec-h2">
+      <span id="portoTitle">Portofolio Website</span><br>
+      <span class="txt-shine">Tampil Langsung Di Sini</span>
+    </h2>
+    <p class="sec-sub">Preview website asli langsung di halaman ini · Klik untuk membuka penuh</p>
+
+    <!-- PORTO FILTER TABS -->
+    <div class="porto-filter" id="portoFilter">
+      <button class="pf-btn active" data-filter="all">Semua</button>
+      <button class="pf-btn" data-filter="ecommerce">E-Commerce</button>
+      <button class="pf-btn" data-filter="finance">Finance</button>
+      <button class="pf-btn" data-filter="inventory">Inventory</button>
+    </div>
+
+    <!-- PORTO EMBED GRID -->
+    <div class="porto-embed-grid" id="portoGrid">
+
+      <!-- Card 1 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="01" style="--accent:#3B82F6;--glow:rgba(59,130,246,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              jasadaud.online
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://jasadaud.online/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://jasadaud.online/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="JasaDaud Online Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">🌐</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://jasadaud.online/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">01</div>
+            <div>
+              <h3 class="ei-title">JasaDaud Online</h3>
+              <p class="ei-desc">Platform jasa digital dengan manajemen order real-time & dashboard admin.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Real-Time DB</span><span>Firebase</span><span>Dashboard</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="02" style="--accent:#10B981;--glow:rgba(16,185,129,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web189.github.io/toko-online
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web189.github.io/toko-online/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web189.github.io/toko-online/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Toko Online Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">🛒</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web189.github.io/toko-online/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">02</div>
+            <div>
+              <h3 class="ei-title">Toko Online Modern</h3>
+              <p class="ei-desc">E-commerce lengkap dengan katalog dinamis, cart system, dan stok real-time.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>E-Commerce</span><span>Cart</span><span>Stok Live</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="embed-card" data-cat="inventory" data-num="03" style="--accent:#8B5CF6;--glow:rgba(139,92,246,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web637.github.io/input-stock-laba
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web637.github.io/input-stock-laba/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web637.github.io/input-stock-laba/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Input Stok Laba Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">📊</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web637.github.io/input-stock-laba/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">03</div>
+            <div>
+              <h3 class="ei-title">Input Stok &amp; Laba</h3>
+              <p class="ei-desc">Manajemen stok dengan kalkulasi laba otomatis, transaksi, dan laporan harian.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Inventory</span><span>Auto Kalkulasi</span><span>Laporan</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="embed-card" data-cat="finance" data-num="04" style="--accent:#F59E0B;--glow:rgba(245,158,11,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web637.github.io/cicilan
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web637.github.io/cicilan/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web637.github.io/cicilan/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Sistem Cicilan Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">💰</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web637.github.io/cicilan/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">04</div>
+            <div>
+              <h3 class="ei-title">Sistem Cicilan</h3>
+              <p class="ei-desc">Perhitungan cicilan otomatis dengan jadwal bayar, notifikasi, dan riwayat kredit.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Finance</span><span>Auto Hitung</span><span>Jadwal Bayar</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="05" style="--accent:#06B6D4;--glow:rgba(6,182,212,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web189.github.io/preseller-aqua
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web189.github.io/preseller-aqua/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web189.github.io/preseller-aqua/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Preseller Aqua Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">💧</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web189.github.io/preseller-aqua/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">05</div>
+            <div>
+              <h3 class="ei-title">Preseller Aqua</h3>
+              <p class="ei-desc">Sistem preseller air mineral dengan katalog harga, order form, dan integrasi WhatsApp.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Preseller</span><span>Order Form</span><span>WhatsApp</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="06" style="--accent:#EC4899;--glow:rgba(236,72,153,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web189.github.io/ForzenFood
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web189.github.io/ForzenFood/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web189.github.io/ForzenFood/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Frozen Food Store Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">🥩</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web189.github.io/ForzenFood/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">06</div>
+            <div>
+              <h3 class="ei-title">Frozen Food Store</h3>
+              <p class="ei-desc">Toko frozen food online dengan tampilan menarik, cart system, dan order via WhatsApp.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Food Store</span><span>Cart</span><span>WA Order</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+    </div><!-- /porto-embed-grid -->
+
+    <!-- PORTO COUNTER -->
+    <div class="porto-counter">
+      Menampilkan <span id="portoCount">6</span> dari 6 proyek
+    </div>
+  </div>
+</section>
+
+<!-- ══ TEKNOLOGI ══ -->
+<section id="teknologi" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Tech Stack</div>
+    <h2 class="sec-h2">Teknologi yang Kami Kuasai</h2>
+    <div class="tech-scroll">
+      <div class="tech-track" id="techTrack">
+        <div class="tech-chip"><span>🔥</span>Firebase</div>
+        <div class="tech-chip"><span>⚡</span>WebSocket</div>
+        <div class="tech-chip"><span>⚛</span>React JS</div>
+        <div class="tech-chip"><span>🌿</span>Node.js</div>
+        <div class="tech-chip"><span>🐘</span>PostgreSQL</div>
+        <div class="tech-chip"><span>🍃</span>MongoDB</div>
+        <div class="tech-chip"><span>☁</span>Cloud Hosting</div>
+        <div class="tech-chip"><span>📱</span>PWA</div>
+        <div class="tech-chip"><span>🔒</span>SSL &amp; Auth</div>
+        <div class="tech-chip"><span>📊</span>Chart.js</div>
+        <div class="tech-chip"><span>💨</span>Tailwind CSS</div>
+        <div class="tech-chip"><span>🔄</span>REST API</div>
+        <!-- duplicate for infinite scroll -->
+        <div class="tech-chip"><span>🔥</span>Firebase</div>
+        <div class="tech-chip"><span>⚡</span>WebSocket</div>
+        <div class="tech-chip"><span>⚛</span>React JS</div>
+        <div class="tech-chip"><span>🌿</span>Node.js</div>
+        <div class="tech-chip"><span>🐘</span>PostgreSQL</div>
+        <div class="tech-chip"><span>🍃</span>MongoDB</div>
+      </div>
+    </div>
+    <div class="tech-grid">
+      <div class="tg-item"><div class="tg-i">🔥</div><span>Firebase</span></div>
+      <div class="tg-item"><div class="tg-i">⚡</div><span>WebSocket</span></div>
+      <div class="tg-item"><div class="tg-i">⚛</div><span>React JS</span></div>
+      <div class="tg-item"><div class="tg-i">🌿</div><span>Node.js</span></div>
+      <div class="tg-item"><div class="tg-i">🐘</div><span>PostgreSQL</span></div>
+      <div class="tg-item"><div class="tg-i">🍃</div><span>MongoDB</span></div>
+      <div class="tg-item"><div class="tg-i">☁</div><span>Cloud Hosting</span></div>
+      <div class="tg-item"><div class="tg-i">📱</div><span>PWA</span></div>
+      <div class="tg-item"><div class="tg-i">🔒</div><span>SSL &amp; Auth</span></div>
+      <div class="tg-item"><div class="tg-i">📊</div><span>Chart.js</span></div>
+      <div class="tg-item"><div class="tg-i">💨</div><span>Tailwind</span></div>
+      <div class="tg-item"><div class="tg-i">🔄</div><span>REST API</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ KONTAK ══ -->
+<section id="kontak" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Hubungi Kami</div>
+    <h2 class="sec-h2">Siap Mulai Proyek?<br>Konsultasi Gratis!</h2>
+    <div class="kontak-grid">
+      <div class="kontak-left">
+        <div class="kl-block">
+          <h3>Yang Anda dapatkan</h3>
+          <ul class="kl-list">
+            <li><span class="kl-dot"></span>Konsultasi kebutuhan sistem gratis</li>
+            <li><span class="kl-dot"></span>Estimasi biaya &amp; waktu pengerjaan</li>
+            <li><span class="kl-dot"></span>Demo sistem real-time langsung</li>
+            <li><span class="kl-dot"></span>Support &amp; maintenance pasca-launch</li>
+            <li><span class="kl-dot"></span>Revisi hingga sesuai kebutuhan</li>
+          </ul>
+        </div>
+        <div class="kl-block">
+          <h3>Ikuti Kami</h3>
+          <div class="soc-row">
+            <a href="https://www.instagram.com/benyoriki" target="_blank" class="soc-btn ig">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              Instagram
+            </a>
+            <a href="https://www.tiktok.com/@benyoriki" target="_blank" class="soc-btn tt">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.16 8.16 0 004.77 1.52V6.82a4.85 4.85 0 01-1-.13z"/></svg>
+              TikTok
+            </a>
+            <a href="https://web.facebook.com/benyo.hermawan" target="_blank" class="soc-btn fb">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook
+            </a>
+            <a href="https://www.youtube.com/@rikihermawan8103" target="_blank" class="soc-btn yt">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+              YouTube
+            </a>
+            <a href="https://benyoriki.com/" target="_blank" class="soc-btn ws">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+              Website
+            </a>
+          </div>
+        </div>
+        <a href="https://wa.me/6282318001234" target="_blank" class="wa-cta">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat WhatsApp Sekarang
+        </a>
+      </div>
+      <div class="kontak-form">
+        <h3>Ceritakan Proyek Anda</h3>
+        <div class="fg"><label>Nama / Perusahaan</label><input type="text" id="fName" placeholder="Nama Anda atau nama bisnis"></div>
+        <div class="fg">
+          <label>Jenis Sistem</label>
+          <select id="fType">
+            <option value="">-- Pilih Jenis --</option>
+            <option>Real-Time Database System</option>
+            <option>Live Dashboard &amp; Analitik</option>
+            <option>Sistem Kasir &amp; Inventory</option>
+            <option>Toko Online / E-Commerce</option>
+            <option>Sistem Login &amp; Multi-Role</option>
+            <option>Chat &amp; Notifikasi Real-Time</option>
+            <option>Custom (ceritakan di bawah)</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Folder / Kategori</label>
-          <select id="am_folder">
-            <option value="Hits Indonesia">🇮🇩 Hits Indonesia</option>
-            <option value="Hits Dunia">🌍 Hits Dunia</option>
-            <option value="Old School">📼 Old School</option>
-            <option value="Viral 2025-2026">🔥 Viral 2025-2026</option>
-            <option value="Slow & Santai">🌙 Slow & Santai</option>
-            <option value="Semangat & Energi">⚡ Semangat & Energi</option>
-            <option value="Cinta & Galau">❤️ Cinta & Galau</option>
-            <option value="Rohani">🙏 Rohani</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Tahun Rilis</label>
-          <input type="number" id="am_year" placeholder="2024" min="1900" max="2026">
-        </div>
-        <div class="form-group">
-          <label>Durasi (menit:detik)</label>
-          <input type="text" id="am_duration" placeholder="3:45">
-        </div>
-      </div>
-
-      <!-- AUDIO FILE UPLOAD -->
-      <div class="form-group">
-        <label>🎵 Upload File Audio <span class="req">*</span></label>
-        <div class="file-upload-zone" id="audioDropZone">
-          <input type="file" id="am_audio_file" accept="audio/*,.mp3,.ogg,.wav,.m4a,.aac,.flac,.opus" onchange="handleAudioFile(this)">
-          <span class="fuz-icon">🎧</span>
-          <div class="fuz-label"><strong>Klik atau seret file audio</strong></div>
-          <div class="fuz-sub">MP3, OGG, WAV, M4A · Maks 50MB</div>
-          <div class="fuz-progress" id="audioProgress" style="display:none"><div class="fuz-progress-bar" id="audioProgressBar"></div><div class="fuz-progress-label" id="audioProgressLabel"></div></div>
-          <div class="fuz-status" id="audioStatus"></div>
-        </div>
-        <div style="margin-top:.5rem;font-size:.72rem;color:var(--text2)">— atau gunakan URL stream —</div>
-        <input type="url" id="am_url" placeholder="https://... URL audio (opsional jika upload file)" style="margin-top:.4rem">
-      </div>
-
-      <!-- COVER IMAGE UPLOAD -->
-      <div class="form-group">
-        <label>🖼 Cover Art</label>
-        <div class="cover-upload-zone" id="coverDropZone">
-          <input type="file" id="am_cover_file" accept="image/*" onchange="handleCoverFile(this)">
-          <img class="cover-preview" id="coverPreview" alt="cover">
-          <span class="cover-label">📷 Upload gambar cover (opsional)</span>
-        </div>
-        <input type="url" id="am_cover" placeholder="https://... URL cover (alternatif)" style="margin-top:.4rem">
-      </div>
-
-      <div class="form-group">
-        <label>Deskripsi / Keterangan</label>
-        <textarea id="am_desc" rows="2" placeholder="Tentang lagu ini..."></textarea>
-      </div>
-      <div class="am-tags">
-        <label>Tag Tambahan</label>
-        <div class="tag-picker" id="tagPicker">
-          <span class="tag-opt" onclick="toggleTag(this,'#hits')"><span>#</span>hits</span>
-          <span class="tag-opt" onclick="toggleTag(this,'#santai')"><span>#</span>santai</span>
-          <span class="tag-opt" onclick="toggleTag(this,'#semangat')"><span>#</span>semangat</span>
-          <span class="tag-opt" onclick="toggleTag(this,'#galau')"><span>#</span>galau</span>
-          <span class="tag-opt" onclick="toggleTag(this,'#nostalgia')"><span>#</span>nostalgia</span>
-          <span class="tag-opt" onclick="toggleTag(this,'#viral')"><span>#</span>viral</span>
-          <span class="tag-opt" onclick="toggleTag(this,'#lofi')"><span>#</span>lofi</span>
-          <span class="tag-opt" onclick="toggleTag(this,'#upbeat')"><span>#</span>upbeat</span>
-        </div>
-      </div>
-      <div class="auth-err" id="amErr"></div>
-      <button class="auth-submit" id="amSubmitBtn" onclick="submitAddMusic()">💾 Upload & Simpan ke Firebase <span>→</span></button>
-    </div>
-  </div>
-</div>
-
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-bg">
-    <div class="orb orb1"></div>
-    <div class="orb orb2"></div>
-    <div class="orb orb3"></div>
-    <div class="grid-lines"></div>
-    <canvas id="neonCanvas"></canvas>
-    <div class="neon-scanline"></div>
-    <div class="neon-corner tl"></div>
-    <div class="neon-corner tr"></div>
-    <div class="neon-corner bl"></div>
-    <div class="neon-corner br"></div>
-    <div class="neon-bolts" id="neonBolts"></div>
-  </div>
-  <div class="hero-content">
-    <div class="hero-badge">✦ Digital Universe 2026 ✦</div>
-    <h1 class="hero-title">Beny<span class="accent">o</span>Riki</h1>
-    <p class="hero-sub">Kreator Konten · Musisi · Inovator Digital</p>
-    <div class="hero-cta">
-      <a href="#social" class="hero-btn primary">Jelajahi ↓</a>
-      <a href="#music" class="hero-btn secondary">🎵 Dengarkan Musik</a>
-    </div>
-    <div class="hero-scroll">
-      <div class="scroll-dot"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SOSIAL MEDIA ===== -->
-<section class="section" id="social">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag">01 / Sosial</span>
-      <h2 class="section-title">Media Sosial</h2>
-      <p class="section-desc">Ikuti perjalanan kreatif di berbagai platform</p>
-    </div>
-    <div class="social-grid-new">
-
-      <!-- Instagram -->
-      <div class="scard ig" onclick="window.open('https://www.instagram.com/benyoriki','_blank')">
-        <div class="scard-glow"></div>
-        <div class="scard-inner">
-          <div class="scard-top">
-            <div class="scard-plat">
-              <div class="scard-plat-icon ig-icon">
-                <svg viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="5" stroke="url(#ig-grad)" stroke-width="2"/><circle cx="12" cy="12" r="4" stroke="url(#ig-grad)" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1" fill="url(#ig-grad)"/><defs><linearGradient id="ig-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f09433"/><stop offset="50%" stop-color="#e6683c"/><stop offset="100%" stop-color="#bc1888"/></linearGradient></defs></svg>
-              </div>
-              <div class="scard-plat-info">
-                <span class="scard-plat-name">Instagram</span>
-                <span class="scard-status ig-status">● Aktif</span>
-              </div>
-            </div>
-            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
-          </div>
-          <div class="scard-profile">
-            <div class="scard-avatar-wrap ig-avatar-wrap">
-              <div class="scard-avatar">📸</div>
-              <div class="scard-avatar-ring ig-ring"></div>
-            </div>
-            <div class="scard-profile-info">
-              <h3>@benyoriki</h3>
-              <p>Kreator konten · Fotografer</p>
-            </div>
-          </div>
-          <p class="scard-bio">Berbagi momen kehidupan, kreativitas, dan inspirasi setiap hari ✨ #photography #lifestyle</p>
-          <div class="scard-stats-row">
-            <div class="scard-stat-item"><div class="scard-stat-val">∞</div><div class="scard-stat-key">Posts</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">★</div><div class="scard-stat-key">Followers</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">♡</div><div class="scard-stat-key">Likes</div></div>
-          </div>
-          <div class="scard-posts-grid">
-            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743)"></div>
-            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb)"></div>
-            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#ffecd2,#fcb69f)"></div>
-            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#a1c4fd,#c2e9fb)"></div>
-            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#d299c2,#fef9d7)"></div>
-            <div class="scard-post-thumb" style="background:linear-gradient(135deg,#ee9ca7,#ffdde1)"></div>
-          </div>
-          <button class="scard-btn ig-btn-new">Kunjungi Profile <span>→</span></button>
-        </div>
-      </div>
-
-      <!-- TikTok -->
-      <div class="scard tt" onclick="window.open('https://www.tiktok.com/@benyoriki','_blank')">
-        <div class="scard-glow"></div>
-        <div class="scard-inner">
-          <div class="scard-top">
-            <div class="scard-plat">
-              <div class="scard-plat-icon tt-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.27 8.27 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg>
-              </div>
-              <div class="scard-plat-info">
-                <span class="scard-plat-name">TikTok</span>
-                <span class="scard-status tt-status">🔥 Viral</span>
-              </div>
-            </div>
-            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
-          </div>
-          <div class="scard-profile">
-            <div class="scard-avatar-wrap tt-avatar-wrap">
-              <div class="scard-avatar">🎵</div>
-              <div class="scard-avatar-ring tt-ring"></div>
-            </div>
-            <div class="scard-profile-info">
-              <h3>@benyoriki</h3>
-              <p>Kreator Video · Entertainer</p>
-            </div>
-          </div>
-          <p class="scard-bio">Video kreatif, hiburan, dan konten viral yang menghibur setiap hari 🎬 #viral #fyp</p>
-          <div class="scard-stats-row">
-            <div class="scard-stat-item"><div class="scard-stat-val">▶</div><div class="scard-stat-key">Videos</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">★</div><div class="scard-stat-key">Followers</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">♡</div><div class="scard-stat-key">Likes</div></div>
-          </div>
-          <div class="scard-reels-grid">
-            <div class="scard-reel" style="background:linear-gradient(160deg,#000,#1a1a2e)"><div class="reel-play-new">▶</div><div class="reel-overlay"></div></div>
-            <div class="scard-reel" style="background:linear-gradient(160deg,#0f0c29,#302b63)"><div class="reel-play-new">▶</div><div class="reel-overlay"></div></div>
-            <div class="scard-reel" style="background:linear-gradient(160deg,#1a1a2e,#16213e)"><div class="reel-play-new">▶</div><div class="reel-overlay"></div></div>
-            <div class="scard-reel" style="background:linear-gradient(160deg,#16213e,#0f3460)"><div class="reel-play-new">▶</div><div class="reel-overlay"></div></div>
-          </div>
-          <button class="scard-btn tt-btn-new">Tonton Video <span>→</span></button>
-        </div>
-      </div>
-
-      <!-- Facebook -->
-      <div class="scard fb" onclick="window.open('https://web.facebook.com/benyo.hermawan','_blank')">
-        <div class="scard-glow"></div>
-        <div class="scard-inner">
-          <div class="scard-top">
-            <div class="scard-plat">
-              <div class="scard-plat-icon fb-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
-              </div>
-              <div class="scard-plat-info">
-                <span class="scard-plat-name">Facebook</span>
-                <span class="scard-status fb-status">● Aktif</span>
-              </div>
-            </div>
-            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
-          </div>
-          <div class="scard-profile">
-            <div class="scard-avatar-wrap fb-avatar-wrap">
-              <div class="scard-avatar">👤</div>
-              <div class="scard-avatar-ring fb-ring"></div>
-            </div>
-            <div class="scard-profile-info">
-              <h3>Benyo Hermawan</h3>
-              <p>Kreator Digital · Musisi</p>
-            </div>
-          </div>
-          <p class="scard-bio">Terhubung, berbagi cerita, dan membangun komunitas bersama 🤝 #community #digital</p>
-          <div class="scard-stats-row">
-            <div class="scard-stat-item"><div class="scard-stat-val">✦</div><div class="scard-stat-key">Posts</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">★</div><div class="scard-stat-key">Friends</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">♡</div><div class="scard-stat-key">Likes</div></div>
-          </div>
-          <div class="scard-timeline-new">
-            <div class="scard-tl-item"><div class="scard-tl-avatar">🤝</div><div class="scard-tl-body"><div class="scard-tl-bar" style="width:85%"></div><div class="scard-tl-bar short" style="width:55%"></div></div><span class="scard-tl-time">2j</span></div>
-            <div class="scard-tl-item"><div class="scard-tl-avatar">📸</div><div class="scard-tl-body"><div class="scard-tl-bar" style="width:70%"></div><div class="scard-tl-bar short" style="width:40%"></div></div><span class="scard-tl-time">5j</span></div>
-            <div class="scard-tl-item"><div class="scard-tl-avatar">🎵</div><div class="scard-tl-body"><div class="scard-tl-bar" style="width:90%"></div><div class="scard-tl-bar short" style="width:60%"></div></div><span class="scard-tl-time">1h</span></div>
-          </div>
-          <button class="scard-btn fb-btn-new">Lihat Facebook <span>→</span></button>
-        </div>
-      </div>
-
-      <!-- YouTube -->
-      <div class="scard yt" onclick="window.open('https://www.youtube.com/@rikihermawan8103','_blank')">
-        <div class="scard-glow"></div>
-        <div class="scard-inner">
-          <div class="scard-top">
-            <div class="scard-plat">
-              <div class="scard-plat-icon yt-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff"/></svg>
-              </div>
-              <div class="scard-plat-info">
-                <span class="scard-plat-name">YouTube</span>
-                <span class="scard-status yt-status">▶ Channel</span>
-              </div>
-            </div>
-            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
-          </div>
-          <div class="scard-profile">
-            <div class="scard-avatar-wrap yt-avatar-wrap">
-              <div class="scard-avatar">🎬</div>
-              <div class="scard-avatar-ring yt-ring"></div>
-            </div>
-            <div class="scard-profile-info">
-              <h3>@rikihermawan8103</h3>
-              <p>YouTuber · Content Creator</p>
-            </div>
-          </div>
-          <p class="scard-bio">Video berkualitas, tutorial, dan hiburan terbaik untuk semua kalangan 🎥 #youtube #tutorial</p>
-          <div class="scard-stats-row">
-            <div class="scard-stat-item"><div class="scard-stat-val">▶</div><div class="scard-stat-key">Videos</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">★</div><div class="scard-stat-key">Subs</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">♡</div><div class="scard-stat-key">Views</div></div>
-          </div>
-          <div class="scard-thumbs-grid">
-            <div class="scard-yt-thumb" style="background:linear-gradient(135deg,#ff0000,#880000)">
-              <div class="yt-thumb-play">▶</div>
-              <div class="yt-thumb-bar"><div class="yt-thumb-bar-fill" style="width:65%"></div></div>
-            </div>
-            <div class="scard-yt-thumb" style="background:linear-gradient(135deg,#cc0000,#ff4444)">
-              <div class="yt-thumb-play">▶</div>
-              <div class="yt-thumb-bar"><div class="yt-thumb-bar-fill" style="width:80%"></div></div>
-            </div>
-          </div>
-          <button class="scard-btn yt-btn-new">Tonton Channel <span>→</span></button>
-        </div>
-      </div>
-
-      <!-- Website -->
-      <div class="scard web" onclick="window.open('https://jasadaud.online/','_blank')">
-        <div class="scard-glow"></div>
-        <div class="scard-inner">
-          <div class="scard-top">
-            <div class="scard-plat">
-              <div class="scard-plat-icon web-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-              </div>
-              <div class="scard-plat-info">
-                <span class="scard-plat-name">Website</span>
-                <span class="scard-status web-status">🌐 Live</span>
-              </div>
-            </div>
-            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
-          </div>
-          <div class="scard-profile">
-            <div class="scard-avatar-wrap web-avatar-wrap">
-              <div class="scard-avatar">🌐</div>
-              <div class="scard-avatar-ring web-ring"></div>
-            </div>
-            <div class="scard-profile-info">
-              <h3>jasadaud.online</h3>
-              <p>Web Developer · Designer</p>
-            </div>
-          </div>
-          <p class="scard-bio">Platform digital modern dengan berbagai layanan, portofolio, dan karya terbaik 💻</p>
-          <div class="scard-stats-row">
-            <div class="scard-stat-item"><div class="scard-stat-val">∞</div><div class="scard-stat-key">Pages</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">⚡</div><div class="scard-stat-key">Speed</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">🔒</div><div class="scard-stat-key">Secure</div></div>
-          </div>
-          <div class="scard-tech-tags">
-            <span>HTML5</span><span>CSS3</span><span>JavaScript</span><span>Firebase</span><span>PWA</span>
-          </div>
-          <button class="scard-btn web-btn-new">Kunjungi Website <span>→</span></button>
-        </div>
-      </div>
-
-      <!-- WhatsApp -->
-      <div class="scard wa" onclick="window.open('https://wa.me/6285156318963','_blank')">
-        <div class="scard-glow"></div>
-        <div class="scard-inner">
-          <div class="scard-top">
-            <div class="scard-plat">
-              <div class="scard-plat-icon wa-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              </div>
-              <div class="scard-plat-info">
-                <span class="scard-plat-name">WhatsApp</span>
-                <span class="scard-status wa-status">🟢 Online</span>
-              </div>
-            </div>
-            <div class="scard-menu-dots"><span></span><span></span><span></span></div>
-          </div>
-          <div class="scard-profile">
-            <div class="scard-avatar-wrap wa-avatar-wrap">
-              <div class="scard-avatar">💬</div>
-              <div class="scard-avatar-ring wa-ring"></div>
-            </div>
-            <div class="scard-profile-info">
-              <h3>Riki Hermawan</h3>
-              <p>+62 851-5631-8963</p>
-            </div>
-          </div>
-          <p class="scard-bio">Hubungi untuk kolaborasi, pertanyaan, atau sekadar ngobrol santai 😊</p>
-          <div class="scard-stats-row">
-            <div class="scard-stat-item"><div class="scard-stat-val">✓✓</div><div class="scard-stat-key">Dibaca</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">⚡</div><div class="scard-stat-key">Respon</div></div>
-            <div class="scard-stat-divider"></div>
-            <div class="scard-stat-item"><div class="scard-stat-val">24/7</div><div class="scard-stat-key">Aktif</div></div>
-          </div>
-          <div class="scard-wa-chat">
-            <div class="wa-bubble recv">Halo! Ada yang bisa saya bantu? 👋</div>
-            <div class="wa-bubble sent">Siap berkolaborasi! ✨</div>
-          </div>
-          <button class="scard-btn wa-btn-new">Chat Sekarang <span>→</span></button>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ===== MUSIC PLAYER ===== -->
-<section class="section music-section" id="music">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag">02 / Musik</span>
-      <h2 class="section-title">Music Universe</h2>
-      <p class="section-desc">Database musik online · Dengarkan kapan saja</p>
-    </div>
-
-    <!-- Music Toolbar -->
-    <div class="music-toolbar">
-      <div class="music-search-wrap">
-        <span class="ms-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Cari judul, artis, genre...">
-      </div>
-      <div class="folder-tabs" id="folderTabs">
-        <button class="ft active" onclick="filterFolder('all',this)">🎵 Semua</button>
-        <button class="ft" onclick="filterFolder('Hits Indonesia',this)">🇮🇩 Indonesia</button>
-        <button class="ft" onclick="filterFolder('Hits Dunia',this)">🌍 Dunia</button>
-        <button class="ft" onclick="filterFolder('Old School',this)">📼 Old School</button>
-        <button class="ft" onclick="filterFolder('Viral 2025-2026',this)">🔥 Viral</button>
-        <button class="ft" onclick="filterFolder('Slow & Santai',this)">🌙 Santai</button>
-        <button class="ft" onclick="filterFolder('Cinta & Galau',this)">❤️ Galau</button>
-      </div>
-      <div class="genre-filter">
-        <button class="pt active" onclick="filterPlaylist('all')">All</button>
-        <button class="pt" onclick="filterPlaylist('pop')">Pop</button>
-        <button class="pt" onclick="filterPlaylist('rock')">Rock</button>
-        <button class="pt" onclick="filterPlaylist('jazz')">Jazz</button>
-        <button class="pt" onclick="filterPlaylist('rnb')">R&B</button>
-        <button class="pt" onclick="filterPlaylist('hiphop')">HipHop</button>
-        <button class="pt" onclick="filterPlaylist('dangdut')">Dangdut</button>
-        <button class="pt" onclick="filterPlaylist('indie')">Indie</button>
-      </div>
-      <button class="add-music-btn" onclick="requireLoginForMusic()" id="addMusicBtn">
-        <span>+</span> Tambah Musik
-      </button>
-    </div>
-
-    <div class="music-wrapper">
-      <!-- Sidebar: Playlist -->
-      <div class="music-sidebar">
-        <div class="sidebar-header">
-          <span>Playlist</span>
-          <span class="track-count" id="trackCount">0 lagu</span>
-        </div>
-        <div class="track-list" id="trackList"></div>
-      </div>
-
-      <!-- Main Player -->
-      <div class="music-main">
-        <div class="now-playing">
-          <div class="np-cover" id="npCover">
-            <div class="np-cover-inner" id="npCoverInner">
-              <span id="npEmoji">🎵</span>
-            </div>
-            <div class="np-cover-glow" id="npGlow"></div>
-            <div class="vinyl-ring"></div>
-          </div>
-          <div class="np-info">
-            <div class="np-tag">Sedang Diputar</div>
-            <h3 id="npTitle">Pilih Lagu</h3>
-            <p id="npArtist">—</p>
-            <div class="np-badges">
-              <span class="np-badge" id="npGenre">—</span>
-              <span class="np-badge" id="npYear">—</span>
-              <span class="np-badge folder-badge" id="npFolder">—</span>
-            </div>
-            <div class="np-likes">
-              <button class="like-btn" id="likeBtn" onclick="toggleLike()">♡ Suka</button>
-              <button class="share-btn" onclick="shareTrack()">⟳ Bagikan</button>
-            </div>
-          </div>
-        </div>
-
-        <div class="player-controls">
-          <div class="progress-area">
-            <span class="time" id="currentTime">0:00</span>
-            <div class="progress-bar" id="progressBar" onclick="seekTo(event)">
-              <div class="progress-fill" id="progressFill"></div>
-              <div class="progress-thumb" id="progressThumb"></div>
-            </div>
-            <span class="time" id="totalTime">0:00</span>
-          </div>
-          <div class="ctrl-buttons">
-            <button class="ctrl-btn" id="shuffleBtn" onclick="toggleShuffle()" title="Acak">⇄</button>
-            <button class="ctrl-btn" onclick="prevTrack()" title="Sebelumnya">⏮</button>
-            <button class="ctrl-play" id="playBtn" onclick="togglePlay()">▶</button>
-            <button class="ctrl-btn" onclick="nextTrack()" title="Berikutnya">⏭</button>
-            <button class="ctrl-btn" id="repeatBtn" onclick="toggleRepeat()" title="Ulangi">↺</button>
-          </div>
-          <div class="volume-area">
-            <button class="mute-btn" onclick="toggleMute()" id="muteBtn">🔈</button>
-            <div class="volume-bar">
-              <input type="range" id="volumeSlider" min="0" max="100" value="70" oninput="setVolume(this.value)">
-            </div>
-            <span>🔊</span>
-          </div>
-        </div>
-
-        <!-- URL / Stream Input -->
-        <div class="stream-box">
-          <div class="stream-title">📻 Tambah Stream / Radio Online</div>
-          <div class="stream-input-row">
-            <input type="url" id="urlInput" placeholder="URL audio stream atau radio online...">
-            <button onclick="addFromUrl()" class="stream-btn">Putar</button>
-          </div>
-          <div class="stream-presets">
-            <button class="sp-btn" onclick="playRadio('https://stream.rri.co.id/rri-proV1/live','RRI Pro 1')">📻 RRI Pro 1</button>
-            <button class="sp-btn" onclick="playRadio('https://stream.rri.co.id/rri-proV2/live','RRI Pro 2')">📻 RRI Pro 2</button>
-            <button class="sp-btn" onclick="playRadio('','Prambors')">🎵 Prambors</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Visual Panel -->
-      <div class="music-visual">
-        <div class="vis-section">
-          <div class="vis-header">
-            <span>⚡ Equalizer</span>
-            <div class="eq-mode-btns">
-              <button class="eq-mode active" onclick="setEqMode('bars',this)">Bars</button>
-              <button class="eq-mode" onclick="setEqMode('wave',this)">Wave</button>
-              <button class="eq-mode" onclick="setEqMode('circle',this)">Circle</button>
-            </div>
-          </div>
-          <div class="equalizer" id="equalizer"></div>
-          <canvas id="waveCanvas" style="display:none;width:100%;height:80px"></canvas>
-        </div>
-
-        <div class="vis-section">
-          <div class="vis-header">⏭ Antrian Berikutnya</div>
-          <div class="queue-list" id="queueList"></div>
-        </div>
-
-        <div class="vis-section">
-          <div class="vis-header">🏆 Top Diputar</div>
-          <div class="top-played" id="topPlayed"></div>
-        </div>
-
-        <div class="vis-section">
-          <div class="vis-header">❤️ Disukai</div>
-          <div class="liked-list" id="likedList"><div style="color:var(--text2);font-size:.8rem;padding:.5rem">Belum ada lagu yang disukai</div></div>
-        </div>
+        <div class="fg"><label>Deskripsi Proyek</label><textarea id="fDesc" placeholder="Ceritakan kebutuhan sistem Anda..."></textarea></div>
+        <button class="form-submit" onclick="submitForm()">
+          Kirim Permintaan
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        </button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== TOOLS ===== -->
-<section class="section tools-section" id="tools">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag">03 / Tools</span>
-      <h2 class="section-title">Kalkulator & Kalender</h2>
-      <p class="section-desc">Alat bantu sehari-hari yang selalu kamu butuhkan</p>
-    </div>
-    <div class="tools-grid">
-      <!-- KALKULATOR -->
-      <div class="tool-box calc-box">
-        <div class="tool-title">🧮 Kalkulator Scientific</div>
-        <div class="calc-display">
-          <div class="calc-expr" id="calcExpr"></div>
-          <div class="calc-result" id="calcResult">0</div>
-        </div>
-        <div class="calc-mode-tabs">
-          <button class="calc-mode active" onclick="setCalcMode('basic',this)">Basic</button>
-          <button class="calc-mode" onclick="setCalcMode('sci',this)">Scientific</button>
-        </div>
-        <div class="calc-buttons" id="calcButtons">
-          <button class="cb func" onclick="calcFunc('AC')">AC</button>
-          <button class="cb func" onclick="calcFunc('+/-')">+/-</button>
-          <button class="cb func" onclick="calcFunc('%')">%</button>
-          <button class="cb op" onclick="calcOp('÷')">÷</button>
-          <button class="cb num" onclick="calcNum('7')">7</button>
-          <button class="cb num" onclick="calcNum('8')">8</button>
-          <button class="cb num" onclick="calcNum('9')">9</button>
-          <button class="cb op" onclick="calcOp('×')">×</button>
-          <button class="cb num" onclick="calcNum('4')">4</button>
-          <button class="cb num" onclick="calcNum('5')">5</button>
-          <button class="cb num" onclick="calcNum('6')">6</button>
-          <button class="cb op" onclick="calcOp('-')">−</button>
-          <button class="cb num" onclick="calcNum('1')">1</button>
-          <button class="cb num" onclick="calcNum('2')">2</button>
-          <button class="cb num" onclick="calcNum('3')">3</button>
-          <button class="cb op" onclick="calcOp('+')">+</button>
-          <button class="cb num zero" onclick="calcNum('0')">0</button>
-          <button class="cb num" onclick="calcNum('.')">.</button>
-          <button class="cb eq" onclick="calcEquals()">=</button>
-        </div>
-        <div class="calc-history" id="calcHistory"><div class="ch-label">Riwayat</div></div>
-      </div>
-
-      <!-- KALENDER -->
-      <div class="tool-box cal-box">
-        <div class="tool-title">📅 Kalender Indonesia 2026</div>
-        <div class="calendar-nav">
-          <button onclick="changeMonth(-1)">‹</button>
-          <div>
-            <select id="monthSelect" onchange="changeMonthSelect()"></select>
-            <select id="yearSelect" onchange="changeYearSelect()"></select>
-          </div>
-          <button onclick="changeMonth(1)">›</button>
-        </div>
-        <div class="calendar-grid">
-          <div class="cal-day-header">Min</div>
-          <div class="cal-day-header">Sen</div>
-          <div class="cal-day-header">Sel</div>
-          <div class="cal-day-header">Rab</div>
-          <div class="cal-day-header">Kam</div>
-          <div class="cal-day-header">Jum</div>
-          <div class="cal-day-header">Sab</div>
-          <div id="calendarDays"></div>
-        </div>
-        <div class="cal-legend">
-          <div class="cal-legend-item"><div class="cal-legend-dot leg-libur"></div>Libur Nasional</div>
-          <div class="cal-legend-item"><div class="cal-legend-dot leg-cuti"></div>Cuti Bersama</div>
-          <div class="cal-legend-item"><div class="cal-legend-dot leg-peringatan"></div>Hari Peringatan</div>
-          <div class="cal-legend-item"><div class="cal-legend-dot leg-sun"></div>Minggu</div>
-        </div>
-        <div class="holiday-list" id="holidayList" style="max-height:220px;overflow-y:auto;margin-top:.5rem"></div>
-        <!-- Add event -->
-        <div class="cal-add-event">
-          <input type="text" id="eventInput" placeholder="Tambah pengingat tanggal ini...">
-          <button onclick="addEvent()">+ Tambah</button>
-        </div>
-        <div class="event-list" id="eventList"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== GAME ===== -->
-<section class="section game-section" id="game">
-  <div class="container">
-    <div class="section-header">
-      <span class="section-tag">04 / Game</span>
-      <h2 class="section-title">Onet Klasik</h2>
-      <p class="section-desc">Temukan dan cocokkan pasangan gambar yang sama</p>
-    </div>
-    <div class="game-wrapper">
-      <div class="game-hud">
-        <div class="hud-item"><span class="hud-label">Skor</span><span class="hud-value" id="gameScore">0</span></div>
-        <div class="hud-item"><span class="hud-label">Waktu</span><span class="hud-value" id="gameTimer">120</span></div>
-        <div class="hud-item"><span class="hud-label">Level</span><span class="hud-value" id="gameLevel">1</span></div>
-        <div class="hud-item"><span class="hud-label">Hint</span><span class="hud-value" id="gameHints">3</span></div>
-        <div class="hud-item"><span class="hud-label">Best</span><span class="hud-value" id="gameBest">0</span></div>
-      </div>
-      <div class="game-controls">
-        <button class="game-btn" onclick="startGame()">▶ Mulai</button>
-        <button class="game-btn secondary" onclick="useHint()">💡 Hint</button>
-        <button class="game-btn secondary" onclick="shuffleBoard()">🔀 Acak</button>
-        <button class="game-btn secondary" onclick="pauseGame()">⏸ Pause</button>
-      </div>
-      <div class="game-board" id="gameBoard"></div>
-      <div class="game-msg" id="gameMsg"></div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
+<!-- ══ FOOTER ══ -->
 <footer class="footer">
-  <div class="footer-content">
-    <div class="footer-logo">◈ Riki Hermawan S.Kom</div>
-    <p class="footer-sub">Digital Universe — 2026</p>
+  <div class="footer-wrap">
+    <div class="footer-brand">
+      <div class="brand-orb"></div>
+      <span>Riki<b>Dev</b></span>
+    </div>
+    <p>Membangun Sistem Real-Time yang Menggerakkan Bisnis Anda</p>
     <div class="footer-links">
-      <a href="https://www.instagram.com/benyoriki" target="_blank">IG</a>
-      <a href="https://www.tiktok.com/@benyoriki" target="_blank">TT</a>
-      <a href="https://web.facebook.com/benyo.hermawan" target="_blank">FB</a>
-      <a href="https://www.youtube.com/@rikihermawan8103" target="_blank">YT</a>
-      <a href="https://jasadaud.online/" target="_blank">🌐</a>
+      <a href="https://www.instagram.com/benyoriki" target="_blank">Instagram</a>
+      <a href="https://www.tiktok.com/@benyoriki" target="_blank">TikTok</a>
+      <a href="https://web.facebook.com/benyo.hermawan" target="_blank">Facebook</a>
+      <a href="https://www.youtube.com/@rikihermawan8103" target="_blank">YouTube</a>
+      <a href="https://benyoriki.com/" target="_blank">Website</a>
     </div>
-    <div class="footer-stats">
-      <span>🎵 <span id="totalSongs">0</span> Lagu</span>
-      <span>👥 <span id="onlineUsers">—</span> Online</span>
-      <span>⚡ Digital Universe v2026</span>
-    </div>
+    <div class="footer-copy">© 2026 Riki Hermawan S.Kom · Real-Time Web System Specialist</div>
   </div>
 </footer>
 
-<!-- Toast Notification -->
+<!-- ══ CHATBOX ══ -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="Chat">
+  <div class="fab-pulse"></div>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  <span class="fab-dot" id="fabDot"></span>
+</button>
+
+<div class="chatbox" id="chatbox">
+  <div class="cb-head">
+    <div class="cb-av"><div class="cb-av-in">RH</div><span class="cb-online"></span></div>
+    <div class="cb-hinfo"><div class="cb-hname">Riki Hermawan S.Kom</div><div class="cb-hstatus"><span class="live-dot"></span>Online sekarang</div></div>
+    <button class="cb-close" onclick="toggleChat()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="cb-msgs" id="cbMsgs">
+    <div class="cb-dateline">Hari ini</div>
+    <div class="cb-msg bot">
+      <div class="cb-bubble">👋 Halo! Saya Riki. Kami spesialis sistem <strong>real-time database</strong> berbasis web. Ada yang bisa saya bantu?</div>
+      <div class="cb-time">Baru saja</div>
+    </div>
+    <div class="cb-qr" id="cbQR">
+      <button class="qr" onclick="qReply('Saya butuh sistem kasir online')">💳 Sistem Kasir</button>
+      <button class="qr" onclick="qReply('Saya butuh toko online')">🛒 Toko Online</button>
+      <button class="qr" onclick="qReply('Berapa biaya pembuatan?')">💰 Tanya Harga</button>
+      <button class="qr" onclick="qReply('Saya ingin konsultasi proyek')">📋 Konsultasi</button>
+    </div>
+  </div>
+  <div class="cb-typing" id="cbTyping" style="display:none">
+    <div class="cb-dots"><span></span><span></span><span></span></div>
+    <span>Riki mengetik...</span>
+  </div>
+  <div class="cb-input">
+    <input id="cbIn" type="text" placeholder="Tulis pesan..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()" aria-label="Kirim">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
-
-<!-- LINE CANVAS for Onet -->
-<canvas id="lineCanvas" style="position:fixed;top:0;left:0;pointer-events:none;z-index:9999;"></canvas>
-<audio id="audioPlayer"></audio>
-
-
-<!-- Firebase Compat SDK (v9 compat mode) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
-
-<script>
-const firebaseConfig = {
-  apiKey: "AIzaSyC1qjVmz94BNs2MO0KiUFMByS4qo8hYKRU",
-  authDomain: "benyoriki-b7006.firebaseapp.com",
-  databaseURL: "https://benyoriki-b7006-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "benyoriki-b7006",
-  storageBucket: "benyoriki-b7006.firebasestorage.app",
-  messagingSenderId: "279665663367",
-  appId: "1:279665663367:web:a0ac6c5596a3e750394722"
-};
-
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-
-const db = firebase.database();
-const storage = firebase.storage();
-</script>
 
 <script src="app.js"></script>
 </body>
