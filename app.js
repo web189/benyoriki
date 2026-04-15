@@ -141,7 +141,7 @@ const revObs = new IntersectionObserver(entries => {
     }
   });
 }, { threshold: .08 });
-document.querySelectorAll('.srv-card,.tg-item,.kl-list li').forEach(el => {
+document.querySelectorAll('.srv-card,.tg-item,.kl-list li,.price-card,.ps-content,.testi-card,.manfaat-card,.faq-item,.usp-item').forEach(el => {
   el.classList.add('reveal');
   revObs.observe(el);
 });
@@ -268,7 +268,7 @@ function submitForm() {
   const desc = document.getElementById('fDesc')?.value.trim();
   if (!name || !type || !desc) { showToast('⚠️ Lengkapi semua kolom terlebih dahulu'); return; }
   const msg = encodeURIComponent(`Halo Riki! Saya *${name}*\n\nMembutuhkan: *${type}*\n\nDeskripsi:\n${desc}`);
-  window.open(`https://wa.me/6282318001234?text=${msg}`, '_blank');
+  window.open(`https://wa.me/628988995637?text=${msg}`, '_blank');
   showToast('✅ Membuka WhatsApp...');
 }
 
@@ -279,14 +279,47 @@ function showToast(msg, dur = 3000) {
   setTimeout(() => t.classList.remove('show'), dur);
 }
 
-/* ── CHATBOX ── */
+/* ── CHATBOX — AI POWERED ── */
 const chatFab = document.getElementById('chatFab');
 const chatbox = document.getElementById('chatbox');
 const fabDot = document.getElementById('fabDot');
 const cbMsgs = document.getElementById('cbMsgs');
 const cbTyping = document.getElementById('cbTyping');
 const cbIn = document.getElementById('cbIn');
-let chatOpen = false, waShown = 0;
+let chatOpen = false, waShown = 0, conversationHistory = [];
+
+// System prompt khusus untuk asisten Riki
+const SYSTEM_PROMPT = `Kamu adalah asisten virtual dari Riki Hermawan S.Kom, pengembang sistem website profesional untuk UMKM dan bisnis lokal Indonesia.
+
+IDENTITAS:
+- Nama asisten: Asisten Riki
+- Pemilik jasa: Riki Hermawan S.Kom
+- Kontak WA: 08988995637
+- Website: benyoriki.com
+- Spesialisasi: Sistem website real-time, kasir online, toko digital, dashboard bisnis
+
+PAKET HARGA (SELALU SEBUT INI JIKA DITANYA HARGA):
+- Basic: Mulai Rp 500rb → Landing Page/Profil Bisnis, Hosting+Domain 1 tahun GRATIS, selesai 2–3 hari kerja
+- Standar: Mulai Rp 1,5jt → Toko Online, Katalog Produk, Sistem Login, selesai 3–5 hari kerja
+- Pro: Mulai Rp 3jt → Kasir Online, Dashboard Real-Time, Multi-Cabang, selesai 5–10 hari kerja
+- SEMUA paket: Demo dulu sebelum bayar, support pasca-launch termasuk
+
+KEUNGGULAN UTAMA (selalu tekankan):
+- Website bisnis siap 2–6 hari kerja
+- Harga mulai di bawah Rp 500rb, hosting+domain gratis di paket Basic
+- Demo sistem sebelum bayar — tidak puas, tidak bayar
+- Support & revisi pasca-launch
+- Bisa diakses dari HP kapan saja
+
+ATURAN MENJAWAB:
+1. Jawab dalam Bahasa Indonesia yang hangat, friendly, dan profesional
+2. Maksimal 4–5 kalimat per balasan — singkat tapi langsung ke manfaat
+3. Jika ditanya harga: LANGSUNG sebut paket dan harga spesifik (Basic/Standar/Pro)
+4. Jangan bilang "tergantung" tanpa memberikan angka perkiraan dulu
+5. Setelah 2 pesan, sarankan untuk konsultasi WA atau isi form
+6. Gunakan emoji secukupnya agar terasa personal
+7. Jika ditanya hal di luar layanan web/bisnis, arahkan kembali dengan sopan
+8. Selalu akhiri dengan ajakan action (chat WA, isi form, atau lihat portofolio)`;
 
 function toggleChat() {
   chatOpen = !chatOpen;
@@ -305,52 +338,104 @@ function addMsg(html, type = 'bot') {
 
 function rmQR() { document.getElementById('cbQR')?.remove(); }
 
-const BOT = {
-  kasir: `💳 <strong>Sistem Kasir Online</strong><br>Kami buat kasir web dengan:<br>• Stok otomatis update<br>• Multi kasir/cabang<br>• Laporan harian & bulanan<br>• Akses HP & PC<br><br>Estimasi: <strong>5–10 hari kerja</strong>. 🚀`,
-  toko: `🛒 <strong>Toko Online</strong><br>E-commerce lengkap:<br>• Katalog produk dinamis<br>• Keranjang belanja<br>• Real-time stok<br>• Order via WhatsApp<br><br>Cek portofolio toko online kami di bagian Portofolio ya! 😊`,
-  harga: `💰 <strong>Estimasi Harga</strong><br>Bergantung kompleksitas:<br>• Landing page: terjangkau<br>• Toko online: menengah<br>• Kasir real-time: menengah+<br>• Custom enterprise: premium<br><br>Ceritakan kebutuhan Anda untuk estimasi pasti! ✨`,
-  konsultasi: `📋 <strong>Konsultasi Gratis!</strong><br>Ceritakan kebutuhan:<br>1. Bisnis apa yang dijalankan?<br>2. Fitur apa yang dibutuhkan?<br>3. Berapa banyak user?<br><br>Atau langsung WhatsApp kami ⬇`,
-  df: [`Terima kasih! 🙏 Untuk detail lebih lanjut, silakan WhatsApp kami ya. Tim siap membantu!`,`Menarik! Bisa ceritakan lebih detail kebutuhan sistemnya? Kami carikan solusi terbaik 💡`,`Kami spesialis <strong>real-time database</strong> web — toko, kasir, dashboard live, semua bisa! 💪`,`Yuk konsultasi gratis via WhatsApp atau isi form di bawah. Tim kami siap! ⬇`]
-};
-
-function getBotResp(txt) {
-  const t = txt.toLowerCase();
-  if (t.includes('kasir') || t.includes('pos')) return BOT.kasir;
-  if (t.includes('toko') || t.includes('online') || t.includes('shop')) return BOT.toko;
-  if (t.includes('harga') || t.includes('biaya') || t.includes('berapa')) return BOT.harga;
-  if (t.includes('konsultasi') || t.includes('proyek') || t.includes('diskusi')) return BOT.konsultasi;
-  if (t.includes('database') || t.includes('firebase') || t.includes('realtime')) return `🔥 <strong>Real-Time Database</strong> keahlian utama kami!<br>Firebase + WebSocket untuk sync instan semua perangkat. Mau demo langsung?`;
-  if (/halo|hai|hi|hello|selamat/.test(t)) return `Halo! Senang bertemu Anda 👋<br>Siap membantu tentang jasa sistem website real-time kami. Ada yang bisa saya bantu?`;
-  return BOT.df[Math.floor(Math.random() * BOT.df.length)];
-}
-
-function showTyping(cb) {
+function showTyping(cb, delay = 1400) {
   if (cbTyping) cbTyping.style.display = 'flex';
   if (cbMsgs) cbMsgs.scrollTop = 9999;
   setTimeout(() => {
     if (cbTyping) cbTyping.style.display = 'none';
     cb();
-    // Show WA button after 2nd reply
     waShown++;
     if (waShown === 2) addWABtn();
-  }, 1350);
+  }, delay);
 }
 
 function addWABtn() {
   const d = document.createElement('div');
   d.style.cssText = 'display:flex;justify-content:center;margin-top:4px';
-  d.innerHTML = `<a href="https://wa.me/6282318001234" target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;text-decoration:none;font-weight:700;padding:9px 16px;border-radius:50px;font-size:.78rem;font-family:'Outfit',sans-serif">
+  d.innerHTML = `<a href="https://wa.me/628988995637" target="_blank" style="display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;text-decoration:none;font-weight:700;padding:9px 16px;border-radius:50px;font-size:.78rem;font-family:'Outfit',sans-serif">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    WhatsApp Langsung
+    💬 Lanjut Chat di WhatsApp
   </a>`;
   cbMsgs?.appendChild(d);
   if (cbMsgs) cbMsgs.scrollTop = 9999;
 }
 
+async function getAIReply(userMessage) {
+  // Tambah ke history
+  conversationHistory.push({ role: 'user', content: userMessage });
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 300,
+        system: SYSTEM_PROMPT,
+        messages: conversationHistory
+      })
+    });
+
+    if (!response.ok) throw new Error('API error');
+    const data = await response.json();
+    const reply = data.content?.[0]?.text || getFallbackReply(userMessage);
+
+    // Simpan reply ke history
+    conversationHistory.push({ role: 'assistant', content: reply });
+
+    // Batasi history agar tidak terlalu panjang (max 10 pesan terakhir)
+    if (conversationHistory.length > 10) {
+      conversationHistory = conversationHistory.slice(-10);
+    }
+
+    return reply;
+  } catch (e) {
+    // Fallback jika API gagal
+    return getFallbackReply(userMessage);
+  }
+}
+
+function getFallbackReply(txt) {
+  const t = txt.toLowerCase();
+  if (t.includes('kasir') || t.includes('pos') || t.includes('inventory'))
+    return `🛒 <strong>Sistem Kasir Online</strong> adalah layanan paling diminati kami! Cocok banget untuk warung, toko, atau bisnis multi-cabang — stok update otomatis, laporan harian, bisa diakses dari HP. Harga tergantung fitur & kerumitan sistem, estimasi mulai <strong>Rp 2–5 juta</strong>. Hosting & domain dihitung terpisah untuk paket ini. Mau konsultasi gratis dulu? 😊`;
+  if (t.includes('toko') || t.includes('online') || t.includes('shop') || t.includes('ecommerce'))
+    return `🌐 <strong>Toko Online</strong> kami dibuat khusus untuk UMKM — tampil profesional tanpa harga selangit! Katalog produk, keranjang belanja, order via WhatsApp, semua bisa disesuaikan. Harga tergantung banyaknya fitur, mulai dari <strong>di bawah Rp 500rb</strong> untuk yang sederhana (sudah termasuk hosting & domain gratis). Produk apa yang mau Anda jual? 🎯`;
+  if (t.includes('harga') || t.includes('biaya') || t.includes('berapa') || t.includes('budget') || t.includes('murah') || t.includes('mahal') || t.includes('paket'))
+    return `💰 Kami punya 3 paket dengan harga transparan:<br><br>📌 <strong>Basic</strong>: Mulai Rp 500rb → Landing Page + Hosting & Domain Gratis (2–3 hari selesai)<br>📌 <strong>Standar</strong>: Mulai Rp 1,5jt → Toko Online + Sistem Login (3–5 hari selesai)<br>📌 <strong>Pro</strong>: Mulai Rp 3jt → Kasir + Dashboard Real-Time + Multi-Cabang (5–10 hari selesai)<br><br>Semua paket: <strong>demo dulu sebelum bayar</strong>. Mau tahu lebih detail? <a href='https://wa.me/628988995637' target='_blank'>Chat Riki sekarang →</a> 🚀`;
+  if (t.includes('hosting') || t.includes('domain'))
+    return `🌐 Soal hosting & domain, begini ketentuannya: untuk paket website <strong>di bawah Rp 500rb</strong>, hosting & domain sudah <strong>GRATIS</strong> termasuk dalam paket! Untuk proyek yang lebih kompleks dengan kebutuhan server lebih besar, hosting & domain dihitung <strong>terpisah</strong> dari harga jasa pembuatan. Mau tahu lebih lanjut? Yuk konsultasi gratis! 😊`;
+  if (t.includes('dashboard') || t.includes('laporan') || t.includes('analitik'))
+    return `📊 <strong>Dashboard bisnis real-time</strong> bisa pantau omzet, stok, dan transaksi dari mana saja langsung dari HP Anda! Grafik live, laporan otomatis, export PDF/Excel. Harga tergantung fitur & kerumitan, estimasi mulai <strong>Rp 3–7 juta</strong> (hosting & domain terpisah). Sangat cocok untuk pemilik bisnis yang sering mobile. Bisnis Anda di bidang apa? 🏪`;
+  if (t.includes('lama') || t.includes('waktu') || t.includes('kapan') || t.includes('selesai'))
+    return `⏱️ Waktu pengerjaan tergantung kompleksitas sistem. Website sederhana bisa <strong>3–5 hari kerja</strong>, toko online <strong>7–10 hari</strong>, kasir/dashboard real-time <strong>10–14 hari</strong>. Kami juga kasih demo dulu sebelum sistem diluncurkan, jadi Anda bisa lihat hasilnya sebelum bayar penuh! 🚀`;
+  if (t.includes('portfolio') || t.includes('portofolio') || t.includes('contoh') || t.includes('hasil'))
+    return `👀 Portofolio kami bisa dilihat langsung di halaman ini — <strong>bukan sekadar screenshot, tapi website asli yang bisa dibuka!</strong> Scroll ke bagian Portofolio ya. Ada toko online, kasir, UMKM makanan & minuman, dan lainnya. Mau saya rekomendasikan yang paling mirip dengan bisnis Anda? 😊`;
+  if (/halo|hai|hi|hello|selamat|pagi|siang|malam/.test(t))
+    return `Halo! Selamat datang di layanan website Riki 👋 Kami spesialis pembuatan sistem web untuk <strong>UMKM & bisnis lokal</strong> — harga mulai <strong>di bawah Rp 500rb</strong>, sudah termasuk hosting & domain gratis untuk paket dasar! Ada yang bisa saya bantu hari ini? 😊`;
+  if (t.includes('revisi') || t.includes('support') || t.includes('maintenance') || t.includes('after'))
+    return `🛡️ Tenang, kami tidak tinggalkan Anda setelah selesai! Setiap proyek sudah termasuk <strong>support & revisi</strong> pasca-launch. Jika ada bug atau perlu penyesuaian, kami siap bantu. Untuk maintenance jangka panjang juga tersedia paket bulanan. Tidak perlu khawatir soal itu! 💪`;
+  if (t.includes('gratis') || t.includes('free'))
+    return `🎁 Ada yang gratis nih! Untuk paket website <strong>di bawah Rp 500rb</strong>, sudah termasuk <strong>hosting & domain GRATIS</strong>. Selain itu, konsultasi awal dan demo sistem sebelum deal juga gratis! Untuk paket yang lebih kompleks, hosting & domain dihitung terpisah sesuai kebutuhan. Tertarik? 😊`;
+  return `Terima kasih sudah menghubungi kami! 🙏 Kami spesialis <strong>sistem website untuk UMKM & bisnis</strong> — harga rata-rata <strong>di bawah Rp 500rb</strong> dengan hosting & domain gratis untuk paket dasar. Harga bisa lebih tergantung fitur & kerumitan sistem. Boleh ceritakan bisnis Anda? Biar saya rekomendasikan solusi yang paling tepat 💡`;
+}
+
+async function processAndReply(userText) {
+  addMsg(userText, 'user');
+  if (cbTyping) cbTyping.style.display = 'flex';
+  if (cbMsgs) cbMsgs.scrollTop = 9999;
+
+  const reply = await getAIReply(userText);
+
+  if (cbTyping) cbTyping.style.display = 'none';
+  addMsg(reply, 'bot');
+  waShown++;
+  if (waShown === 2) addWABtn();
+}
+
 function qReply(txt) {
   rmQR();
-  addMsg(txt, 'user');
-  showTyping(() => addMsg(getBotResp(txt), 'bot'));
+  processAndReply(txt);
 }
 
 function sendChat() {
@@ -358,9 +443,47 @@ function sendChat() {
   if (!val) return;
   cbIn.value = '';
   rmQR();
-  addMsg(val, 'user');
-  showTyping(() => addMsg(getBotResp(val), 'bot'));
+  processAndReply(val);
 }
+
+/* ── FAQ TOGGLE ── */
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const ans = item.querySelector('.faq-a');
+  const isOpen = item.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.faq-item').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-a')?.classList.remove('open');
+  });
+  // Open clicked if it was closed
+  if (!isOpen) {
+    item.classList.add('open');
+    ans?.classList.add('open');
+  }
+}
+
+/* ── TESTIMONI IMAGE MODAL ── */
+const modal = document.getElementById("imgModal");
+const modalImg = document.getElementById("modalImg");
+const closeModal = document.querySelector(".close-modal");
+
+document.querySelectorAll(".testi-img").forEach(img => {
+  img.addEventListener("click", function(){
+    modal.style.display = "block";
+    modalImg.src = this.src;
+  });
+});
+
+closeModal.onclick = function(){
+  modal.style.display = "none";
+};
+
+modal.onclick = function(e){
+  if(e.target === modal){
+    modal.style.display = "none";
+  }
+};
 
 /* ── PAGE LOAD ANIMATION ── */
 document.querySelectorAll('.hero-left > *').forEach((el, i) => {
