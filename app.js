@@ -3,6 +3,17 @@
    Lightweight · Canggih · Full Featured
    ═══════════════════════════════════════════════ */
 
+/* ── SCROLL PROGRESS BAR ── */
+(function() {
+  const bar = document.createElement('div');
+  bar.id = 'scrollProgress';
+  document.body.prepend(bar);
+  window.addEventListener('scroll', () => {
+    const total = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (window.scrollY / total * 100) + '%';
+  }, { passive: true });
+})();
+
 /* ── THEME ── */
 const html = document.documentElement;
 const themeBtn = document.getElementById('themeBtn');
@@ -12,20 +23,26 @@ themeBtn?.addEventListener('click', () => applyTheme(html.getAttribute('data-the
 
 /* ── NAVBAR ── */
 const navbar = document.getElementById('navbar');
-let lastY = 0;
+let lastY = 0, ticking = false;
 window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  navbar?.classList.toggle('up', y > 40);
-  // active link
-  document.querySelectorAll('section[id]').forEach(s => {
-    const top = s.offsetTop - 120, id = s.id;
-    const link = document.querySelector(`.nl[href="#${id}"]`);
-    if (y >= top && y < top + s.offsetHeight) {
-      document.querySelectorAll('.nl').forEach(l => l.classList.remove('active'));
-      link?.classList.add('active');
-    }
-  });
-  lastY = y;
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const y = window.scrollY;
+      navbar?.classList.toggle('up', y > 40);
+      // Active link highlight
+      document.querySelectorAll('section[id]').forEach(s => {
+        const top = s.offsetTop - 120, id = s.id;
+        const link = document.querySelector(`.nl[href="#${id}"]`);
+        if (y >= top && y < top + s.offsetHeight) {
+          document.querySelectorAll('.nl').forEach(l => l.classList.remove('active'));
+          link?.classList.add('active');
+        }
+      });
+      lastY = y;
+      ticking = false;
+    });
+    ticking = true;
+  }
 }, { passive: true });
 
 /* ── HAMBURGER ── */
@@ -35,12 +52,36 @@ hamburger?.addEventListener('click', () => mobMenu?.classList.toggle('show'));
 function closeMob() { mobMenu?.classList.remove('show'); }
 document.addEventListener('click', e => { if (!navbar?.contains(e.target)) closeMob(); });
 
-/* ── SMOOTH ANCHOR SCROLL ── */
+/* ── SECTION HEADING ENTRANCE OBSERVER ── */
+const headObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'none';
+      e.target.style.filter = 'none';
+      headObs.unobserve(e.target);
+    }
+  });
+}, { threshold: .2 });
+document.querySelectorAll('.sec-h2, .sec-label, .sec-sub').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.filter = 'blur(3px)';
+  el.style.transition = 'opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1), filter .6s ease';
+  headObs.observe(el);
+});
+
+/* ── SMOOTH ANCHOR SCROLL with offset ── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const id = a.getAttribute('href').slice(1);
     const el = document.getElementById(id);
-    if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+    if (el) {
+      e.preventDefault();
+      const offset = 80;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
   });
 });
 
@@ -93,11 +134,21 @@ window.addEventListener('resize', () => { resizeC(); initC(); }, { passive: true
 function runCounter(el) {
   const target = +el.dataset.count;
   let start = null;
+  const easeOutExpo = t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
   const step = ts => {
     if (!start) start = ts;
-    const p = Math.min((ts - start) / 1600, 1);
-    el.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target);
-    if (p < 1) requestAnimationFrame(step); else el.textContent = target;
+    const p = Math.min((ts - start) / 1800, 1);
+    const ease = easeOutExpo(p);
+    el.textContent = Math.floor(ease * target);
+    if (p < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.textContent = target;
+      // Gold flash on finish
+      el.style.transition = 'text-shadow .3s';
+      el.style.textShadow = '0 0 30px rgba(201,168,76,.6)';
+      setTimeout(() => { el.style.textShadow = '0 0 20px rgba(201,168,76,.3)'; }, 300);
+    }
   };
   requestAnimationFrame(step);
 }
@@ -136,11 +187,11 @@ setInterval(animateMockBars, 3000);
 const revObs = new IntersectionObserver(entries => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i % 6 * 70);
+      setTimeout(() => e.target.classList.add('visible'), i % 6 * 80);
       revObs.unobserve(e.target);
     }
   });
-}, { threshold: .08 });
+}, { threshold: .06 });
 document.querySelectorAll('.srv-card,.tg-item,.kl-list li,.price-card,.ps-content,.testi-card,.manfaat-card,.faq-item,.usp-item').forEach(el => {
   el.classList.add('reveal');
   revObs.observe(el);
@@ -152,10 +203,13 @@ document.querySelectorAll('.embed-card').forEach(card => {
     const r = card.getBoundingClientRect();
     const x = (e.clientX - r.left) / r.width - .5;
     const y = (e.clientY - r.top) / r.height - .5;
-    if (card.classList.contains('ec-visible'))
-      card.style.transform = `translateY(-6px) rotateY(${x * 4}deg) rotateX(${-y * 3}deg)`;
+    card.style.transform = `perspective(1200px) rotateY(${x * 5}deg) rotateX(${-y * 4}deg) translateY(-4px)`;
+    card.style.transition = 'transform .08s linear, background var(--dur)';
   });
-  card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+    card.style.transition = 'transform .45s cubic-bezier(.16,1,.3,1), background var(--dur)';
+  });
 });
 
 /* ── PORTFOLIO FILTER (EMBED CARDS) ── */
@@ -169,11 +223,24 @@ filterBtns.forEach(btn => {
     filterBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     let visible = 0;
-    embedCards.forEach(card => {
+    embedCards.forEach((card, i) => {
       const cat = card.dataset.cat;
       const show = filter === 'all' || cat === filter;
-      if (show) { card.classList.remove('hidden'); visible++; }
-      else card.classList.add('hidden');
+      if (show) {
+        card.classList.remove('hidden');
+        // Re-trigger entrance animation
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px) scale(.99)';
+        setTimeout(() => {
+          card.style.opacity = '';
+          card.style.transform = '';
+          card.classList.add('ec-visible');
+        }, i * 60);
+        visible++;
+      } else {
+        card.classList.add('hidden');
+        card.classList.remove('ec-visible');
+      }
     });
     if (portoCount) portoCount.textContent = visible;
   });
@@ -183,17 +250,14 @@ filterBtns.forEach(btn => {
 const ecObs = new IntersectionObserver(entries => {
   entries.forEach((e, i) => {
     if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('ec-visible'), i * 90);
+      setTimeout(() => e.target.classList.add('ec-visible'), i * 80);
       ecObs.unobserve(e.target);
     }
   });
 }, { threshold: .05 });
-embedCards.forEach(card => {
-  card.style.transition = 'opacity .6s ease, transform .6s cubic-bezier(.2,.8,.2,1), border-color .3s, box-shadow .35s';
-  ecObs.observe(card);
-});
+embedCards.forEach(card => ecObs.observe(card));
 
-/* ── IFRAME EMBED LOADER ── */
+/* ── IFRAME EMBED LOADER — FIXED ── */
 function loadEmbed(btn) {
   const wrap = btn.closest('.embed-frame-wrap');
   if (!wrap) return;
@@ -202,58 +266,55 @@ function loadEmbed(btn) {
   const loading = wrap.querySelector('.embed-loading');
   if (!iframe || !overlay) return;
 
-  // Show loading indicator
+  // Prevent double-loading
+  if (wrap.dataset.loaded === '1') {
+    overlay.classList.add('hidden');
+    return;
+  }
+
+  // Hide overlay immediately so user sees loading state
+  overlay.style.display = 'none';
   loading?.classList.add('active');
-  overlay.classList.add('hidden');
 
-  // Set real src from data-src
   const src = iframe.dataset.src;
-  if (src && !iframe.src) {
-    iframe.src = src;
+  if (!src) {
+    loading?.classList.remove('active');
+    overlay.style.display = '';
+    return;
+  }
 
-    // Detect load or block
-    const timeout = setTimeout(() => {
-      // If still not loaded after 8s, show blocked fallback
-      loading?.classList.remove('active');
-      showEmbedFallback(wrap, src);
-    }, 8000);
+  // Set timeout fallback for blocked sites
+  const timeout = setTimeout(() => {
+    loading?.classList.remove('active');
+    showEmbedFallback(wrap, src);
+  }, 9000);
 
-    iframe.addEventListener('load', () => {
-      clearTimeout(timeout);
-      loading?.classList.remove('active');
-      try {
-        // Try accessing the iframe content (will throw if cross-origin blocked)
-        const doc = iframe.contentDocument || iframe.contentWindow?.document;
-        // If we get here, it loaded fine
-        iframe.classList.add('loaded');
-      } catch (e) {
-        // Cross-origin is normal for external sites — still show iframe
-        iframe.classList.add('loaded');
-      }
-    }, { once: true });
-
-    iframe.addEventListener('error', () => {
-      clearTimeout(timeout);
-      loading?.classList.remove('active');
-      showEmbedFallback(wrap, src);
-    }, { once: true });
-  } else {
-    // Already loaded
+  iframe.addEventListener('load', () => {
+    clearTimeout(timeout);
     loading?.classList.remove('active');
     iframe.classList.add('loaded');
-  }
+    wrap.dataset.loaded = '1';
+  }, { once: true });
+
+  iframe.addEventListener('error', () => {
+    clearTimeout(timeout);
+    loading?.classList.remove('active');
+    showEmbedFallback(wrap, src);
+  }, { once: true });
+
+  // Actually set the src — this triggers the load
+  iframe.src = src;
 }
 
 function showEmbedFallback(wrap, url) {
-  // Check if already showing blocked state
   if (wrap.querySelector('.embed-blocked')) return;
   const iframe = wrap.querySelector('.embed-iframe');
-  if (iframe) iframe.style.display = 'none';
+  if (iframe) { iframe.style.display = 'none'; }
   const blocked = document.createElement('div');
   blocked.className = 'embed-blocked show';
   blocked.innerHTML = `
     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
-    <div><strong>Preview tidak tersedia</strong>Website ini memblokir embed (X-Frame-Options).<br>Tapi situsnya masih bisa dikunjungi langsung! ✅</div>
+    <div><strong>Preview tidak tersedia</strong><br>Website ini memblokir tampilan embed.<br>Tapi bisa dikunjungi langsung! ✅</div>
     <a href="${url}" target="_blank" rel="noopener" class="eb-visit-btn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
       Buka Website Langsung
@@ -466,29 +527,89 @@ function toggleFaq(btn) {
 /* ── TESTIMONI IMAGE MODAL ── */
 const modal = document.getElementById("imgModal");
 const modalImg = document.getElementById("modalImg");
-const closeModal = document.querySelector(".close-modal");
+const closeModalBtn = document.querySelector(".close-modal");
 
 document.querySelectorAll(".testi-img").forEach(img => {
   img.addEventListener("click", function(){
+    if (!modal || !modalImg) return;
     modal.style.display = "block";
     modalImg.src = this.src;
   });
 });
 
-closeModal.onclick = function(){
-  modal.style.display = "none";
-};
-
-modal.onclick = function(e){
-  if(e.target === modal){
-    modal.style.display = "none";
-  }
-};
+if (closeModalBtn) {
+  closeModalBtn.addEventListener('click', () => { if (modal) modal.style.display = "none"; });
+}
+if (modal) {
+  modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = "none"; });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.style.display = "none"; });
+}
 
 /* ── PAGE LOAD ANIMATION ── */
 document.querySelectorAll('.hero-left > *').forEach((el, i) => {
   el.style.opacity = '0';
-  el.style.transform = 'translateY(24px)';
-  el.style.transition = `opacity .6s ${i * .12}s ease, transform .6s ${i * .12}s ease`;
-  setTimeout(() => { el.style.opacity = '1'; el.style.transform = 'none'; }, 100 + i * 120);
+  el.style.transform = 'translateY(28px)';
+  el.style.filter = 'blur(4px)';
+  el.style.transition = `opacity .7s ${i * .13}s cubic-bezier(.16,1,.3,1), transform .7s ${i * .13}s cubic-bezier(.16,1,.3,1), filter .6s ${i * .13}s ease`;
+  requestAnimationFrame(() => setTimeout(() => {
+    el.style.opacity = '1';
+    el.style.transform = 'none';
+    el.style.filter = 'none';
+  }, 80 + i * 130));
 });
+
+/* ── BUTTON RIPPLE EFFECT ── */
+document.querySelectorAll('.btn-solid, .btn-ghost, .cta-btn, .form-submit, .wa-cta, .pc-btn').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    const r = this.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = Math.max(r.width, r.height);
+    ripple.style.cssText = `
+      position:absolute; border-radius:50%;
+      width:${size}px; height:${size}px;
+      left:${e.clientX - r.left - size/2}px;
+      top:${e.clientY - r.top - size/2}px;
+      background:rgba(255,255,255,.25);
+      transform:scale(0); animation:ripple .55s ease-out forwards;
+      pointer-events:none; z-index:10;
+    `;
+    this.style.position = 'relative';
+    this.style.overflow = 'hidden';
+    this.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 600);
+  });
+});
+
+/* Add ripple keyframe dynamically */
+if (!document.getElementById('rippleStyle')) {
+  const s = document.createElement('style');
+  s.id = 'rippleStyle';
+  s.textContent = '@keyframes ripple{to{transform:scale(2.5);opacity:0}}';
+  document.head.appendChild(s);
+}
+
+/* ── EMBED CARD HIDDEN CLASS — ensure display:none works ── */
+(function() {
+  if (!document.getElementById('hiddenStyle')) {
+    const s = document.createElement('style');
+    s.id = 'hiddenStyle';
+    s.textContent = '.embed-card.hidden{display:none!important}';
+    document.head.appendChild(s);
+  }
+})();
+
+/* ── EMBED SPINNER CSS inject ── */
+(function() {
+  if (!document.getElementById('spinStyle')) {
+    const s = document.createElement('style');
+    s.id = 'spinStyle';
+    s.textContent = `
+      .embed-spinner{width:24px;height:24px;border:2px solid var(--b2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+      @keyframes spin{to{transform:rotate(360deg)}}
+      .embed-loading span{font-size:.72rem;color:var(--tx3)}
+      .embed-blocked.show{display:flex!important}
+      .embed-blocked svg{color:var(--tx3)}
+    `;
+    document.head.appendChild(s);
+  }
+})();
