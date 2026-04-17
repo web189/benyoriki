@@ -1,678 +1,1147 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
 
 <!-- Primary Meta -->
-<meta name="title" content="ONLIN TOKO - Sistem Toko Online Modern & Siap Pakai">
-<meta name="description" content="ONLIN TOKO adalah solusi sistem toko online modern untuk UMKM & bisnis. Kelola produk, pesanan, dan transaksi dengan mudah, cepat, dan profesional dalam satu platform.">
+<title>Sistem Web UMKM & Bisnis</title>
+<meta name="description" content="Jasa pembuatan sistem website untuk UMKM & bisnis. Kasir online, toko digital, dashboard real-time — harga UMKM, kualitas enterprise.">
 
 <!-- Open Graph (WA / Facebook) -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://onlintoko.netlify.app/">
-<meta property="og:title" content="ONLIN TOKO - Sistem Toko Online Modern">
-<meta property="og:description" content="Bangun toko online profesional tanpa ribet. Sistem lengkap, tampilan modern, dan siap digunakan untuk meningkatkan penjualan bisnis Anda.">
-<meta property="og:image" content="https://onlintoko.netlify.app/preview.jpg">
+<meta property="og:url" content="https://benyoriki.com/">
+<meta property="og:title" content="Sistem Website UMKM — Harga Terjangkau, Kualitas Premium">
+<meta property="og:description" content="Wujudkan bisnis digital Anda sekarang. Kasir online, toko web, dashboard live — mulai dari harga yang ramah di kantong UMKM.">
+<meta property="og:image" content="https://benyoriki.com/preview.jpg">
+
+<!-- WA lebih suka ini -->
+<meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:title" content="ONLIN TOKO - Solusi Toko Online Siap Pakai">
-<meta property="twitter:description" content="Kelola bisnis lebih mudah dengan sistem toko online modern. Cocok untuk UMKM, fitur lengkap, dan siap meningkatkan penjualan Anda.">
-<meta property="twitter:image" content="https://onlintoko.netlify.app/preview.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Benyoriki - Developer Modern">
+<meta name="twitter:description" content="Website dan aplikasi dengan desain premium dan performa optimal.">
+<meta name="twitter:image" content="https://benyoriki.com/preview.jpg">
 
-<meta name="title" content="@benyoriki Store - Toko Online Modern & Terpercaya">
-<meta name="description" content="Belanja mudah, cepat, dan aman di @benyoriki Store.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://onlintoko.netlify.app/">
-<meta property="og:title" content="@benyoriki Store - Belanja Online Praktis & Modern">
-<meta property="og:description" content="Platform e-commerce modern untuk kebutuhan harian Anda.">
+<link rel="icon" href="favicon.png"> 
+<link rel="apple-touch-icon" href="img/favicon.png">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>@benyoriki Store — Belanja Mudah, Harga Terbaik</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<meta name="description" content="Jasa profesional pembuatan sistem website dengan real-time database. Firebase, WebSocket, live dashboard, dan aplikasi web modern 2026.">
+
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<link rel="icon" href="favicon.png">
 </head>
 <body>
 
-<!-- TOAST NOTIFICATION -->
-<div id="toast" class="toast"></div>
+<!-- ══ TOPBAR IDENTITY STRIP ══ -->
+<div class="topbar-strip"></div>
 
-<!-- DARK MODE TOGGLE -->
-<button id="darkModeBtn" class="dark-mode-btn" onclick="toggleDarkMode()" title="Toggle Dark Mode">🌙</button>
+<!-- ══ CURSOR TRAIL ══ -->
+<div id="cursorGlow"></div>
 
-<!-- BACK TO TOP -->
-<button id="backToTop" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
-<!-- CART SIDEBAR -->
-<div id="cartOverlay" class="cart-overlay" onclick="closeCart()"></div>
-<div id="cartSidebar" class="cart-sidebar">
-  <div class="cart-header">
-    <h3>🛒 Keranjang Belanja</h3>
-    <button onclick="closeCart()" class="close-btn">✕</button>
-  </div>
-  <div id="cartItems" class="cart-items"></div>
-  <div class="cart-footer">
-    <div class="cart-total"><span>Total:</span><span id="cartTotal">Rp 0</span></div>
-    <button onclick="checkout()" class="btn-checkout">⚡ Lanjut ke Pembayaran</button>
-  </div>
+<!-- ══ AURORA BACKGROUND ══ -->
+<div class="bg-wrap" aria-hidden="true">
+  <canvas id="bgCanvas"></canvas>
+  <div class="aurora a1"></div>
+  <div class="aurora a2"></div>
+  <div class="aurora a3"></div>
+  <div class="aurora a4"></div>
+  <div class="flash fl1"></div>
+  <div class="flash fl2"></div>
+  <div class="flash fl3"></div>
+  <div class="shoot sh1"></div>
+  <div class="shoot sh2"></div>
+  <div class="shoot sh3"></div>
+  <div class="grid-mesh"></div>
+  <div class="vignette"></div>
 </div>
 
-<!-- ===== CHECKOUT MODAL ===== -->
-<div id="checkoutModal" class="checkout-modal-overlay">
-  <div class="checkout-modal-box">
-    <div class="checkout-modal-header">
-      <h2>🛍️ Checkout</h2>
-      <button onclick="closeCheckoutModal()" class="close-btn">✕</button>
-    </div>
-
-    <!-- Step Indicator -->
-    <div class="checkout-steps">
-      <div class="step-indicator active" id="step-ind-1">
-        <div class="step-circle">1</div>
-        <span>Alamat</span>
-      </div>
-      <div class="step-line"></div>
-      <div class="step-indicator" id="step-ind-2">
-        <div class="step-circle">2</div>
-        <span>Kurir</span>
-      </div>
-      <div class="step-line"></div>
-      <div class="step-indicator" id="step-ind-3">
-        <div class="step-circle">3</div>
-        <span>Konfirmasi</span>
-      </div>
-    </div>
-
-    <!-- Step 1: Alamat & Email -->
-    <div id="co-step-1" class="checkout-step-panel active">
-      <h3 class="co-step-title">📍 Data Diri & Alamat Pengiriman</h3>
-      <div class="co-form-grid">
-        <div class="co-input-group">
-          <label>Nama Lengkap *</label>
-          <input type="text" id="co_name" placeholder="Nama penerima paket" />
-        </div>
-        <div class="co-input-group">
-          <label>Email *</label>
-          <input type="email" id="co_email" placeholder="email@kamu.com" />
-        </div>
-        <div class="co-input-group">
-          <label>Nomor HP / WA *</label>
-          <input type="tel" id="co_phone" placeholder="08xxxxxxxxxx" />
-        </div>
-        <div class="co-input-group co-full">
-          <label>Alamat Lengkap *</label>
-          <textarea id="co_address" placeholder="Nama jalan, nomor rumah, RT/RW, kelurahan..." rows="3"></textarea>
-        </div>
-        <div class="co-input-group">
-          <label>Kota / Kabupaten *</label>
-          <input type="text" id="co_city" placeholder="Contoh: Depok" />
-        </div>
-        <div class="co-input-group">
-          <label>Provinsi *</label>
-          <input type="text" id="co_province" placeholder="Contoh: Jawa Barat" />
-        </div>
-        <div class="co-input-group">
-          <label>Kode Pos *</label>
-          <input type="text" id="co_postal" placeholder="Contoh: 16412" />
-        </div>
-      </div>
-      <div class="co-summary-mini">
-        <h4>🛒 Ringkasan Pesanan</h4>
-        <div id="coSummaryItems"></div>
-      </div>
-      <div class="co-step-actions">
-        <button onclick="closeCheckoutModal()" class="btn-co-back">✕ Batal</button>
-        <button onclick="goToStep2()" class="btn-co-next">Pilih Kurir →</button>
-      </div>
-    </div>
-
-    <!-- Step 2: Pilih Kurir -->
-    <div id="co-step-2" class="checkout-step-panel">
-      <h3 class="co-step-title">🚚 Pilih Jasa Kurir</h3>
-      <div id="courierList" class="courier-list"></div>
-      <div id="coTotalDisplay" class="co-total-display"></div>
-      <div class="co-step-actions">
-        <button onclick="showCheckoutStep(1)" class="btn-co-back">← Kembali</button>
-        <button onclick="goToStep3()" class="btn-co-next">Review Pesanan →</button>
-      </div>
-    </div>
-
-    <!-- Step 3: Review & Konfirmasi -->
-    <div id="co-step-3" class="checkout-step-panel">
-      <h3 class="co-step-title">✅ Review & Konfirmasi Pesanan</h3>
-      <div class="co-review-block">
-        <div class="co-review-label">📍 Alamat Pengiriman</div>
-        <div id="reviewAddress" class="co-review-value"></div>
-      </div>
-      <div class="co-review-block">
-        <div class="co-review-label">🚚 Jasa Kurir</div>
-        <div id="reviewCourier" class="co-review-value"></div>
-      </div>
-      <div class="co-review-block">
-        <div class="co-review-label">🛒 Produk</div>
-        <div id="coSummaryItems" class="co-review-value co-summary-items-review"></div>
-      </div>
-      <div class="co-review-block">
-        <div class="co-review-label">💳 Metode Pembayaran</div>
-        <div id="paymentMethodsList" class="payment-methods-list"></div>
-      </div>
-      <div id="coTotalDisplay" class="co-total-display co-total-final"></div>
-      <div class="co-step-actions">
-        <button onclick="showCheckoutStep(2)" class="btn-co-back">← Kembali</button>
-        <button onclick="confirmOrder()" class="btn-co-confirm">✅ Konfirmasi Pesanan</button>
-      </div>
-    </div>
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar" id="navbar">
+<a href="#home" class="nav-brand">
+  <img src="favicon.png" alt="Logo Benyoriki" class="brand-logo">
+  <div class="brand-orb"></div>
+  <span>@benyo<b>riki</b></span>
+</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home"        class="nl">Beranda</a></li>
+    <li><a href="#layanan"     class="nl">Layanan</a></li>
+    <li><a href="#harga"       class="nl">Harga</a></li>
+    <li><a href="#portofolio"  class="nl">Portofolio</a></li>
+    <li><a href="#manfaat"     class="nl">Manfaat</a></li>
+    <li><a href="#kontak"      class="nl">Kontak</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-theme" id="themeBtn" aria-label="Toggle tema">
+      <svg class="ico-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      <svg class="ico-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+    </button>
+    <a href="#kontak" class="cta-btn">Konsultasi Gratis</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
   </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mob-menu" id="mobMenu">
+  <a href="#home"       onclick="closeMob()">Beranda</a>
+  <a href="#layanan"    onclick="closeMob()">Layanan</a>
+  <a href="#harga"      onclick="closeMob()">Harga</a>
+  <a href="#portofolio" onclick="closeMob()">Portofolio</a>
+  <a href="#manfaat"    onclick="closeMob()">Manfaat</a>
+  <a href="#kontak"     onclick="closeMob()">Kontak</a>
 </div>
 
-<!-- ===== TRACKING MODAL ===== -->
-<div id="trackingModal" class="tracking-modal-overlay">
-  <div class="tracking-modal-box">
-    <div class="tracking-modal-header">
-      <h2>🔍 Lacak Paket</h2>
-      <button onclick="closeTrackingModal()" class="close-btn">✕</button>
+<!-- ══ HERO ══ -->
+<section id="home" class="hero">
+  <div class="hero-left">
+    <div class="hero-pill">
+      <span class="pulse-ring"></span>
+      <span class="pulse-dot"></span>
+      ✅ Terbuka untuk Proyek · Slot Terbatas — Daftar Sekarang
     </div>
-    <div class="tracking-search">
-      <input type="text" id="trackingInput" placeholder="Masukkan nomor resi atau ID pesanan..." onkeydown="if(event.key==='Enter')trackPackage()" />
-      <button onclick="trackPackage()" class="btn-track-submit">🔍 Lacak</button>
-    </div>
-    <div id="trackingResult" class="tracking-result"></div>
-  </div>
-</div>
+    <h1 class="hero-h1">
+      Website Bisnis Siap<br>
+      <span class="txt-shine">2–6 Hari Kerja</span><br>
+      <span class="txt-dim">Mulai di Bawah Rp 200rb</span>
+    </h1>
+    <p class="hero-p">Bukan desain template asal jadi — kami bangun sistem web <strong>khusus bisnis Anda</strong>: kasir online, toko digital, dashboard real-time. Harga transparan, tidak ada biaya tersembunyi, dan Anda bisa lihat demonya <strong>sebelum bayar</strong>.</p>
 
-<!-- ===== MY ORDERS MODAL ===== -->
-<div id="myOrdersModal" class="myorders-modal-overlay">
-  <div class="myorders-modal-box">
-    <div class="myorders-modal-header">
-      <h2>📦 Pesanan Saya</h2>
-      <button onclick="closeMyOrders()" class="close-btn">✕</button>
-    </div>
-    <div id="myOrdersList" class="my-orders-list"></div>
-  </div>
-</div>
-
-<!-- MODAL PRODUCT DETAIL -->
-<div id="productModal" class="modal-overlay" onclick="closeModal(event)">
-  <div class="modal-box">
-    <button onclick="closeModal()" class="modal-close">✕</button>
-    <div id="modalContent"></div>
-  </div>
-</div>
-
-<!-- ADMIN LOGIN MODAL -->
-<div id="loginModal" class="modal-overlay" onclick="closeLoginModal(event)">
-  <div class="modal-box login-box">
-    <button onclick="closeLoginModal()" class="modal-close">✕</button>
-    <div class="login-header">
-      <div class="login-icon">🔐</div>
-      <h2>Admin Login</h2>
-      <p>Masukkan kredensial untuk mengakses panel admin</p>
-    </div>
-    <div class="login-form">
-      <div class="input-group">
-        <label>Username</label>
-        <input type="text" id="loginUser" placeholder="admin" />
+    <!-- USP Strip -->
+    <div class="usp-strip">
+      <div class="usp-item">
+        <span class="usp-ico">⚡</span>
+        <div>
+          <strong>Cepat 2–6 Hari</strong>
+          <span>Siap pakai, bukan berbulan-bulan</span>
+        </div>
       </div>
-      <div class="input-group">
-        <label>Password</label>
-        <input type="password" id="loginPass" placeholder="••••••••" />
+      <div class="usp-item">
+        <span class="usp-ico">💰</span>
+        <div>
+          <strong>Mulai Rp 200rb</strong>
+          <span>Hosting & domain sudah termasuk</span>
+        </div>
       </div>
-      <button onclick="doLogin()" class="btn-login">Masuk</button>
+      <div class="usp-item">
+        <span class="usp-ico">👁️</span>
+        <div>
+          <strong>Demo Dulu Baru Bayar</strong>
+          <span>Tidak suka? Tidak perlu bayar</span>
+        </div>
+      </div>
+      <div class="usp-item">
+        <span class="usp-ico">🛡️</span>
+        <div>
+          <strong>Support Pasca-Launch</strong>
+          <span>Kami tidak menghilang setelah selesai</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hs-item"><span class="hs-n" data-count="50">0</span><span class="hs-u">+</span><span class="hs-l">Proyek Selesai</span></div>
+      <div class="hs-sep"></div>
+      <div class="hs-item"><span class="hs-n" data-count="100">0</span><span class="hs-u">%</span><span class="hs-l">Klien Puas</span></div>
+      <div class="hs-sep"></div>
+      <div class="hs-item"><span class="hs-n" data-count="8">0</span><span class="hs-u"></span><span class="hs-l">Portofolio Live</span></div>
+    </div>
+    <div class="hero-btns">
+      <a href="#kontak" class="btn-solid">
+        Minta Penawaran Gratis
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#harga" class="btn-ghost">
+        Lihat Paket Harga
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </a>
     </div>
   </div>
+
+  <div class="hero-right">
+    <!-- Realtime DB Card -->
+    <div class="db-card">
+      <div class="db-topbar">
+        <div class="db-dots"><s></s><s></s><s></s></div>
+        <div class="db-url">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          realtime.database.app
+        </div>
+        <div class="db-badge"><span class="live-dot"></span>LIVE</div>
+      </div>
+      <div class="db-rows">
+        <div class="db-row" style="--i:0"><span class="db-k">orders</span><span class="db-v blink" id="dbO">#1247</span></div>
+        <div class="db-row" style="--i:1"><span class="db-k">stock</span><span class="db-v">487 unit</span></div>
+        <div class="db-row" style="--i:2"><span class="db-k">revenue</span><span class="db-v blink" id="dbR">Rp 2.4M</span></div>
+        <div class="db-row" style="--i:3"><span class="db-k">users_online</span><span class="db-v">24 aktif</span></div>
+        <div class="db-row" style="--i:4"><span class="db-k">last_sync</span><span class="db-v" id="dbS">0ms ago</span></div>
+      </div>
+      <div class="db-bar"><div class="db-prog"></div></div>
+      <!-- Floating metric badges -->
+      <div class="float-badge f-top">⚡ Sync 0ms</div>
+      <div class="float-badge f-bot">🔥 Firebase</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ LAYANAN ══ -->
+<section id="layanan" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Layanan Kami</div>
+    <h2 class="sec-h2">Solusi Digital Lengkap<br>Harga Mulai dari Ratusan, Bukan Ratusan Juta</h2>
+    <div class="srv-grid">
+      <div class="srv-card featured">
+        <div class="srv-ico">⚡</div>
+        <h3>Sistem Real-Time Database</h3>
+        <p>Data bisnis Anda sinkron otomatis di semua perangkat — HP, tablet, PC — tanpa refresh, tanpa ketinggalan update.</p>
+        <ul><li>Firebase Realtime DB</li><li>WebSocket Integration</li><li>Multi-user Sync Live</li><li>Auto-backup Harian</li></ul>
+        <div class="srv-badge">PALING DIMINATI</div>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">📊</div>
+        <h3>Dashboard Bisnis Live</h3>
+        <p>Pantau omzet, stok, dan performa bisnis dari mana saja. Grafik real-time, laporan instan — semua di genggaman Anda.</p>
+        <ul><li>Grafik & Chart Live</li><li>KPI Tracking Otomatis</li><li>Export Laporan PDF/Excel</li><li>Akses HP & PC</li></ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">🛒</div>
+        <h3>Kasir & Inventory Online</h3>
+        <p>Tidak perlu software mahal. Kasir berbasis web, stok terupdate otomatis, laporan lengkap — cocok untuk UMKM & warung.</p>
+        <ul><li>Kasir Multi-Cabang</li><li>Stok Auto-Update</li><li>Laporan Harian & Bulanan</li><li>Riwayat Transaksi Lengkap</li></ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">🔐</div>
+        <h3>Sistem Login & Multi-Role</h3>
+        <p>Kelola akses tim Anda dengan aman. Admin, kasir, gudang — semua punya hak akses berbeda sesuai tugasnya.</p>
+        <ul><li>Multi-Level Akses</li><li>Login Google OAuth</li><li>Session Management</li><li>Log Aktivitas User</li></ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">💬</div>
+        <h3>Chat & Notifikasi Internal</h3>
+        <p>Koordinasi tim lebih cepat dengan sistem chat & notifikasi push bawaan. Tidak perlu WhatsApp untuk urusan bisnis.</p>
+        <ul><li>Live Chat Antar Tim</li><li>Push Notification</li><li>Read Receipt</li><li>Kirim File & Gambar</li></ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-ico">🌐</div>
+        <h3>Toko Online & Landing Page</h3>
+        <p>Tampil profesional di internet. Toko online lengkap atau landing page promosi yang menjual — siap pakai dalam hitungan hari.</p>
+        <ul><li>Katalog Produk Dinamis</li><li>Cart & Checkout</li><li>Tracking Order</li><li>Order via WhatsApp</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PORTOFOLIO — EMBED WEBVIEW ══ -->
+<section id="portofolio" class="section porto-section">
+  <div class="wrap wide">
+    <div class="sec-label">— Hasil Karya Nyata</div>
+    <h2 class="sec-h2">
+      <span id="portoTitle">Website yang Sudah Kami Bangun</span><br>
+      <span class="txt-shine">Bisa Dicoba Langsung Di Sini</span>
+    </h2>
+    <p class="sec-sub">Bukan sekadar screenshot — preview website asli bisa Anda akses sekarang · Klik untuk membuka penuh</p>
+
+    <!-- PORTO FILTER TABS -->
+    <div class="porto-filter" id="portoFilter">
+      <button class="pf-btn active" data-filter="all">Semua</button>
+      <button class="pf-btn" data-filter="ecommerce">E-Commerce</button>
+      <button class="pf-btn" data-filter="finance">Finance</button>
+      <button class="pf-btn" data-filter="inventory">Inventory</button>
+    </div>
+
+    <!-- PORTO EMBED GRID -->
+    <div class="porto-embed-grid" id="portoGrid">
+
+      <!-- Card 1 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="01" style="--accent:#3B82F6;--glow:rgba(59,130,246,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              jasadaud.online
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://jasadaud.online/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://jasadaud.online/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="JasaDaud Online Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">🌐</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://jasadaud.online/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">01</div>
+            <div>
+              <h3 class="ei-title">JasaDaud Online</h3>
+              <p class="ei-desc">Platform jasa digital dengan manajemen order real-time & dashboard admin.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Real-Time DB</span><span>Firebase</span><span>Dashboard</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="02" style="--accent:#10B981;--glow:rgba(16,185,129,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              https://onlintoko.netlify.app/
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://onlintoko.netlify.app/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://onlintoko.netlify.app/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Toko Online Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">🛒</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://onlintoko.netlify.app/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">02</div>
+            <div>
+              <h3 class="ei-title">Toko Online Modern</h3>
+              <p class="ei-desc">E-commerce lengkap dengan katalog dinamis, cart system, dan stok real-time.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>E-Commerce</span><span>Cart</span><span>Stok Live</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="embed-card" data-cat="inventory" data-num="03" style="--accent:#8B5CF6;--glow:rgba(139,92,246,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web637.github.io/input-stock-laba
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web637.github.io/input-stock-laba/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web637.github.io/input-stock-laba/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Input Stok Laba Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">📊</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web637.github.io/input-stock-laba/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">03</div>
+            <div>
+              <h3 class="ei-title">Input Stok &amp; Laba</h3>
+              <p class="ei-desc">Manajemen stok dengan kalkulasi laba otomatis, transaksi, dan laporan harian.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Inventory</span><span>Auto Kalkulasi</span><span>Laporan</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="embed-card" data-cat="finance" data-num="04" style="--accent:#F59E0B;--glow:rgba(245,158,11,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web637.github.io/cicilan
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web637.github.io/cicilan/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web637.github.io/cicilan/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Sistem Cicilan Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">💰</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web637.github.io/cicilan/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">04</div>
+            <div>
+              <h3 class="ei-title">Sistem Cicilan</h3>
+              <p class="ei-desc">Perhitungan cicilan otomatis dengan jadwal bayar, notifikasi, dan riwayat kredit.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Finance</span><span>Auto Hitung</span><span>Jadwal Bayar</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="05" style="--accent:#06B6D4;--glow:rgba(6,182,212,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web189.github.io/preseller-aqua
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web189.github.io/preseller-aqua/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web189.github.io/preseller-aqua/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Preseller Aqua Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">💧</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web189.github.io/preseller-aqua/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">05</div>
+            <div>
+              <h3 class="ei-title">Preseller Aqua</h3>
+              <p class="ei-desc">Sistem preseller air mineral dengan katalog harga, order form, dan integrasi WhatsApp.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Preseller</span><span>Order Form</span><span>WhatsApp</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="06" style="--accent:#EC4899;--glow:rgba(236,72,153,0.3)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              web189.github.io/ForzenFood
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://web189.github.io/ForzenFood/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://web189.github.io/ForzenFood/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="Frozen Food Store Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">🥩</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://web189.github.io/ForzenFood/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-left">
+            <div class="ei-num">06</div>
+            <div>
+              <h3 class="ei-title">Frozen Food Store</h3>
+              <p class="ei-desc">Toko frozen food online dengan tampilan menarik, cart system, dan order via WhatsApp.</p>
+            </div>
+          </div>
+          <div class="ei-tags">
+            <span>Food Store</span><span>Cart</span><span>WA Order</span>
+          </div>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+	  
+	  <!-- Card 7 -->
+<div class="embed-card" data-cat="portfolio" data-num="07" style="--accent:#EC4899;--glow:rgba(236,72,153,0.3)">
+  <div class="embed-browser">
+    <div class="embed-topbar">
+      <div class="eb-dots"><s></s><s></s><s></s></div>
+      <div class="eb-url">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+        web637.github.io/UMKM-tato
+      </div>
+      <div class="eb-actions">
+        <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+        <a href="https://web637.github.io/UMKM-tato/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="embed-frame-wrap">
+      <div class="embed-loading">
+        <div class="embed-spinner"></div>
+        <span>Memuat website...</span>
+      </div>
+
+      <iframe class="embed-iframe"
+        data-src="https://web637.github.io/UMKM-tato/"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        title="Tattoo Studio Preview"></iframe>
+
+      <div class="embed-overlay">
+        <div class="eo-content">
+          <div class="eo-icon">🖋️</div>
+          <div class="eo-title">Lihat Portfolio Tattoo</div>
+          <div class="eo-sub">Eksplor karya & gaya artist</div>
+          <div class="eo-btns">
+            <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+            <a href="https://web637.github.io/UMKM-tato/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="embed-info">
+    <div class="ei-left">
+      <div class="ei-num">07</div>
+      <div>
+        <h3 class="ei-title">Tattoo Studio</h3>
+        <p class="ei-desc">
+          Website portfolio tattoo artist dengan tampilan bold & elegan, menampilkan karya, layanan, dan sistem booking langsung.
+        </p>
+      </div>
+    </div>
+
+    <div class="ei-tags">
+      <span>Portfolio</span><span>Creative</span><span>Booking</span>
+    </div>
+  </div>
+
+  <div class="embed-halo"></div>
+</div>
+	  
+	  
+	  <!-- Card 8 -->
+<div class="embed-card" data-cat="ecommerce" data-num="08" style="--accent:#22C55E;--glow:rgba(34,197,94,0.3)">
+  <div class="embed-browser">
+    <div class="embed-topbar">
+      <div class="eb-dots"><s></s><s></s><s></s></div>
+      <div class="eb-url">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+        web637.github.io/UMKM-esteler
+      </div>
+      <div class="eb-actions">
+        <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+        <a href="https://web637.github.io/UMKM-esteler/" target="_blank" rel="noopener" class="eb-open">
+          ↗
+        </a>
+      </div>
+    </div>
+
+    <div class="embed-frame-wrap">
+      <div class="embed-loading">
+        <div class="embed-spinner"></div>
+        <span>Memuat website...</span>
+      </div>
+
+      <iframe class="embed-iframe"
+        data-src="https://web637.github.io/UMKM-esteler/"
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        title="UMKM Es Teler Preview"></iframe>
+
+      <div class="embed-overlay">
+        <div class="eo-content">
+          <div class="eo-icon">🥥</div>
+          <div class="eo-title">Preview Website UMKM</div>
+          <div class="eo-sub">Landing page minuman segar & kekinian</div>
+          <div class="eo-btns">
+            <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Lihat Preview</button>
+            <a href="https://web637.github.io/UMKM-esteler/" target="_blank" class="eo-btn-open">↗ Buka Website</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="embed-info">
+    <div class="ei-left">
+      <div class="ei-num">08</div>
+      <div>
+        <h3 class="ei-title">UMKM Es Teler</h3>
+        <p class="ei-desc">
+          Website UMKM minuman dengan desain segar & modern, menampilkan produk, harga, dan pemesanan langsung via WhatsApp.
+        </p>
+      </div>
+    </div>
+
+    <div class="ei-tags">
+      <span>UMKM</span><span>Food & Drink</span><span>WA Order</span>
+    </div>
+  </div>
+
+  <div class="embed-halo"></div>
 </div>
 
-<!-- AI CHATBOT -->
-<div id="chatbotOverlay" class="chatbot-overlay" onclick="closeChatbot(event)"></div>
-<div id="chatbotContainer" class="chatbot-container">
-  <div class="chatbot-header">
-    <div class="chatbot-avatar">
-      <div class="chatbot-avatar-inner"><img src="favicon.png" alt="AI" class="avatar-img" /></div>
-      <div class="chatbot-status-dot"></div>
-    </div>
-    <div class="chatbot-header-info">
-      <strong>Benyo AI Assistant</strong>
-      <span class="chatbot-online">● Online</span>
-    </div>
-    <div class="chatbot-header-actions">
-      <button onclick="clearChat()" class="chatbot-clear-btn" title="Hapus riwayat">🗑️</button>
-      <button onclick="closeChatbot()" class="chatbot-close-btn">✕</button>
+    </div><!-- /porto-embed-grid -->
+
+    <!-- PORTO COUNTER -->
+    <div class="porto-counter">
+      Menampilkan <span id="portoCount">8</span> dari 8 proyek
     </div>
   </div>
-  <div id="chatMessages" class="chat-messages">
-    <div class="chat-msg bot">
-      <div class="chat-bubble">
-        <p>Halo! Saya <strong>Benyo AI</strong> 👋</p>
-        <p>Siap bantu kamu belanja, lacak paket, atau cari promo di @benyoriki Store! 🛍️</p>
+</section>
+
+<!-- ══ HARGA ══ -->
+<section id="harga" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Paket & Harga</div>
+    <h2 class="sec-h2">Harga Transparan,<br><span class="txt-shine">Tidak Ada Biaya Tersembunyi</span></h2>
+    <p class="sec-sub">Pilih paket sesuai kebutuhan bisnis Anda — semua sudah termasuk hosting, domain, dan support pasca-launch</p>
+    <div class="pricing-grid">
+
+      <!-- BASIC -->
+      <div class="price-card">
+        <div class="pc-label">Basic</div>
+        <div class="pc-price">
+          <span class="pc-from">Mulai</span>
+          <span class="pc-num">Rp 200rb</span>
+          <span class="pc-note">hosting + domain Github Netlify</span>
+        </div>
+        <p class="pc-desc">Cocok untuk UMKM yang baru mau go digital — tampil profesional tanpa biaya besar.</p>
+        <ul class="pc-list">
+          <li>✅ Landing Page / Profil UMKM</li>
+          <li>✅ Desain Mobile-Friendly</li>
+          <li>✅ Form Order via WhatsApp</li>
+          <li>✅ 1x Revisi Desain</li>
+          <li>✅ Selesai dalam 2–3 Hari Kerja</li>
+		  <li class="pc-no">❌ Hosting & Domain</li>
+          <li class="pc-no">❌ Kasir / Inventory</li>
+          <li class="pc-no">❌ Dashboard Real-Time</li>
+        </ul>
+        <a href="https://wa.me/628988995637?text=Halo+Riki%2C+saya+tertarik+paket+Basic+website+landing+page" target="_blank" class="pc-btn">Pilih Paket Basic →</a>
       </div>
-      <div class="chat-time">Asisten AI</div>
+
+      <!-- STANDAR — MOST POPULAR -->
+      <div class="price-card featured">
+        <div class="pc-popular">⭐ PALING DIMINATI</div>
+        <div class="pc-label">Standar</div>
+        <div class="pc-price">
+          <span class="pc-from">Mulai</span>
+          <span class="pc-num">Rp 1,2jt</span>
+          <span class="pc-note">hosting + domain terpisah</span>
+        </div>
+        <p class="pc-desc">Ideal untuk toko online, sistem order, atau website bisnis lengkap dengan fitur interaktif.</p>
+        <ul class="pc-list">
+          <li>✅ Semua fitur Basic</li>
+          <li>✅ E-Catalog</li>
+          <li>✅ Checkout WA</li>
+          <li>✅ Halaman Produk Dinamis</li>
+          <li>✅ Sistem Login Member</li>
+          <li>✅ 3x Revisi Desain</li>
+          <li>✅ Selesai dalam 3–5 Hari Kerja</li>
+          <li class="pc-no">❌ Dashboard Real-Time</li>
+        </ul>
+        <a href="https://wa.me/628988995637?text=Halo+Riki%2C+saya+tertarik+paket+Standar+toko+online" target="_blank" class="pc-btn">Pilih Paket Standar →</a>
+      </div>
+
+      <!-- PRO -->
+      <div class="price-card">
+        <div class="pc-label">Pro</div>
+        <div class="pc-price">
+          <span class="pc-from">Mulai</span>
+          <span class="pc-num">Rp 3jt</span>
+          <span class="pc-note">hosting + domain terpisah</span>
+        </div>
+        <p class="pc-desc">Untuk bisnis yang butuh sistem canggih: kasir multi-cabang, stok otomatis, laporan real-time.</p>
+        <ul class="pc-list">
+          <li>✅ Semua fitur Standar</li>
+          <li>✅ Kasir Online Multi-Cabang</li>
+          <li>✅ Inventory & Stok Otomatis</li>
+          <li>✅ Dashboard Bisnis Real-Time</li>
+          <li>✅ Export Laporan PDF/Excel</li>
+          <li>✅ Akses Multi-Role (Admin, Kasir, dll)</li>
+          <li>✅ Revisi Tidak Terbatas</li>
+          <li>✅ Selesai dalam 5–10 Hari Kerja</li>
+        </ul>
+        <a href="https://wa.me/628988995637?text=Halo+Riki%2C+saya+tertarik+paket+Pro+kasir+dashboard" target="_blank" class="pc-btn">Pilih Paket Pro →</a>
+      </div>
+
     </div>
-    <div class="chat-quick-btns">
-      <button onclick="quickChat('Produk apa yang lagi promo?')">🔥 Promo terbaru</button>
-      <button onclick="quickChat('Cara lacak paket saya?')">📦 Lacak Paket</button>
-      <button onclick="quickChat('Cara melakukan pembayaran?')">💳 Cara bayar</button>
-      <button onclick="quickChat('Produk fashion terpopuler')">👗 Fashion</button>
+    <div class="pricing-note">
+      💡 Tidak yakin paket mana yang cocok? <a href="https://wa.me/628988995637" target="_blank">Chat dulu gratis</a> — kami bantu tentukan sesuai kebutuhan & budget Anda.
     </div>
   </div>
-  <div class="chat-typing" id="chatTyping" style="display:none">
-    <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+</section>
+
+<!-- ══ PROSES KERJA ══ -->
+<section id="proses" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Cara Kerja Kami</div>
+    <h2 class="sec-h2">4 Langkah Mudah<br><span class="txt-shine">Dari Cerita ke Website Jadi</span></h2>
+    <p class="sec-sub">Tidak ribet, tidak bikin pusing — kami yang urus semua teknisnya</p>
+    <div class="process-steps">
+
+      <div class="ps-item">
+        <div class="ps-num">01</div>
+        <div class="ps-line"></div>
+        <div class="ps-content">
+          <div class="ps-ico">💬</div>
+          <h3>Konsultasi Gratis</h3>
+          <p>Ceritakan bisnis & kebutuhan Anda via WhatsApp. Kami dengarkan, tanya detail penting, dan beri rekomendasi solusi terbaik. <strong>Tidak ada biaya apapun di tahap ini.</strong></p>
+          <div class="ps-tag">WhatsApp · Tidak perlu meeting</div>
+        </div>
+      </div>
+
+      <div class="ps-item">
+        <div class="ps-num">02</div>
+        <div class="ps-line"></div>
+        <div class="ps-content">
+          <div class="ps-ico">📋</div>
+          <h3>Estimasi & Kesepakatan</h3>
+          <p>Kami kirim estimasi harga yang jelas dan detail — tidak ada angka yang tiba-tiba berubah. Anda setuju, baru kami mulai. <strong>Bayar 50% di muka, sisanya setelah selesai.</strong></p>
+          <div class="ps-tag">1–2 hari · Harga transparan</div>
+        </div>
+      </div>
+
+      <div class="ps-item">
+        <div class="ps-num">03</div>
+        <div class="ps-line"></div>
+        <div class="ps-content">
+          <div class="ps-ico">⚙️</div>
+          <h3>Pengerjaan & Update Progress</h3>
+          <p>Kami kerjakan sistem Anda dengan update progres berkala. Anda tidak perlu menebak-nebak sudah sampai mana — kami rutin lapor perkembangan.</p>
+          <div class="ps-tag">2–10 hari kerja · Update rutin</div>
+        </div>
+      </div>
+
+      <div class="ps-item">
+        <div class="ps-num">04</div>
+        <div class="ps-line last"></div>
+        <div class="ps-content">
+          <div class="ps-ico">🚀</div>
+          <h3>Demo, Revisi & Launch</h3>
+          <p>Sebelum bayar lunas, Anda bisa uji coba sistem langsung. Jika ada yang kurang sesuai, kami revisi dulu. <strong>Baru puas, baru launch, baru bayar sisanya.</strong></p>
+          <div class="ps-tag">Demo dulu · Revisi gratis</div>
+        </div>
+      </div>
+
+    </div>
   </div>
-  <div class="chat-input-area">
-    <input type="text" id="chatInput" placeholder="Tanya tentang produk, promo, dll..." onkeydown="if(event.key==='Enter')sendChat()" />
-    <button onclick="sendChat()" class="chat-send-btn">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+</section>
+
+<!-- ══ TESTIMONI ══ -->
+<!-- ══ TESTIMONI ══ -->
+<section id="testimoni" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Testimoni Klien</div>
+    <h2 class="sec-h2">Bukti Nyata Klien Puas</h2>
+    <p class="sec-sub">Screenshot langsung dari WhatsApp klien kami</p>
+
+    <div class="testi-img-grid">
+      <img src="img/testi1.jfif" alt="Testimoni 1" class="testi-img">
+      <img src="img/testi2.jfif" alt="Testimoni 2" class="testi-img">
+      <img src="img/testi3.jfif" alt="Testimoni 3" class="testi-img">
+    </div>
+  </div>
+</section>
+
+<!-- MODAL ZOOM -->
+<div id="imgModal" class="img-modal">
+  <span class="close-modal">&times;</span>
+  <img class="modal-content" id="modalImg">
+</div>
+
+<!-- ══ FAQ ══ -->
+<section id="faq" class="section">
+  <div class="wrap faq-wrap">
+    <div class="sec-label">— Pertanyaan Umum</div>
+    <h2 class="sec-h2">Pertanyaan yang Sering Ditanya<br><span class="txt-shine">Kami Jawab Sebelum Anda Tanya</span></h2>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          💰 Berapa harga pastinya? Apakah ada biaya tersembunyi?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a">
+          <p>Harga kami transparan dan sudah kami uraikan di <a href="#harga">section Harga</a>. Paket Basic mulai <strong>di bawah Rp 200rb</strong> (sudah termasuk hosting & domain gratis 1 tahun). Paket Standar mulai Rp 1,5jt, dan Pro mulai Rp 3jt. <strong>Tidak ada biaya tersembunyi</strong> — semua sudah tercantum di estimasi yang kami kirim sebelum Anda setuju.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          ⏱️ Berapa lama website saya selesai dikerjakan?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a">
+          <p>Tergantung kompleksitas: <strong>Landing page sederhana: 2–3 hari kerja. Toko online: 3–5 hari kerja. Kasir & dashboard real-time: 5–10 hari kerja.</strong> Kami beri update progres setiap hari agar Anda tahu sudah sampai mana. Tidak ada yang tiba-tiba hilang tanpa kabar.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          🤔 Saya tidak paham teknologi. Apakah tetap bisa pakai sistemnya?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a">
+          <p>Justru sistem kami dirancang untuk pemilik bisnis, bukan programmer. Antarmukanya mudah digunakan dari HP atau laptop biasa. Kami juga sertakan <strong>panduan penggunaan + sesi training singkat</strong> setelah sistem selesai agar Anda langsung bisa pakai sendiri tanpa bantuan teknis.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          🔄 Bagaimana kalau saya tidak puas dengan hasilnya?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a">
+          <p>Sebelum bayar lunas, Anda bisa <strong>demo dan uji coba sistem langsung</strong>. Jika ada yang tidak sesuai, kami revisi dulu. Baru puas, baru launch, baru bayar sisa 50%-nya. Sistem revisi kami fleksibel — kami tidak akan merilis sesuatu yang Anda sendiri belum setuju.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          📱 Apakah website bisa diakses dari HP dan bisa dipakai untuk multiple cabang?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a">
+          <p><strong>Ya, semua website kami mobile-friendly dan responsif</strong> — bisa diakses dari HP, tablet, maupun laptop. Untuk paket Standar ke atas, sistem juga support <strong>multi-cabang dan multi-user</strong> dengan hak akses berbeda (admin, kasir, gudang, dll) dari satu dashboard terpusat.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          🛡️ Bagaimana dengan support setelah website selesai? Apakah ada biaya lagi?
+          <span class="faq-arrow">▼</span>
+        </button>
+        <div class="faq-a">
+          <p>Setiap paket sudah termasuk <strong>support & perbaikan bug pasca-launch</strong> tanpa biaya tambahan. Jika ada error atau kendala teknis dalam 30 hari pertama, kami perbaiki gratis. Untuk maintenance jangka panjang (update fitur, tambah halaman, dll), tersedia paket bulanan dengan harga terjangkau — bisa didiskusikan sesuai kebutuhan.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="faq-cta">
+      <p>Masih ada pertanyaan lain? <a href="https://wa.me/628988995637" target="_blank">Chat langsung dengan Riki →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MANFAAT UMKM (ganti Teknologi) ══ -->
+<section id="manfaat" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Kenapa Pilih Kami</div>
+    <h2 class="sec-h2">Bukan Sekadar Website —<br><span class="txt-shine">Sistem yang Bikin Bisnis Anda Lebih Untung</span></h2>
+    <p class="sec-sub">Kami tidak jual nama framework — kami jual hasil nyata untuk bisnis Anda</p>
+    <div class="manfaat-grid">
+
+      <div class="manfaat-card">
+        <div class="mc-ico">📱</div>
+        <h3>Kelola Bisnis dari HP</h3>
+        <p>Pantau omzet, stok, dan pesanan dari mana saja — di warung, di rumah, bahkan saat liburan. Tidak perlu duduk di depan komputer.</p>
+      </div>
+
+      <div class="manfaat-card">
+        <div class="mc-ico">⚡</div>
+        <h3>Data Update Otomatis</h3>
+        <p>Stok berkurang saat terjual, laporan terbuat sendiri, notifikasi masuk saat ada pesanan baru. Hemat waktu, kurangi kesalahan manusia.</p>
+      </div>
+
+      <div class="manfaat-card">
+        <div class="mc-ico">📊</div>
+        <h3>Laporan Instan Tanpa Hitung Manual</h3>
+        <p>Omzet harian, bulanan, produk terlaris — semua tersedia dalam hitungan detik. Bisa di-export ke Excel atau PDF untuk laporan ke bank atau investor.</p>
+      </div>
+
+      <div class="manfaat-card">
+        <div class="mc-ico">🌐</div>
+        <h3>Tampil Profesional di Internet</h3>
+        <p>Punya website sendiri bukan lagi milik perusahaan besar. UMKM Anda bisa terlihat sekelas brand ternama — dan pelanggan lebih percaya.</p>
+      </div>
+
+      <div class="manfaat-card">
+        <div class="mc-ico">🔒</div>
+        <h3>Data Aman, Backup Otomatis</h3>
+        <p>Semua data bisnis Anda tersimpan aman di cloud. Tidak akan hilang meski HP rusak atau karyawan resign. Backup otomatis setiap hari.</p>
+      </div>
+
+      <div class="manfaat-card">
+        <div class="mc-ico">👥</div>
+        <h3>Kelola Tim Lebih Mudah</h3>
+        <p>Kasir, admin, dan gudang bisa bekerja di sistem yang sama dengan akses berbeda. Tidak perlu WA-an terus untuk koordinasi stok atau laporan.</p>
+      </div>
+
+    </div>
+
+    <!-- Tech scroll tetap ada tapi lebih subtle -->
+    <div class="tech-scroll" style="margin-top:3rem">
+      <div class="tech-track" id="techTrack">
+        <div class="tech-chip"><span>🔥</span>Firebase</div>
+        <div class="tech-chip"><span>⚡</span>WebSocket</div>
+        <div class="tech-chip"><span>⚛</span>React JS</div>
+        <div class="tech-chip"><span>🌿</span>Node.js</div>
+        <div class="tech-chip"><span>🐘</span>PostgreSQL</div>
+        <div class="tech-chip"><span>🍃</span>MongoDB</div>
+        <div class="tech-chip"><span>☁</span>Cloud Hosting</div>
+        <div class="tech-chip"><span>📱</span>PWA</div>
+        <div class="tech-chip"><span>🔒</span>SSL &amp; Auth</div>
+        <div class="tech-chip"><span>📊</span>Chart.js</div>
+        <div class="tech-chip"><span>💨</span>Tailwind CSS</div>
+        <div class="tech-chip"><span>🔄</span>REST API</div>
+        <div class="tech-chip"><span>🔥</span>Firebase</div>
+        <div class="tech-chip"><span>⚡</span>WebSocket</div>
+        <div class="tech-chip"><span>⚛</span>React JS</div>
+        <div class="tech-chip"><span>🌿</span>Node.js</div>
+        <div class="tech-chip"><span>🐘</span>PostgreSQL</div>
+        <div class="tech-chip"><span>🍃</span>MongoDB</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ KONTAK ══ -->
+<section id="kontak" class="section">
+  <div class="wrap">
+    <div class="sec-label">— Hubungi Kami</div>
+    <h2 class="sec-h2">Ceritakan Bisnis Anda,<br>Kami Bangun Sistemnya — <span class="txt-shine">Tanpa Ribet</span></h2>
+    <div class="kontak-grid">
+      <div class="kontak-left">
+        <div class="kl-block">
+          <h3>Yang Anda dapatkan</h3>
+          <ul class="kl-list">
+            <li><span class="kl-dot"></span>Konsultasi kebutuhan sistem — <strong>GRATIS</strong></li>
+            <li><span class="kl-dot"></span>Estimasi biaya transparan, tidak ada biaya tersembunyi</li>
+            <li><span class="kl-dot"></span>Demo sistem real-time sebelum bayar</li>
+            <li><span class="kl-dot"></span>Harga terjangkau, cocok untuk skala UMKM</li>
+            <li><span class="kl-dot"></span>Support & revisi hingga benar-benar sesuai kebutuhan</li>
+          </ul>
+        </div>
+        <div class="kl-block">
+          <h3>Ikuti Kami</h3>
+          <div class="soc-row">
+            <a href="https://www.instagram.com/benyoriki" target="_blank" class="soc-btn ig">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              Instagram
+            </a>
+            <a href="https://www.tiktok.com/@benyoriki" target="_blank" class="soc-btn tt">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.16 8.16 0 004.77 1.52V6.82a4.85 4.85 0 01-1-.13z"/></svg>
+              TikTok
+            </a>
+            <a href="https://web.facebook.com/benyo.hermawan" target="_blank" class="soc-btn fb">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+              Facebook
+            </a>
+            <a href="https://www.youtube.com/@rikihermawan8103" target="_blank" class="soc-btn yt">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M23.495 6.205a3.007 3.007 0 00-2.088-2.088c-1.87-.501-9.396-.501-9.396-.501s-7.507-.01-9.396.501A3.007 3.007 0 00.527 6.205a31.247 31.247 0 00-.522 5.805 31.247 31.247 0 00.522 5.783 3.007 3.007 0 002.088 2.088c1.868.502 9.396.502 9.396.502s7.506 0 9.396-.502a3.007 3.007 0 002.088-2.088 31.247 31.247 0 00.5-5.783 31.247 31.247 0 00-.5-5.805zM9.609 15.601V8.408l6.264 3.602z"/></svg>
+              YouTube
+            </a>
+            <a href="https://benyoriki.com/" target="_blank" class="soc-btn ws">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+              Website
+            </a>
+          </div>
+        </div>
+        <a href="https://wa.me/628988995637" target="_blank" class="wa-cta">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat WhatsApp — Konsultasi Gratis Sekarang
+        </a>
+      </div>
+      <div class="kontak-form">
+        <h3>Ceritakan Kebutuhan Bisnis Anda</h3>
+        <div class="fg"><label>Nama / Nama Bisnis / UMKM</label><input type="text" id="fName" placeholder="Contoh: Warung Makan Pak Budi"></div>
+        <div class="fg">
+          <label>Sistem yang Dibutuhkan</label>
+          <select id="fType">
+            <option value="">-- Pilih Sistem --</option>
+            <option>Kasir & Inventory Online</option>
+            <option>Toko Online / E-Commerce</option>
+            <option>Dashboard Bisnis Real-Time</option>
+            <option>Landing Page / Profil UMKM</option>
+            <option>Sistem Login & Multi-Role</option>
+            <option>Chat & Notifikasi Internal</option>
+            <option>Lainnya (ceritakan di bawah)</option>
+          </select>
+        </div>
+        <div class="fg"><label>Deskripsi Singkat Bisnis & Kebutuhan</label><textarea id="fDesc" placeholder="Contoh: Saya punya warung makan 2 cabang, butuh kasir online yang bisa dipantau dari HP..."></textarea></div>
+        <button class="form-submit" onclick="submitForm()">
+          Kirim — Konsultasi Gratis
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <div class="footer-wrap">
+    <div class="footer-brand">
+      <div class="brand-orb"></div>
+      <span>@benyo<b>riki</b></span>
+    </div>
+    <p>Sistem Website Profesional · Harga Ramah UMKM · Kualitas Enterprise</p>
+    <div class="footer-links">
+      <a href="https://www.instagram.com/benyoriki" target="_blank">Instagram</a>
+      <a href="https://www.tiktok.com/@benyoriki" target="_blank">TikTok</a>
+      <a href="https://web.facebook.com/benyo.hermawan" target="_blank">Facebook</a>
+      <a href="https://www.youtube.com/@rikihermawan8103" target="_blank">YouTube</a>
+      <a href="https://benyoriki.com/" target="_blank">Website</a>
+    </div>
+    <div class="footer-copy">© 2026 Riki Hermawan S.Kom · Real-Time Web System Specialist</div>
+  </div>
+</footer>
+
+<!-- ══ CHATBOX ══ -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="Chat">
+  <div class="fab-pulse"></div>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+  <span class="fab-dot" id="fabDot"></span>
+</button>
+
+<div class="chatbox" id="chatbox">
+  <div class="cb-head">
+    <div class="cb-av"><div class="cb-av-in">RH</div><span class="cb-online"></span></div>
+    <div class="cb-hinfo">
+      <div class="cb-hname">Riki Hermawan S.Kom</div>
+      <div class="cb-hstatus"><span class="live-dot"></span>Online</div>
+    </div>
+    <button class="cb-close" onclick="toggleChat()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="cb-msgs" id="cbMsgs">
+    <div class="cb-dateline">Hari ini</div>
+    <div class="cb-msg bot">
+      <div class="cb-bubble">👋 Halo! Saya asisten Riki — spesialis website bisnis & UMKM.<br><br>💰 <strong>Website bisnis mulai Rp 200rb</strong>, siap dalam <strong>2–6 hari kerja</strong>, hosting + domain sudah termasuk!<br><br>Mau tanya soal apa? Pilih di bawah atau ketik langsung 👇</div>
+      <div class="cb-time">Baru saja</div>
+    </div>
+    <div class="cb-qr" id="cbQR">
+      <button class="qr" onclick="qReply('Berapa harga dan paket yang tersedia?')">💰 Lihat Harga & Paket</button>
+      <button class="qr" onclick="qReply('Saya butuh toko online untuk bisnis saya')">🛒 Toko Online</button>
+      <button class="qr" onclick="qReply('Saya butuh sistem kasir dan inventory untuk warung/toko saya')">🖥️ Kasir & Stok Otomatis</button>
+      <button class="qr" onclick="qReply('Berapa lama waktu pengerjaan dan proses kerjanya bagaimana?')">⏱️ Proses & Waktu Kerja</button>
+    </div>
+  </div>
+  <div class="cb-typing" id="cbTyping" style="display:none">
+    <div class="cb-dots"><span></span><span></span><span></span></div>
+    <span>Asisten mengetik...</span>
+  </div>
+  <div class="cb-input">
+    <input id="cbIn" type="text" placeholder="Tanya apa saja tentang layanan kami..." onkeydown="if(event.key==='Enter')sendChat()">
+    <button onclick="sendChat()" aria-label="Kirim">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13M22 2L15 22l-4-9-9-4 20-7z"/></svg>
     </button>
   </div>
 </div>
 
-<!-- CHATBOT FAB -->
-<button id="chatbotFab" class="chatbot-fab" onclick="toggleChatbot()">
-  <span class="fab-icon">💬</span>
-  <span class="fab-badge" id="chatFabBadge" style="display:none">!</span>
-</button>
-
-<!-- HEADER -->
-<header id="mainHeader">
-  <div class="header-inner">
-    <div class="logo" onclick="showPage('shop'); adminSecretLogoClick()">
-      <img src="favicon.png" alt="logo" class="logo-icon-img" onerror="this.style.display='none'" />
-      <span class="logo-text">@benyoriki<span>Store</span></span>
-    </div>
-
-    <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Cari produk, brand, kategori..." oninput="handleSearch()" />
-      <button class="search-btn">🔍</button>
-    </div>
-
-    <div class="header-actions">
-      <button class="icon-btn track-btn" onclick="openTrackingModal()" title="Lacak Paket">
-        🔍 <span class="icon-label">Lacak</span>
-      </button>
-      <button class="icon-btn orders-btn" onclick="openMyOrders()" title="Pesanan Saya">
-        📦 <span class="icon-label">Pesanan</span>
-      </button>
-      <button class="icon-btn" onclick="openCart()">
-        🛒 <span id="cartBadge" class="badge">0</span>
-      </button>
-      <button class="icon-btn wishlist-btn" onclick="showPage('wishlist')">❤️ <span id="wishBadge" class="badge">0</span></button>
-      <button id="adminToggle" class="btn-admin admin-hidden-btn" onclick="handleAdminClick()">
-        ⚙️ Admin
-        <span id="adminNotifBadge" class="admin-notif-badge" style="display:none">0</span>
-      </button>
-    </div>
-  </div>
-
-  <!-- CATEGORY NAV -->
-  <div class="category-nav">
-    <button class="cat-btn active" onclick="filterCategory('all', this)">Semua</button>
-    <button class="cat-btn" onclick="filterCategory('elektronik', this)">📱 Elektronik</button>
-    <button class="cat-btn" onclick="filterCategory('fashion', this)">👗 Fashion</button>
-    <button class="cat-btn" onclick="filterCategory('makanan', this)">🍔 Makanan</button>
-    <button class="cat-btn" onclick="filterCategory('kecantikan', this)">💄 Kecantikan</button>
-    <button class="cat-btn" onclick="filterCategory('olahraga', this)">⚽ Olahraga</button>
-    <button class="cat-btn" onclick="filterCategory('rumah', this)">🏠 Rumah</button>
-  </div>
-</header>
-
-<!-- MAIN CONTENT -->
-<main id="mainContent">
-
-  <!-- SHOP PAGE -->
-  <section id="shopPage" class="page active">
-    <!-- HERO BANNER -->
-    <div class="hero-banner">
-      <div class="hero-slides-wrapper" id="heroSlider">
-        <div class="hero-slide active" style="background: linear-gradient(135deg, #f97316 0%, #ef4444 100%)">
-          <div class="hero-text">
-            <span class="hero-tag">🔥 Flash Sale Hari Ini</span>
-            <h2>Diskon Hingga<br><strong>70% OFF</strong></h2>
-            <p>Jangan sampai kehabisan, stok terbatas!</p>
-            <button onclick="filterCategory('all', document.querySelector('.cat-btn'))">Belanja Sekarang →</button>
-          </div>
-          <div class="hero-img"><img src="favicon.png" alt="logo" class="logo1-icon-img" onerror="this.style.display='none'" /></div>
-        </div>
-        <div class="hero-slide" style="background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%)">
-          <div class="hero-text">
-            <span class="hero-tag">✨ Produk Baru</span>
-            <h2>Teknologi<br><strong>Terkini 2026</strong></h2>
-            <p>Gadget terbaru dengan harga kompetitif!</p>
-            <button onclick="filterCategory('elektronik', document.querySelectorAll('.cat-btn')[1])">Lihat Elektronik →</button>
-          </div>
-          <div class="hero-img">📱</div>
-        </div>
-        <div class="hero-slide" style="background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%)">
-          <div class="hero-text">
-            <span class="hero-tag">📦 Lacak Paket Mudah</span>
-            <h2>Pantau Paket<br><strong>Real-Time</strong></h2>
-            <p>Lacak perjalanan paketmu dari dikemas hingga tiba!</p>
-            <button onclick="openTrackingModal()">Lacak Sekarang →</button>
-          </div>
-          <div class="hero-img">🎁</div>
-        </div>
-      </div>
-      <div class="hero-dots" id="heroDots">
-        <button class="hero-dot active" onclick="goToSlide(0)"></button>
-        <button class="hero-dot" onclick="goToSlide(1)"></button>
-        <button class="hero-dot" onclick="goToSlide(2)"></button>
-      </div>
-    </div>
-
-    <!-- STATS BAR -->
-    <div class="stats-bar">
-      <div class="stat-item"><span class="stat-icon">📦</span><div><strong id="statProducts">0</strong><small>Produk</small></div></div>
-      <div class="stat-item"><span class="stat-icon">⭐</span><div><strong>4.9</strong><small>Rating</small></div></div>
-      <div class="stat-item"><span class="stat-icon">🚚</span><div><strong>6 Kurir</strong><small>Tersedia</small></div></div>
-      <div class="stat-item"><span class="stat-icon">🔄</span><div><strong>30 Hari</strong><small>Return</small></div></div>
-    </div>
-
-    <!-- AI PROMO BANNER -->
-    <div class="ai-promo-banner" onclick="toggleChatbot()">
-      <div class="ai-promo-left">
-        <div class="chatbot-avatar-inner"><img src="favicon.png" alt="AI" class="avatar-img" /></div>
-        <div>
-          <strong>Benyo AI Assistant</strong>
-          <p>Tanya rekomendasi produk, promo, cara belanja, lacak paket & lebih banyak lagi!</p>
-        </div>
-      </div>
-      <button class="ai-promo-btn">Chat Sekarang →</button>
-    </div>
-
-    <!-- FLASH SALE SECTION -->
-    <div class="section-header">
-      <div class="section-title">
-        <span class="flash-icon">⚡</span>
-        <h3>Flash Sale</h3>
-        <div class="countdown" id="countdown"></div>
-      </div>
-      <a href="#" class="see-all">Lihat Semua →</a>
-    </div>
-    <div id="flashSaleList" class="product-grid"></div>
-
-    <!-- ALL PRODUCTS -->
-    <div class="section-header">
-      <div class="section-title"><h3>🏪 Semua Produk</h3></div>
-      <div class="sort-control">
-        <select onchange="sortProducts(this.value)">
-          <option value="default">Urutkan</option>
-          <option value="price-asc">Harga Terendah</option>
-          <option value="price-desc">Harga Tertinggi</option>
-          <option value="rating">Rating Terbaik</option>
-          <option value="newest">Terbaru</option>
-        </select>
-      </div>
-    </div>
-    <div id="productList" class="product-grid"></div>
-    <div id="emptyState" class="empty-state" style="display:none">
-      <div class="empty-icon">🔍</div>
-      <h3>Produk tidak ditemukan</h3>
-      <p>Coba kata kunci lain atau lihat semua produk</p>
-      <button onclick="toggleChatbot()" class="btn-ask-ai">🤖 Tanya AI untuk rekomendasi</button>
-    </div>
-  </section>
-
-  <!-- WISHLIST PAGE -->
-  <section id="wishlistPage" class="page">
-    <div class="page-header"><h2>❤️ Wishlist Saya</h2></div>
-    <div id="wishlistGrid" class="product-grid"></div>
-    <div id="wishlistEmpty" class="empty-state" style="display:none">
-      <div class="empty-icon">💔</div>
-      <h3>Wishlist kosong</h3>
-      <p>Tambahkan produk favorit kamu di sini</p>
-    </div>
-  </section>
-
-  <!-- ADMIN PAGE -->
-  <section id="adminPage" class="page">
-    <div class="admin-layout">
-      <aside class="admin-sidebar">
-        <div class="admin-profile">
-          <div class="admin-avatar">👤</div>
-          <strong>Administrator</strong>
-          <small>Super Admin</small>
-        </div>
-        <nav class="admin-nav">
-          <button class="admin-nav-btn active" onclick="showAdminTab('dashboard', this)">📊 Dashboard</button>
-          <button class="admin-nav-btn" onclick="showAdminTab('products', this)">📦 Produk</button>
-          <button class="admin-nav-btn" onclick="showAdminTab('addProduct', this)">➕ Tambah Produk</button>
-          <button class="admin-nav-btn notif-nav-btn" onclick="showAdminTab('notifications', this)">
-            🔔 Notifikasi
-            <span id="sidebarNotifBadge" class="sidebar-notif-badge"></span>
-          </button>
-          <button class="admin-nav-btn" onclick="showAdminTab('orders', this)">🧾 Kelola Pesanan</button>
-        </nav>
-        <button onclick="logout()" class="btn-logout">🚪 Keluar</button>
-      </aside>
-
-      <!-- ADMIN MAIN -->
-      <div class="admin-main">
-        <!-- DASHBOARD TAB -->
-        <div id="tab-dashboard" class="admin-tab active">
-          <h2 class="admin-title">📊 Dashboard</h2>
-          <div class="dashboard-cards">
-            <div class="dash-card orange">
-              <div class="dash-icon">📦</div>
-              <div class="dash-info"><strong id="dashProducts">0</strong><span>Total Produk</span></div>
-            </div>
-            <div class="dash-card green">
-              <div class="dash-icon">🧾</div>
-              <div class="dash-info"><strong id="dashOrders">0</strong><span>Total Pesanan</span></div>
-            </div>
-            <div class="dash-card blue">
-              <div class="dash-icon">💰</div>
-              <div class="dash-info"><strong id="dashRevenue">Rp 0</strong><span>Pendapatan</span></div>
-            </div>
-            <div class="dash-card red">
-              <div class="dash-icon">⏳</div>
-              <div class="dash-info"><strong id="dashPending">0</strong><span>Pesanan Aktif</span></div>
-            </div>
-          </div>
-          <div class="recent-orders">
-            <h3>🧾 Pesanan Terbaru</h3>
-            <div id="recentOrdersList" class="orders-table-wrap">
-              <p class="empty-msg">Belum ada pesanan masuk.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- PRODUCTS TAB -->
-        <div id="tab-products" class="admin-tab">
-          <h2 class="admin-title">📦 Kelola Produk</h2>
-          <div class="admin-toolbar">
-            <input type="text" placeholder="Cari produk..." oninput="adminSearch(this.value)" class="admin-search" />
-          </div>
-          <div id="adminProductList" class="admin-product-list"></div>
-        </div>
-
-        <!-- ADD PRODUCT TAB -->
-        <div id="tab-addProduct" class="admin-tab">
-          <h2 class="admin-title" id="addProductTitle">➕ Tambah Produk Baru</h2>
-          <div class="add-form">
-            <input type="hidden" id="editIndex" value="-1" />
-            <div class="form-row">
-              <div class="input-group">
-                <label>Nama Produk *</label>
-                <input type="text" id="pName" placeholder="Masukkan nama produk" />
-              </div>
-              <div class="input-group">
-                <label>Kategori *</label>
-                <select id="pCategory">
-                  <option value="">Pilih Kategori</option>
-                  <option value="elektronik">📱 Elektronik</option>
-                  <option value="fashion">👗 Fashion</option>
-                  <option value="makanan">🍔 Makanan</option>
-                  <option value="kecantikan">💄 Kecantikan</option>
-                  <option value="olahraga">⚽ Olahraga</option>
-                  <option value="rumah">🏠 Rumah</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="input-group">
-                <label>Harga (Rp) *</label>
-                <input type="number" id="pPrice" placeholder="Contoh: 150000" />
-              </div>
-              <div class="input-group">
-                <label>Harga Coret (Rp)</label>
-                <input type="number" id="pOrigPrice" placeholder="Harga asli sebelum diskon" />
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="input-group">
-                <label>Stok *</label>
-                <input type="number" id="pStock" placeholder="Jumlah stok tersedia" />
-              </div>
-              <div class="input-group">
-                <label>Rating (1-5)</label>
-                <input type="number" id="pRating" placeholder="4.5" min="1" max="5" step="0.1" />
-              </div>
-            </div>
-            <div class="input-group">
-              <label>Deskripsi Produk</label>
-              <textarea id="pDesc" placeholder="Deskripsikan produk Anda..." rows="3"></textarea>
-            </div>
-            <div class="input-group">
-              <label>URL Gambar *</label>
-              <input type="text" id="pImage" placeholder="https://... atau upload file" oninput="previewImage()" />
-              <div class="image-preview-wrap">
-                <img id="imgPreview" src="" alt="" style="display:none" />
-                <span id="imgPlaceholder" class="img-placeholder">👁 Preview gambar muncul di sini</span>
-              </div>
-            </div>
-            <div class="input-group">
-              <label>Upload Gambar</label>
-              <div class="upload-area" onclick="document.getElementById('fileUpload').click()">
-                <input type="file" id="fileUpload" accept="image/*" onchange="handleFileUpload(event)" style="display:none" />
-                <div class="upload-content">
-                  <span class="upload-icon">📁</span>
-                  <p>Klik untuk upload gambar</p>
-                  <small>JPG, PNG, WebP — maks. 5MB</small>
-                </div>
-              </div>
-            </div>
-            <div class="form-check">
-              <label class="check-label">
-                <input type="checkbox" id="pFlash" />
-                <span>⚡ Masukkan ke Flash Sale</span>
-              </label>
-            </div>
-            <div class="form-actions">
-              <button onclick="saveProduct()" class="btn-save">💾 Simpan Produk</button>
-              <button onclick="resetForm()" class="btn-reset">🔄 Reset</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- NOTIFICATIONS TAB -->
-        <div id="tab-notifications" class="admin-tab">
-          <h2 class="admin-title">🔔 Notifikasi Pesanan Masuk</h2>
-          <div id="notifList" class="notif-list">
-            <div class="empty-state">
-              <div class="empty-icon">🔔</div>
-              <h3>Tidak ada notifikasi</h3>
-            </div>
-          </div>
-        </div>
-
-        <!-- ORDERS TAB -->
-        <div id="tab-orders" class="admin-tab">
-          <h2 class="admin-title">🧾 Kelola Pesanan & Pengiriman</h2>
-          <div id="ordersList" class="orders-list">
-            <div class="empty-state">
-              <div class="empty-icon">📭</div>
-              <h3>Belum ada pesanan</h3>
-              <p>Pesanan dari pelanggan akan muncul di sini</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-</main>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="logo"><img src="favicon.png" alt="logo" class="logo-icon-img" onerror="this.style.display='none'" /><span class="logo-text">@Benyoriki<span>Store</span></span></div>
-      <p>Belanja mudah, cepat, dan terpercaya. Tersedia ribuan produk pilihan untuk kamu.</p>
-      <div class="footer-social">
-        <a href="https://www.instagram.com/benyoriki/" target="_blank" class="social-btn">📸 Instagram</a>
-        <a href="https://wa.me/628988995637?text=Halo%20saya%20ingin%20bertanya" class="social-btn" target="_blank" rel="noopener noreferrer">💬 WhatsApp</a>
-      </div>
-    </div>
-    <div class="footer-links">
-      <h4>Layanan</h4>
-      <a href="https://jasadaud.online/">Tentang Kami</a>
-      <a href="https://www.tiktok.com/@benyoriki">Cara Belanja</a>
-      <a href="https://www.youtube.com/channel/UCc5tgrRwlCiE_VDRN5Qnjcw?app=desktop">Kebijakan Return</a>
-      <a href="https://www.instagram.com/benyoriki/">Pusat Bantuan</a>
-    </div>
-    <div class="footer-links">
-      <h4>Pembayaran</h4>
-      <div class="payment-methods">
-        <span>💳 VISA</span><span>💳 Mastercard</span><span>🏦 Transfer</span><span>💚 GoPay</span><span>🔵 OVO</span><span>🔵 DANA</span>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2026 @Benyoriki Store. All rights reserved. Made with ❤️ in Indonesia</p>
-  </div>
-</footer>
-
-<!-- RECEIPT / STRUK MODAL -->
-<div id="receiptOverlay" class="receipt-overlay">
-  <div class="receipt-modal">
-    <div id="receiptContent" class="receipt-paper">
-      <div class="receipt-header">
-        <div class="receipt-logo">
-          <img src="favicon.png" alt="logo" class="receipt-logo-img" onerror="this.style.display='none'" />
-          <span class="receipt-store-name">@benyoriki Store</span>
-        </div>
-        <p class="receipt-tagline">Belanja Mudah, Harga Terbaik</p>
-        <div class="receipt-divider-dashes"></div>
-        <div class="receipt-meta">
-          <div class="receipt-meta-row"><span>No. Pesanan</span><span id="receiptOrderId">—</span></div>
-          <div class="receipt-meta-row"><span>Tanggal</span><span id="receiptDate">—</span></div>
-          <div class="receipt-meta-row"><span>Status</span><span class="receipt-status">Berhasil ✅</span></div>
-        </div>
-        <div class="receipt-divider-dashes"></div>
-      </div>
-      <!-- Buyer info -->
-      <div class="receipt-buyer-section">
-        <div class="receipt-items-title">DATA PENGIRIMAN</div>
-        <div id="receiptBuyer" class="receipt-buyer-info"></div>
-      </div>
-      <div class="receipt-divider-dashes"></div>
-      <div class="receipt-items-title">DAFTAR BELANJA</div>
-      <div id="receiptItemsList" class="receipt-items-list"></div>
-      <div class="receipt-divider-dashes"></div>
-      <div class="receipt-totals">
-        <div class="receipt-total-row"><span>Subtotal</span><span id="receiptSubtotal">Rp 0</span></div>
-        <div class="receipt-total-row"><span>Ongkir</span><span id="receiptOngkir">Rp 0</span></div>
-        <div class="receipt-divider-solid"></div>
-        <div class="receipt-total-row receipt-grand-total"><span>TOTAL BAYAR</span><span id="receiptGrandTotal">Rp 0</span></div>
-      </div>
-      <div class="receipt-divider-dashes"></div>
-      <div class="receipt-footer-note">
-        <p>Terima kasih telah berbelanja! 🙏</p>
-        <p>Instagram: @benyoriki</p>
-        <div class="receipt-barcode">▌▐█▌▐█▌▌▐▌█▌▌▐▌▐▌▐▌▌▐</div>
-      </div>
-    </div>
-    <div class="receipt-actions">
-      <button class="receipt-btn receipt-btn-close" onclick="closeReceipt()">✕ Tutup</button>
-      <button class="receipt-btn receipt-btn-download" onclick="downloadReceiptJPG()">⬇️ Download JPG</button>
-      <button class="receipt-btn receipt-btn-wa" onclick="sendReceiptWA()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:5px"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Kirim ke Admin WA
-      </button>
-    </div>
-  </div>
-</div>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <script src="app.js"></script>
 </body>
