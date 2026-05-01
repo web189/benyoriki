@@ -10,7 +10,8 @@
   document.body.prepend(bar);
   window.addEventListener('scroll', () => {
     const total = document.documentElement.scrollHeight - window.innerHeight;
-    bar.style.width = (window.scrollY / total * 100) + '%';
+    if (total <= 0) { bar.style.width = '100%'; return; }
+    bar.style.width = Math.min(window.scrollY / total * 100, 100) + '%';
   }, { passive: true });
 })();
 
@@ -223,26 +224,31 @@ filterBtns.forEach(btn => {
     filterBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     let visible = 0;
-    embedCards.forEach((card, i) => {
+    embedCards.forEach(card => {
       const cat = card.dataset.cat;
       const show = filter === 'all' || cat === filter;
       if (show) {
-        card.classList.remove('hidden');
-        // Re-trigger entrance animation
+        card.style.display = '';
         card.style.opacity = '0';
-        card.style.transform = 'translateY(20px) scale(.99)';
-        setTimeout(() => {
-          card.style.opacity = '';
+        card.style.transform = 'translateY(16px)';
+        // Reflow trick untuk re-trigger transition
+        void card.offsetHeight;
+        requestAnimationFrame(() => {
+          card.style.transition = 'opacity .4s ease, transform .4s cubic-bezier(.16,1,.3,1)';
+          card.style.opacity = '1';
           card.style.transform = '';
-          card.classList.add('ec-visible');
-        }, i * 60);
+        });
         visible++;
       } else {
-        card.classList.add('hidden');
-        card.classList.remove('ec-visible');
+        card.style.transition = 'opacity .2s ease';
+        card.style.opacity = '0';
+        setTimeout(() => {
+          card.style.display = 'none';
+          card.style.transition = '';
+        }, 200);
       }
     });
-    if (portoCount) portoCount.textContent = visible;
+    if (portoCount) setTimeout(() => { portoCount.textContent = visible; }, 100);
   });
 });
 
@@ -324,13 +330,28 @@ function showEmbedFallback(wrap, url) {
 
 /* ── CONTACT FORM ── */
 function submitForm() {
-  const name = document.getElementById('fName')?.value.trim();
-  const type = document.getElementById('fType')?.value;
-  const desc = document.getElementById('fDesc')?.value.trim();
-  if (!name || !type || !desc) { showToast('⚠️ Lengkapi semua kolom terlebih dahulu'); return; }
-  const msg = encodeURIComponent(`Halo Riki! Saya *${name}*\n\nMembutuhkan: *${type}*\n\nDeskripsi:\n${desc}`);
+  const nameEl = document.getElementById('fName');
+  const typeEl = document.getElementById('fType');
+  const descEl = document.getElementById('fDesc');
+  const name = nameEl?.value.trim();
+  const type = typeEl?.value;
+  const desc = descEl?.value.trim();
+
+  // Validasi lengkap
+  if (!name) { showToast('⚠️ Masukkan nama / nama bisnis Anda'); nameEl?.focus(); return; }
+  if (name.length < 2) { showToast('⚠️ Nama terlalu pendek'); nameEl?.focus(); return; }
+  if (!type) { showToast('⚠️ Pilih jenis sistem yang dibutuhkan'); typeEl?.focus(); return; }
+  if (!desc) { showToast('⚠️ Ceritakan kebutuhan bisnis Anda dulu'); descEl?.focus(); return; }
+  if (desc.length < 10) { showToast('⚠️ Deskripsi terlalu singkat, ceritakan lebih detail'); descEl?.focus(); return; }
+
+  const msg = encodeURIComponent(`Halo Riki! Saya *${name}*\n\nMembutuhkan: *${type}*\n\nDeskripsi:\n${desc}\n\n_Dikirim dari website benyoriki.com_`);
   window.open(`https://wa.me/628988995637?text=${msg}`, '_blank');
   showToast('✅ Membuka WhatsApp...');
+
+  // Reset form setelah submit berhasil
+  if (nameEl) nameEl.value = '';
+  if (typeEl) typeEl.value = '';
+  if (descEl) descEl.value = '';
 }
 
 function showToast(msg, dur = 3000) {
@@ -405,8 +426,6 @@ function showTyping(cb, delay = 1400) {
   setTimeout(() => {
     if (cbTyping) cbTyping.style.display = 'none';
     cb();
-    waShown++;
-    if (waShown === 2) addWABtn();
   }, delay);
 }
 
@@ -507,6 +526,102 @@ function sendChat() {
   processAndReply(val);
 }
 
+/* ── ESTIMASI HARGA KALKULATOR ── */
+(function() {
+  let picks = { step1: '', step2: '', step3: '' };
+
+  window.pickEst = function(btn, currentStep, nextStep) {
+    // Mark selected
+    btn.closest('.est-opts').querySelectorAll('.est-opt').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    picks[currentStep] = btn.dataset.val;
+
+    // Transition to next step
+    setTimeout(() => {
+      document.getElementById(currentStep)?.classList.remove('active');
+      document.getElementById(nextStep)?.classList.add('active');
+      // Update progress dots
+      const stepNum = parseInt(nextStep.replace('est',''), 10);
+      document.querySelectorAll('.est-pdot').forEach((d, i) => {
+        d.classList.toggle('active', i < stepNum);
+      });
+    }, 200);
+  };
+
+  window.showEstResult = function(btn) {
+    btn.closest('.est-opts').querySelectorAll('.est-opt').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    picks.step3 = btn.dataset.val;
+
+    setTimeout(() => {
+      document.getElementById('est3')?.classList.remove('active');
+      document.querySelectorAll('.est-pdot').forEach(d => d.classList.add('active'));
+
+      // Hitung estimasi berdasarkan kombinasi
+      let minHarga, maxHarga, paket, note;
+      const f = picks.step2;
+      const c = picks.step3;
+
+      if (f === 'landing') {
+        minHarga = 'Rp 200rb'; maxHarga = 'Rp 500rb';
+        paket = 'Paket Basic';
+        note = 'Landing page profesional dengan form order WA. Hosting & domain gratis 1 tahun. Selesai 2–3 hari kerja.';
+      } else if (f === 'toko') {
+        minHarga = 'Rp 1,2jt'; maxHarga = 'Rp 2,5jt';
+        paket = 'Paket Standar';
+        note = 'Toko online lengkap: katalog produk, cart, checkout WA, sistem login member. Selesai 3–5 hari kerja.';
+      } else if (f === 'kasir') {
+        if (c === '1') { minHarga = 'Rp 2jt'; maxHarga = 'Rp 3,5jt'; }
+        else if (c === '2-5') { minHarga = 'Rp 3jt'; maxHarga = 'Rp 5jt'; }
+        else { minHarga = 'Rp 4jt'; maxHarga = 'Rp 7jt+'; }
+        paket = 'Paket Pro';
+        note = 'Kasir online multi-cabang, stok otomatis, laporan harian & bulanan, akses multi-role. Selesai 5–10 hari kerja.';
+      } else if (f === 'dashboard') {
+        if (c === '1') { minHarga = 'Rp 3jt'; maxHarga = 'Rp 4,5jt'; }
+        else { minHarga = 'Rp 4jt'; maxHarga = 'Rp 8jt+'; }
+        paket = 'Paket Pro';
+        note = 'Dashboard real-time: grafik live, KPI tracking, laporan otomatis, export PDF/Excel, akses dari HP. Selesai 5–10 hari kerja.';
+      } else {
+        minHarga = 'Rp 200rb'; maxHarga = 'Rp 3jt+';
+        paket = 'Diskusikan dulu';
+        note = 'Estimasi tergantung fitur & kompleksitas. Konsultasi gratis untuk mendapat harga yang paling sesuai.';
+      }
+
+      const priceEl = document.getElementById('estPrice');
+      const noteEl = document.getElementById('estNote');
+      const waEl = document.getElementById('estWA');
+      const resultEl = document.getElementById('estResult');
+      const progressEl = document.getElementById('estProgress');
+
+      if (priceEl) priceEl.textContent = `${minHarga} – ${maxHarga}`;
+      if (noteEl) noteEl.innerHTML = `<strong>${paket}</strong><br>${note}`;
+      if (waEl) {
+        const waMsg = encodeURIComponent(`Halo Riki! Saya sudah coba kalkulator estimasi di benyoriki.com.\n\nBisnis: ${picks.step1}\nFitur: ${f}\nCabang: ${c}\nEstimasi: ${minHarga} – ${maxHarga}\n\nBoleh minta penawaran resminya?`);
+        waEl.href = `https://wa.me/628988995637?text=${waMsg}`;
+      }
+      if (resultEl) resultEl.style.display = 'block';
+      if (progressEl) progressEl.style.display = 'none';
+    }, 200);
+  };
+
+  window.resetEst = function() {
+    picks = { step1: '', step2: '', step3: '' };
+    ['est1','est2','est3'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('active');
+        el.querySelectorAll('.est-opt').forEach(b => b.classList.remove('selected'));
+      }
+    });
+    const r = document.getElementById('estResult');
+    if (r) r.style.display = 'none';
+    const p = document.getElementById('estProgress');
+    if (p) p.style.display = '';
+    document.getElementById('est1')?.classList.add('active');
+    document.querySelectorAll('.est-pdot').forEach((d, i) => d.classList.toggle('active', i === 0));
+  };
+})();
+
 /* ── FAQ TOGGLE ── */
 function toggleFaq(btn) {
   const item = btn.closest('.faq-item');
@@ -534,6 +649,7 @@ document.querySelectorAll(".testi-img").forEach(img => {
     if (!modal || !modalImg) return;
     modal.style.display = "block";
     modalImg.src = this.src;
+    modalImg.alt = this.alt;
   });
 });
 
@@ -544,6 +660,37 @@ if (modal) {
   modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = "none"; });
   document.addEventListener('keydown', e => { if (e.key === 'Escape') modal.style.display = "none"; });
 }
+
+/* ── TESTIMONI CAROUSEL DOTS (mobile scroll snap) ── */
+(function() {
+  const grid = document.getElementById('testiGrid');
+  const dots = document.querySelectorAll('.testi-dot');
+  if (!grid || !dots.length) return;
+
+  function getActiveIndex() {
+    const imgs = grid.querySelectorAll('.testi-img');
+    if (!imgs.length) return 0;
+    const itemW = imgs[0].offsetWidth + 12; // width + gap
+    return Math.min(Math.round(grid.scrollLeft / itemW), dots.length - 1);
+  }
+
+  function updateDots() {
+    const active = getActiveIndex();
+    dots.forEach((d, i) => d.classList.toggle('active', i === active));
+  }
+
+  grid.addEventListener('scroll', updateDots, { passive: true });
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const idx = parseInt(dot.dataset.index, 10);
+      const imgs = grid.querySelectorAll('.testi-img');
+      if (!imgs.length) return;
+      const itemW = imgs[0].offsetWidth + 12;
+      grid.scrollTo({ left: itemW * idx, behavior: 'smooth' });
+    });
+  });
+})();
 
 /* ── PAGE LOAD ANIMATION ── */
 document.querySelectorAll('.hero-left > *').forEach((el, i) => {
@@ -588,15 +735,7 @@ if (!document.getElementById('rippleStyle')) {
   document.head.appendChild(s);
 }
 
-/* ── EMBED CARD HIDDEN CLASS — ensure display:none works ── */
-(function() {
-  if (!document.getElementById('hiddenStyle')) {
-    const s = document.createElement('style');
-    s.id = 'hiddenStyle';
-    s.textContent = '.embed-card.hidden{display:none!important}';
-    document.head.appendChild(s);
-  }
-})();
+/* ── EMBED CARD HIDDEN — handled via style.display in filter ── */
 
 /* ── EMBED SPINNER CSS inject ── */
 (function() {
