@@ -563,28 +563,64 @@ a { text-decoration:none; color:inherit }
 /* ═══════════════════════════════════════════════
    TESTIMONIALS
    ═══════════════════════════════════════════════ */
-.testi-img-grid {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:1px; background:var(--line); border:1px solid var(--line);
-}
-.testi-img {
-  width:100%; aspect-ratio:4/3; object-fit:cover;
-  cursor:zoom-in; transition:opacity var(--dur); display:block;
-}
-.testi-img:hover { opacity:.85 }
 
+/* ── Desktop: 3 kolom grid ── */
+.testi-carousel-wrap { overflow: hidden }
+
+.testi-img-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+
+.testi-img {
+  width: 100%;
+  aspect-ratio: 9/16;
+  object-fit: cover;
+  object-position: top center;
+  cursor: zoom-in;
+  display: block;
+  transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity var(--dur);
+}
+.testi-img:hover { opacity: .88; transform: scale(1.02) }
+
+/* Dots — hidden on desktop */
+.testi-dots {
+  display: none;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+}
+.testi-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--tx3); cursor: pointer;
+  transition: background .25s, transform .25s;
+  border: none; padding: 0;
+}
+.testi-dot.active { background: var(--gold); transform: scale(1.3) }
+
+/* ── Modal zoom ── */
 .img-modal {
-  display:none; position:fixed; inset:0; z-index:9000;
-  background:rgba(0,0,0,.92); align-items:center; justify-content:center;
+  display: none; position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,.92);
+  align-items: center; justify-content: center;
 }
-.img-modal[style*="display: block"] { display:flex !important }
-.modal-content { max-width:90vw; max-height:90vh; border-radius:2px }
+.img-modal[style*="display: block"] { display: flex !important }
+.modal-content {
+  max-width: min(90vw, 400px);
+  max-height: 90vh;
+  border-radius: var(--r);
+  box-shadow: 0 24px 80px rgba(0,0,0,.6);
+}
 .close-modal {
-  position:absolute; top:20px; right:28px;
-  color:#fff; font-size:2rem; cursor:pointer; font-weight:300;
-  line-height:1; transition:color var(--dur);
+  position: absolute; top: 20px; right: 28px;
+  color: #fff; font-size: 2rem; cursor: pointer;
+  font-weight: 300; line-height: 1;
+  transition: color var(--dur);
 }
-.close-modal:hover { color:var(--gold) }
+.close-modal:hover { color: var(--gold) }
 
 /* ═══════════════════════════════════════════════
    FAQ
@@ -696,6 +732,70 @@ a { text-decoration:none; color:inherit }
   transition:all var(--dur);
 }
 .form-submit:hover { background:var(--gold2); transform:translateY(-1px); box-shadow:0 10px 28px rgba(201,168,76,.3) }
+
+/* ═══════════════════════════════════════════════
+   ESTIMASI HARGA KALKULATOR
+   ═══════════════════════════════════════════════ */
+.est-card {
+  background: var(--card);
+  border: 1px solid var(--b2);
+  border-radius: 4px;
+  padding: 36px 40px;
+  position: relative;
+}
+.est-step { display: none }
+.est-step.active { display: block }
+.est-q {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.05rem; font-weight: 700;
+  margin-bottom: 24px; letter-spacing: -.2px;
+}
+.est-opts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.est-opt {
+  padding: 14px 18px;
+  background: var(--bg3); border: 1px solid var(--b1);
+  border-radius: 3px; cursor: pointer; text-align: left;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: .87rem; font-weight: 500; color: var(--tx);
+  transition: all var(--dur);
+}
+.est-opt:hover { border-color: var(--gold); color: var(--gold); background: var(--ggold) }
+.est-opt.selected { border-color: var(--gold); background: var(--ggold); color: var(--gold) }
+
+.est-result { text-align: center; padding: 12px 0 }
+.est-r-label {
+  font-size: .75rem; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--tx3); margin-bottom: 12px;
+}
+.est-r-price {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 800; color: var(--gold);
+  letter-spacing: -1px; margin-bottom: 12px; line-height: 1;
+}
+.est-r-note {
+  font-size: .85rem; color: var(--tx2);
+  line-height: 1.7; margin-bottom: 28px; max-width: 480px; margin-left: auto; margin-right: auto;
+}
+.est-r-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap }
+
+.est-progress {
+  display: flex; justify-content: center; gap: 8px; margin-top: 28px;
+}
+.est-pdot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--tx3); transition: background .25s, transform .25s;
+}
+.est-pdot.active { background: var(--gold); transform: scale(1.3) }
+
+@media (max-width: 600px) {
+  .est-card { padding: 24px 20px }
+  .est-opts { grid-template-columns: 1fr }
+}
 
 /* ═══════════════════════════════════════════════
    FOOTER
@@ -857,7 +957,7 @@ a { text-decoration:none; color:inherit }
   .manfaat-grid { grid-template-columns:1fr }
   .pricing-grid { grid-template-columns:1fr }
   .price-card:last-child { grid-column:auto }
-  .testi-img-grid { grid-template-columns:1fr }
+  .testi-img-grid { grid-template-columns: 1fr } /* diganti oleh carousel di bawah */
   .porto-embed-grid { grid-template-columns:1fr }
   
   .kontak-left, .kontak-form { padding:28px 24px }
@@ -884,6 +984,51 @@ a { text-decoration:none; color:inherit }
   .soc-row { gap:6px }
   .soc-btn { font-size:.72rem; padding:7px 10px }
   .ei-tags { display:none }
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE CAROUSEL TESTIMONI — max 768px
+   Scroll snap horizontal, swipeable, dots indicator
+   ───────────────────────────────────────────── */
+@media (max-width:768px) {
+  .testi-carousel-wrap {
+    overflow: hidden;
+    margin: 0 -6%;  /* bleed ke tepi layar */
+    padding: 0 6%;
+  }
+
+  .testi-img-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    background: transparent;
+    border: none;
+
+    /* Scroll snap */
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    /* Padding agar foto di ujung tidak kepotong */
+    padding-bottom: 8px;
+  }
+  .testi-img-grid::-webkit-scrollbar { display: none }
+
+  .testi-img {
+    flex: 0 0 72vw;
+    max-width: 280px;
+    aspect-ratio: 9/16;       /* portrait — alami screenshot WA */
+    object-position: top center;
+    scroll-snap-align: center;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    transform: none !important; /* disable hover scale di touch */
+  }
+
+  /* Tampilkan dots */
+  .testi-dots { display: flex }
 }
 
 /* ═══════════════════════════════════════════════
