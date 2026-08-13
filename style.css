@@ -962,7 +962,7 @@ a { text-decoration:none; color:inherit }
   
   .kontak-left, .kontak-form { padding:28px 24px }
   
-  .chatbox { width:calc(100vw - 32px); right:16px; bottom:86px }
+  .chatbox { left:12px; right:12px; width:auto; max-width:calc(100% - 24px); box-sizing:border-box; bottom:86px }
   .chat-fab { right:16px; bottom:16px }
   
   .ps-item { flex-direction:column; gap:12px; padding:28px 0 }
@@ -1308,4 +1308,184 @@ a { text-decoration:none; color:inherit }
 @keyframes logoPulse {
   0%,100% { transform: scale(1); }
   50% { transform: scale(1.05); }
+}
+/* ═══════════════════════════════════════════════════════════════
+   ══  BENYORIKI 2026 — VISUAL REFRESH LAYER  ══
+   Modern glass-premium overhaul: softer geometry, layered depth,
+   pill-shaped accents, refined motion. Loads after base rules so
+   it safely overrides the original hairline/spreadsheet styling.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root{
+  --r-lg: 20px;   /* large card radius   */
+  --r-md: 14px;   /* medium element      */
+  --r-sm: 10px;   /* buttons, inputs     */
+  --r-pill: 999px;/* pills / badges      */
+  --dur: .28s;
+  --ease: cubic-bezier(.16,1,.3,1);
+  --gold-grad: linear-gradient(135deg, var(--gold2) 0%, var(--gold) 55%, #a9812f 100%);
+  --card-brd: 1px solid var(--b2);
+  --shadow-1: 0 1px 2px rgba(0,0,0,.18), 0 8px 24px -8px rgba(0,0,0,.35);
+  --shadow-2: 0 4px 12px rgba(0,0,0,.22), 0 24px 56px -16px rgba(0,0,0,.45);
+  --shadow-gold: 0 12px 36px -8px rgba(201,168,76,.35);
+}
+[data-theme="light"]{
+  --shadow-1: 0 1px 2px rgba(24,24,27,.05), 0 8px 22px -10px rgba(24,24,27,.12);
+  --shadow-2: 0 4px 14px rgba(24,24,27,.06), 0 26px 54px -18px rgba(24,24,27,.18);
+  --shadow-gold: 0 14px 36px -10px rgba(184,137,46,.28);
+}
+
+html{ scroll-behavior:smooth }
+html,body{ overflow-x:hidden; max-width:100%; }
+::selection{ background:var(--gold); color:#0B0F1A }
+
+/* ── Global soft-radius correction ── */
+.hero-pill,.sec-label,.usp-item,.db-card,.float-badge,.srv-card,.srv-badge,
+.embed-card,.embed-browser,.embed-topbar,.eb-open,.eo-btn-preview,.eo-btn-open,
+.price-card,.pc-btn,.faq-list,.faq-item,.manfaat-card,.kontak-grid,.kontak-left,
+.kontak-form,.fg input,.fg select,.fg textarea,.form-submit,.wa-cta,.tech-chip,
+.soc-btn,.chatbox,.chat-fab,.cb-input input,.toast,.btn-solid,.btn-ghost,.cta-btn,
+.porto-filter,.pf-btn,.img-modal .modal-content,.testi-img,.ps-item{
+  border-radius:var(--r-md);
+}
+.hero-pill,.srv-badge,.db-badge,.pc-popular ~ *,.eb-live,.ei-tags span,.pf-btn,
+.chat-fab,.soc-btn,.tech-chip,.pc-btn,.btn-solid,.btn-ghost,.cta-btn,.eo-btn-preview,
+.eo-btn-open,.form-submit,.wa-cta{
+  border-radius:var(--r-pill);
+}
+.porto-filter{ border-radius:var(--r-pill); padding:4px; gap:4px; border:1px solid var(--line) }
+.pf-btn{ border-right:none !important }
+.pf-btn.active{ box-shadow:var(--shadow-1) }
+.fg input,.fg select,.fg textarea,.cb-input input{ border-radius:var(--r-sm) }
+.faq-list,.faq-item:first-child .faq-q{ }
+.faq-list{ overflow:hidden }
+
+/* ── Navbar: glass + depth ── */
+.navbar{ backdrop-filter:blur(22px) saturate(160%); -webkit-backdrop-filter:blur(22px) saturate(160%); box-shadow:0 1px 0 var(--line) }
+.navbar.up{ box-shadow:0 1px 0 var(--line), var(--shadow-1) }
+.nl{ border-radius:var(--r-pill) }
+.nl:hover,.nl.active{ background:var(--ggold) }
+.nl::after{ display:none }
+.btn-theme{ border-radius:50%; }
+.btn-theme svg{ transition:transform .4s var(--ease) }
+.btn-theme:hover svg{ transform:rotate(20deg) }
+
+/* ── Buttons: gradient + lift ── */
+.btn-solid,.cta-btn,.eo-btn-preview,.form-submit{
+  background:var(--gold-grad); border:none; color:#0B0F1A; box-shadow:var(--shadow-1);
+}
+.btn-solid:hover,.cta-btn:hover,.eo-btn-preview:hover,.form-submit:hover{
+  background:var(--gold-grad); filter:brightness(1.08);
+  transform:translateY(-2px); box-shadow:var(--shadow-gold);
+}
+/* pc-btn stays an outline button by default (gold text needs a transparent/dark
+   background to stay readable); only fills solid on hover or when featured. */
+.pc-btn{ background:transparent; border:1.5px solid var(--gold); color:var(--gold); box-shadow:none }
+.pc-btn:hover{ background:var(--gold-grad); color:#0B0F1A; border-color:transparent; box-shadow:var(--shadow-gold) }
+.price-card.featured .pc-btn{ background:var(--gold-grad); color:#0B0F1A; border-color:transparent; box-shadow:var(--shadow-1) }
+.price-card.featured .pc-btn:hover{ filter:brightness(1.08); box-shadow:var(--shadow-gold) }
+.btn-ghost{ background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow-1) }
+.btn-ghost:hover{ background:var(--card2); transform:translateY(-2px); box-shadow:var(--shadow-1) }
+.wa-cta{ box-shadow:0 12px 32px -8px rgba(37,211,102,.4) }
+
+/* ── Cards: elevate off hairline grids into real depth cards ── */
+.srv-grid,.manfaat-grid,.pricing-grid,.porto-embed-grid{
+  background:transparent !important; border:none !important; gap:22px !important;
+}
+.srv-card,.manfaat-card,.price-card,.embed-card{
+  border:var(--card-brd); box-shadow:var(--shadow-1);
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease), background var(--dur);
+}
+.srv-card::before{ border-radius:var(--r-md) var(--r-md) 0 0 }
+.manfaat-card::after{ display:none }
+.srv-card:hover,.manfaat-card:hover{
+  transform:translateY(-6px); box-shadow:var(--shadow-2); border-color:var(--b3);
+}
+.price-card{ border:var(--card-brd) }
+.price-card:hover{ border-color:var(--b3) }
+.price-card.featured{ border-color:var(--gold); box-shadow:var(--shadow-gold) }
+.embed-card{ display:flex; flex-direction:column }
+.embed-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-2); border-color:var(--accent, var(--b3)) }
+.embed-browser{ overflow:hidden; border-radius:var(--r-md) var(--r-md) 0 0 }
+.embed-frame-wrap{ overflow:hidden }
+.embed-info{ border-radius:0 0 var(--r-md) var(--r-md) }
+
+/* ── Pricing featured card: glow border (plain border — more reliable than
+   mask-based gradient borders which render inconsistently in mobile WebViews) ── */
+.price-card.featured{ border:1.5px solid var(--gold) !important; box-shadow:var(--shadow-gold) }
+
+/* ── DB card: glass depth ── */
+.db-card{ box-shadow:var(--shadow-2), 0 0 60px rgba(201,168,76,.06); backdrop-filter:blur(6px) }
+.db-topbar{ border-radius:var(--r-md) var(--r-md) 0 0 }
+.db-row{ border-radius:var(--r-sm) }
+.float-badge{ box-shadow:var(--shadow-1) }
+
+/* ── Kontak & Chat surfaces ── */
+.kontak-grid{ background:transparent !important; border:none !important; gap:22px }
+.kontak-left,.kontak-form{ border:var(--card-brd); box-shadow:var(--shadow-1) }
+/* ── Chatbox: refined shape + mobile scrim so it reads as a proper panel
+   instead of a card awkwardly overlapping page content underneath it ── */
+.chatbox{ box-shadow:var(--shadow-2); border:1px solid var(--line); overflow:hidden; border-radius:var(--r-lg) }
+.cb-head{ border-radius:var(--r-lg) var(--r-lg) 0 0 }
+.chat-fab{ box-shadow:var(--shadow-gold) }
+
+#chatScrim{
+  position:fixed; inset:0; z-index:799; background:rgba(6,9,16,.55);
+  backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+  opacity:0; pointer-events:none; transition:opacity .3s var(--ease); display:none;
+}
+@media (max-width:768px){
+  #chatScrim{ display:block }
+  #chatScrim.show{ opacity:1; pointer-events:auto }
+  .chatbox{ z-index:900; border-radius:var(--r-lg) var(--r-lg) 0 0 }
+  .cb-head{ border-radius:var(--r-lg) var(--r-lg) 0 0 }
+}
+
+/* ── FINAL FAILSAFE: guarantee the chat panel never exceeds the screen width
+   on mobile, no matter what other rule or WebView quirk is in play. ── */
+@media (max-width:768px){
+  .chatbox{
+    position:fixed !important; left:12px !important; right:12px !important;
+    width:auto !important; max-width:calc(100vw - 24px) !important;
+    box-sizing:border-box !important; margin:0 !important;
+  }
+  .cb-head{ padding-right:14px !important }
+  .cb-close{ flex-shrink:0 !important }
+}
+.faq-item:hover .faq-q{ background:var(--ggold) }
+
+/* ── Section rhythm & container width polish ── */
+.section{ padding:100px 0 }
+.wrap{ max-width:1240px }
+.sec-h2{ letter-spacing:-1.2px }
+.section::before{ display:none } /* remove hairline top divider, replaced by generous spacing */
+
+/* ── Micro-polish ── */
+.tech-chip{ box-shadow:var(--shadow-1) }
+.soc-btn{ box-shadow:var(--shadow-1) }
+.testi-img{ box-shadow:var(--shadow-1) }
+.pc-list li::before{ background:var(--gold-grad) }
+.pc-list li{ padding-left:22px }
+.pc-list li::before{
+  content:'✓'; width:auto; height:auto; background:none !important;
+  top:0; transform:none; left:0; color:var(--gold); font-weight:700; font-size:.85rem;
+}
+.price-card.featured .pc-list li::before{ color:var(--gold2) }
+.pc-list li.pc-no::before{ content:'—'; color:var(--tx3); font-weight:400 }
+input,select,textarea{ transition:border-color var(--dur), box-shadow var(--dur), background var(--dur) }
+
+/* ── Reduce motion accessibility ── */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important }
+}
+
+/* ── Responsive polish for the new gap-based grids ── */
+@media (max-width:1024px){
+  .srv-grid,.manfaat-grid{ grid-template-columns:repeat(2,1fr) !important }
+  .pricing-grid{ grid-template-columns:1fr 1fr !important; gap:22px !important }
+}
+@media (max-width:768px){
+  .srv-grid,.manfaat-grid,.pricing-grid,.porto-embed-grid{ grid-template-columns:1fr !important }
+  .section{ padding:72px 0 }
+  .kontak-grid{ gap:16px }
 }

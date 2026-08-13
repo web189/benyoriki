@@ -361,7 +361,7 @@ function showToast(msg, dur = 3000) {
   setTimeout(() => t.classList.remove('show'), dur);
 }
 
-/* ── CHATBOX — AI POWERED ── */
+/* ── CHATBOX — Balasan pintar berbasis kata kunci (client-side, tanpa API key) ── */
 const chatFab = document.getElementById('chatFab');
 const chatbox = document.getElementById('chatbox');
 const fabDot = document.getElementById('fabDot');
@@ -406,6 +406,7 @@ ATURAN MENJAWAB:
 function toggleChat() {
   chatOpen = !chatOpen;
   chatbox?.classList.toggle('open', chatOpen);
+  document.getElementById('chatScrim')?.classList.toggle('show', chatOpen);
   if (chatOpen && fabDot) fabDot.style.display = 'none';
 }
 
@@ -441,38 +442,20 @@ function addWABtn() {
 }
 
 async function getAIReply(userMessage) {
-  // Tambah ke history
+  // Chatbox ini berjalan sepenuhnya di sisi klien (static hosting / GitHub Pages),
+  // jadi tidak ada backend aman untuk menyimpan API key. Daripada memanggil API
+  // eksternal tanpa autentikasi (selalu gagal & menambah delay), kita langsung
+  // pakai mesin balasan pintar berbasis kata kunci — cepat & selalu relevan.
   conversationHistory.push({ role: 'user', content: userMessage });
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 300,
-        system: SYSTEM_PROMPT,
-        messages: conversationHistory
-      })
-    });
+  const reply = getFallbackReply(userMessage);
 
-    if (!response.ok) throw new Error('API error');
-    const data = await response.json();
-    const reply = data.content?.[0]?.text || getFallbackReply(userMessage);
-
-    // Simpan reply ke history
-    conversationHistory.push({ role: 'assistant', content: reply });
-
-    // Batasi history agar tidak terlalu panjang (max 10 pesan terakhir)
-    if (conversationHistory.length > 10) {
-      conversationHistory = conversationHistory.slice(-10);
-    }
-
-    return reply;
-  } catch (e) {
-    // Fallback jika API gagal
-    return getFallbackReply(userMessage);
+  conversationHistory.push({ role: 'assistant', content: reply });
+  if (conversationHistory.length > 10) {
+    conversationHistory = conversationHistory.slice(-10);
   }
+
+  return reply;
 }
 
 function getFallbackReply(txt) {
