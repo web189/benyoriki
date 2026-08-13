@@ -1504,3 +1504,75 @@ input,select,textarea{ transition:border-color var(--dur), box-shadow var(--dur)
   .section{ padding:72px 0 }
   .kontak-grid{ gap:16px }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ══  PRELOADER / SPLASH SCREEN  ══
+   ═══════════════════════════════════════════════════════════════ */
+#preloader{
+  position:fixed; inset:0; z-index:9999;
+  display:flex; align-items:center; justify-content:center;
+  background:#0B0F1A;
+  transition:opacity .7s var(--ease), visibility .7s var(--ease);
+}
+#preloader.pl-hide{ opacity:0; visibility:hidden; pointer-events:none }
+body.pl-lock{ overflow:hidden }
+
+.pl-bg{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(circle at 22% 28%, rgba(201,168,76,.16), transparent 55%),
+    radial-gradient(circle at 78% 74%, rgba(201,168,76,.10), transparent 55%),
+    linear-gradient(180deg, #0B0F1A 0%, #0A0D16 100%);
+}
+.pl-bg::after{
+  content:''; position:absolute; inset:0; opacity:.5;
+  background-image:
+    linear-gradient(rgba(201,168,76,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,.05) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:radial-gradient(circle at 50% 45%, #000 0%, transparent 72%);
+}
+
+.pl-content{ position:relative; display:flex; flex-direction:column; align-items:center; gap:22px; padding:0 24px }
+
+.pl-mark{ position:relative; width:96px; height:96px; display:flex; align-items:center; justify-content:center }
+.pl-ring{ position:absolute; inset:0; width:100%; height:100%; transform:rotate(-90deg) }
+.pl-ring-track{ fill:none; stroke:rgba(201,168,76,.16); stroke-width:3 }
+.pl-ring-fill{
+  fill:none; stroke:var(--gold); stroke-width:3;
+  stroke-linecap:round; stroke-dasharray:264; stroke-dashoffset:264;
+  animation:plRing 1.7s cubic-bezier(.65,0,.35,1) infinite;
+}
+@keyframes plRing{
+  0%{ stroke-dashoffset:264; transform-origin:center; }
+  50%{ stroke-dashoffset:40; }
+  100%{ stroke-dashoffset:264; }
+}
+.pl-logo{
+  width:52px; height:52px; border-radius:14px; object-fit:cover;
+  box-shadow:0 8px 24px -6px rgba(201,168,76,.5);
+  animation:plPulse 1.7s ease-in-out infinite;
+}
+@keyframes plPulse{ 0%,100%{ transform:scale(1) } 50%{ transform:scale(1.06) } }
+
+.pl-word{ font-family:'Plus Jakarta Sans',sans-serif; font-size:1.5rem; font-weight:800; letter-spacing:-.3px; color:#F5F1E6 }
+.pl-word .pl-accent{ color:var(--gold) }
+.pl-tagline{ font-size:.82rem; color:rgba(245,241,230,.5); letter-spacing:.02em }
+
+.pl-bar{ width:180px; height:3px; border-radius:99px; background:rgba(201,168,76,.15); overflow:hidden; margin-top:2px }
+.pl-bar-fill{
+  height:100%; width:0%; border-radius:99px;
+  background:linear-gradient(90deg, var(--gold2), var(--gold));
+  animation:plBar 5s cubic-bezier(.22,.61,.36,1) forwards;
+}
+@keyframes plBar{ from{ width:0% } to{ width:100% } }
+
+@media (prefers-reduced-motion: reduce){
+  .pl-ring-fill,.pl-logo,.pl-bar-fill{ animation:none }
+  .pl-bar-fill{ width:100% }
+}
+@media (max-width:480px){
+  .pl-mark{ width:80px; height:80px }
+  .pl-logo{ width:44px; height:44px }
+  .pl-word{ font-size:1.25rem }
+}

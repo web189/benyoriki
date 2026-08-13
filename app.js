@@ -382,7 +382,7 @@ IDENTITAS:
 
 PAKET HARGA (SELALU SEBUT INI JIKA DITANYA HARGA):
 - Basic: Mulai Rp 200rb → Landing Page/Profil Bisnis, Hosting+Domain 1 tahun GRATIS, selesai 2–3 hari kerja
-- Standar: Mulai Rp 1,5jt → Toko Online, Katalog Produk, Sistem Login, selesai 3–5 hari kerja
+- Standar: Mulai Rp 1,2jt → Toko Online, Katalog Produk, Sistem Login, selesai 3–5 hari kerja
 - Pro: Mulai Rp 3jt → Kasir Online, Dashboard Real-Time, Multi-Cabang, selesai 5–10 hari kerja
 - SEMUA paket: Demo dulu sebelum bayar, support pasca-launch termasuk
 
@@ -465,7 +465,7 @@ function getFallbackReply(txt) {
   if (t.includes('toko') || t.includes('online') || t.includes('shop') || t.includes('ecommerce'))
     return `🌐 <strong>Toko Online</strong> kami dibuat khusus untuk UMKM — tampil profesional tanpa harga selangit! Katalog produk, keranjang belanja, order via WhatsApp, semua bisa disesuaikan. Harga tergantung banyaknya fitur, mulai dari <strong>di bawah Rp 200rb</strong> untuk yang sederhana (sudah termasuk hosting & domain gratis). Produk apa yang mau Anda jual? 🎯`;
   if (t.includes('harga') || t.includes('biaya') || t.includes('berapa') || t.includes('budget') || t.includes('murah') || t.includes('mahal') || t.includes('paket'))
-    return `💰 Kami punya 3 paket dengan harga transparan:<br><br>📌 <strong>Basic</strong>: Mulai Rp 200rb → Landing Page + Hosting & Domain Gratis (2–3 hari selesai)<br>📌 <strong>Standar</strong>: Mulai Rp 1,5jt → Toko Online + Sistem Login (3–5 hari selesai)<br>📌 <strong>Pro</strong>: Mulai Rp 3jt → Kasir + Dashboard Real-Time + Multi-Cabang (5–10 hari selesai)<br><br>Semua paket: <strong>demo dulu sebelum bayar</strong>. Mau tahu lebih detail? <a href='https://wa.me/628988995637' target='_blank'>Chat Riki sekarang →</a> 🚀`;
+    return `💰 Kami punya 3 paket dengan harga transparan:<br><br>📌 <strong>Basic</strong>: Mulai Rp 200rb → Landing Page + Hosting & Domain Gratis (2–3 hari selesai)<br>📌 <strong>Standar</strong>: Mulai Rp 1,2jt → Toko Online + Sistem Login (3–5 hari selesai)<br>📌 <strong>Pro</strong>: Mulai Rp 3jt → Kasir + Dashboard Real-Time + Multi-Cabang (5–10 hari selesai)<br><br>Semua paket: <strong>demo dulu sebelum bayar</strong>. Mau tahu lebih detail? <a href='https://wa.me/628988995637' target='_blank'>Chat Riki sekarang →</a> 🚀`;
   if (t.includes('hosting') || t.includes('domain'))
     return `🌐 Soal hosting & domain, begini ketentuannya: untuk paket website <strong>di bawah Rp 200rb</strong>, hosting & domain sudah <strong>GRATIS</strong> termasuk dalam paket! Untuk proyek yang lebih kompleks dengan kebutuhan server lebih besar, hosting & domain dihitung <strong>terpisah</strong> dari harga jasa pembuatan. Mau tahu lebih lanjut? Yuk konsultasi gratis! 😊`;
   if (t.includes('dashboard') || t.includes('laporan') || t.includes('analitik'))
@@ -751,4 +751,33 @@ if (!document.getElementById('rippleStyle')) {
   window.addEventListener('orientationchange', snapBack);
   document.addEventListener('DOMContentLoaded', snapBack);
   window.addEventListener('load', snapBack);
+})();
+
+/* ── PRELOADER — tampil ±5 detik lalu fade-out halus ───────────────── */
+(function preloader() {
+  const pl = document.getElementById('preloader');
+  if (!pl) return;
+
+  document.body.classList.add('pl-lock');
+
+  const MIN_DISPLAY_MS = 5000;
+  const start = Date.now();
+
+  function hidePreloader() {
+    const elapsed = Date.now() - start;
+    const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
+    setTimeout(() => {
+      pl.classList.add('pl-hide');
+      document.body.classList.remove('pl-lock');
+      setTimeout(() => { pl.remove(); }, 800); // bersihkan dari DOM setelah transisi selesai
+    }, remaining);
+  }
+
+  if (document.readyState === 'complete') {
+    hidePreloader();
+  } else {
+    window.addEventListener('load', hidePreloader);
+    // jaring pengaman: jangan sampai preloader nyangkut kalau event 'load' gagal
+    setTimeout(hidePreloader, MIN_DISPLAY_MS + 4000);
+  }
 })();

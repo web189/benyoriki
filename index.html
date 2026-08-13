@@ -58,10 +58,66 @@
 <meta name="theme-color" content="#0B0F1A" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Berapa harga pastinya? Apakah ada biaya tersembunyi?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Harga kami transparan. Paket Basic mulai di bawah Rp 200rb (hosting gratis via GitHub/Netlify, domain bisa pakai subdomain gratis atau custom domain terpisah). Paket Standar mulai Rp 1,2jt, dan Pro mulai Rp 3jt (hosting & domain custom terpisah, kami bantu setup). Tidak ada biaya tersembunyi." }
+    },
+    {
+      "@type": "Question",
+      "name": "Berapa lama website saya selesai dikerjakan?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Tergantung kompleksitas: Landing page sederhana 2-3 hari kerja, toko online 3-5 hari kerja, kasir & dashboard real-time 5-10 hari kerja. Update progres diberikan setiap hari." }
+    },
+    {
+      "@type": "Question",
+      "name": "Saya tidak paham teknologi. Apakah tetap bisa pakai sistemnya?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Ya, sistem dirancang untuk pemilik bisnis, bukan programmer. Antarmuka mudah digunakan dari HP atau laptop, dilengkapi panduan penggunaan dan sesi training singkat." }
+    },
+    {
+      "@type": "Question",
+      "name": "Bagaimana kalau saya tidak puas dengan hasilnya?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sebelum bayar lunas, Anda bisa demo dan uji coba sistem langsung. Jika ada yang tidak sesuai, akan direvisi dulu sampai Anda puas, baru launch dan bayar sisa 50%." }
+    },
+    {
+      "@type": "Question",
+      "name": "Apakah website bisa diakses dari HP dan bisa dipakai untuk multiple cabang?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Ya, semua website mobile-friendly dan responsif. Untuk paket Standar ke atas, sistem mendukung multi-cabang dan multi-user dengan hak akses berbeda dari satu dashboard terpusat." }
+    },
+    {
+      "@type": "Question",
+      "name": "Bagaimana dengan support setelah website selesai? Apakah ada biaya lagi?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Setiap paket sudah termasuk support & perbaikan bug pasca-launch tanpa biaya tambahan selama 30 hari pertama. Untuk maintenance jangka panjang tersedia paket bulanan terjangkau." }
+    }
+  ]
+}
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- ══ PRELOADER — splash screen bermerek, tampil ±5 detik saat halaman dibuka ══ -->
+<div id="preloader" aria-hidden="true">
+  <div class="pl-bg"></div>
+  <div class="pl-content">
+    <div class="pl-mark">
+      <svg viewBox="0 0 100 100" class="pl-ring">
+        <circle cx="50" cy="50" r="42" class="pl-ring-track"></circle>
+        <circle cx="50" cy="50" r="42" class="pl-ring-fill"></circle>
+      </svg>
+      <img src="favicon.png" alt="" class="pl-logo">
+    </div>
+    <div class="pl-word"><span>@benyo</span><span class="pl-accent">riki</span></div>
+    <div class="pl-tagline">Menyiapkan sistem website Anda…</div>
+    <div class="pl-bar"><div class="pl-bar-fill"></div></div>
+  </div>
+</div>
 
 <!-- ══ TOPBAR IDENTITY STRIP ══ -->
 <div class="topbar-strip"></div>
@@ -173,11 +229,11 @@
     </div>
 
     <div class="hero-stats">
-      <div class="hs-item"><span class="hs-n" data-count="50">0</span><span class="hs-u">+</span><span class="hs-l">Proyek Selesai</span></div>
+      <div class="hs-item"><span class="hs-n" data-count="50">50</span><span class="hs-u">+</span><span class="hs-l">Proyek Selesai</span></div>
       <div class="hs-sep"></div>
-      <div class="hs-item"><span class="hs-n" data-count="100">0</span><span class="hs-u">%</span><span class="hs-l">Klien Puas</span></div>
+      <div class="hs-item"><span class="hs-n" data-count="100">100</span><span class="hs-u">%</span><span class="hs-l">Klien Puas</span></div>
       <div class="hs-sep"></div>
-      <div class="hs-item"><span class="hs-n" data-count="8">0</span><span class="hs-u"></span><span class="hs-l">Portofolio Live</span></div>
+      <div class="hs-item"><span class="hs-n" data-count="8">8</span><span class="hs-u"></span><span class="hs-l">Portofolio Live</span></div>
     </div>
     <div class="hero-btns">
       <a href="#kontak" class="btn-solid">
@@ -734,7 +790,7 @@
   <div class="wrap">
     <div class="sec-label">— Paket & Harga</div>
     <h2 class="sec-h2">Harga Transparan,<br><span class="txt-shine">Tidak Ada Biaya Tersembunyi</span></h2>
-    <p class="sec-sub">Pilih paket sesuai kebutuhan bisnis Anda — semua sudah termasuk hosting, domain, dan support pasca-launch</p>
+    <p class="sec-sub">Pilih paket sesuai kebutuhan bisnis Anda — harga transparan, tanpa biaya tersembunyi</p>
     <div class="pricing-grid">
 
       <!-- BASIC -->
@@ -973,7 +1029,7 @@
           <span class="faq-arrow">▼</span>
         </button>
         <div class="faq-a">
-          <p>Harga kami transparan dan sudah kami uraikan di <a href="#harga">section Harga</a>. Paket Basic mulai <strong>di bawah Rp 200rb</strong> (sudah termasuk hosting & domain gratis 1 tahun). Paket Standar mulai Rp 1,5jt, dan Pro mulai Rp 3jt. <strong>Tidak ada biaya tersembunyi</strong> — semua sudah tercantum di estimasi yang kami kirim sebelum Anda setuju.</p>
+          <p>Harga kami transparan dan sudah kami uraikan di <a href="#harga">section Harga</a>. Paket Basic mulai <strong>di bawah Rp 200rb</strong> (hosting gratis via GitHub/Netlify, domain bisa pakai subdomain gratis atau custom domain terpisah). Paket Standar mulai Rp 1,2jt, dan Pro mulai Rp 3jt (hosting & domain custom terpisah, kami bantu setup). <strong>Tidak ada biaya tersembunyi</strong> — semua sudah tercantum di estimasi yang kami kirim sebelum Anda setuju.</p>
         </div>
       </div>
 
