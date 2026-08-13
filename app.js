@@ -735,3 +735,20 @@ if (!document.getElementById('rippleStyle')) {
     document.head.appendChild(s);
   }
 })();
+/* ── LOCK HORIZONTAL SCROLL ──────────────────────────────────────────
+   Jaring pengaman terakhir: apapun penyebabnya (elemen yang melebar,
+   bug WebView, dsb), posisi geser horizontal dipaksa balik ke 0 setiap
+   kali terdeteksi bergeser. Ini membuat halaman "terkunci" secara nyata
+   di layar HP, tidak hanya mengandalkan overflow-x:hidden di CSS. ── */
+(function lockHorizontalScroll() {
+  function snapBack() {
+    if (window.scrollX !== 0) {
+      window.scrollTo(0, window.scrollY);
+    }
+  }
+  window.addEventListener('scroll', snapBack, { passive: true });
+  window.addEventListener('resize', snapBack);
+  window.addEventListener('orientationchange', snapBack);
+  document.addEventListener('DOMContentLoaded', snapBack);
+  window.addEventListener('load', snapBack);
+})();
