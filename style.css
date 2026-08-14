@@ -383,7 +383,12 @@ a { text-decoration:none; color:inherit }
 .srv-card:hover::before { background:var(--gold) }
 .srv-card.featured { background:var(--card2) }
 .srv-card.featured::before { background:var(--gold) }
-.srv-ico { font-size:1.8rem; margin-bottom:18px; display:block }
+.srv-ico {
+  width:48px; height:48px; display:flex; align-items:center; justify-content:center;
+  background:var(--ggold); color:var(--gold); border-radius:var(--r-sm); margin-bottom:18px;
+}
+.srv-ico svg{ width:24px; height:24px }
+.srv-card.featured .srv-ico{ background:var(--gold-grad); color:#0B0F1A }
 .srv-card h3 { font-family:'Sora',sans-serif; font-size:1.1rem; font-weight:700; margin-bottom:12px; line-height:1.3; letter-spacing:-.2px }
 .srv-card p { color:var(--tx2); font-size:.87rem; line-height:1.75; margin-bottom:18px }
 .srv-card ul { list-style:none; display:flex; flex-direction:column; gap:6px }
@@ -573,6 +578,9 @@ a { text-decoration:none; color:inherit }
   background: var(--line);
   border: 1px solid var(--line);
 }
+/* Bungkus <picture> untuk source WebP+fallback JPG tidak boleh ikut jadi
+   grid/flex item — biarkan .testi-img di dalamnya yang berperan langsung. */
+.testi-img-grid picture { display: contents }
 
 .testi-img {
   width: 100%;
@@ -662,7 +670,11 @@ a { text-decoration:none; color:inherit }
 }
 .manfaat-card:hover { background:var(--card2) }
 .manfaat-card:hover::after { background:var(--gold) }
-.mc-ico { font-size:1.6rem; margin-bottom:16px; display:block }
+.mc-ico {
+  width:44px; height:44px; display:flex; align-items:center; justify-content:center;
+  background:var(--ggold); color:var(--gold); border-radius:var(--r-sm); margin-bottom:16px;
+}
+.mc-ico svg{ width:22px; height:22px }
 .manfaat-card h3 { font-family:'Sora',sans-serif; font-size:1rem; font-weight:700; margin-bottom:10px; line-height:1.4; letter-spacing:-.2px }
 .manfaat-card p { font-size:.83rem; color:var(--tx2); line-height:1.75 }
 
