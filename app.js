@@ -49,8 +49,17 @@ window.addEventListener('scroll', () => {
 /* ── HAMBURGER ── */
 const hamburger = document.getElementById('hamburger');
 const mobMenu = document.getElementById('mobMenu');
-hamburger?.addEventListener('click', () => mobMenu?.classList.toggle('show'));
-function closeMob() { mobMenu?.classList.remove('show'); }
+const mobMenuScrim = document.getElementById('mobMenuScrim');
+hamburger?.addEventListener('click', () => {
+  const isOpen = mobMenu?.classList.toggle('show');
+  mobMenuScrim?.classList.toggle('show', isOpen);
+  hamburger?.classList.toggle('active', isOpen);
+});
+function closeMob() {
+  mobMenu?.classList.remove('show');
+  mobMenuScrim?.classList.remove('show');
+  hamburger?.classList.remove('active');
+}
 document.addEventListener('click', e => { if (!navbar?.contains(e.target)) closeMob(); });
 
 /* ── SECTION HEADING ENTRANCE OBSERVER ── */

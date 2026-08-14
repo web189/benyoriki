@@ -197,7 +197,6 @@ a { text-decoration:none; color:inherit }
 .mob-menu.show { transform:none; opacity:1 }
 .mob-menu a { padding:12px 16px; font-weight:500; color:var(--tx2); transition:all var(--dur); border-bottom:1px solid var(--b1) }
 .mob-menu a:hover { color:var(--gold) }
-
 /* ═══════════════════════════════════════════════
    HERO
    ═══════════════════════════════════════════════ */
@@ -456,7 +455,7 @@ a { text-decoration:none; color:inherit }
 .eo-btn-preview {
   padding:8px 16px; background:var(--gold); color:#0B0F1A;
   border:none; border-radius:2px; font-size:.78rem; font-weight:600; cursor:pointer;
-  font-family:'DM Sans',sans-serif; transition:all var(--dur);
+  font-family:'Plus Jakarta Sans',sans-serif; transition:all var(--dur);
 }
 .eo-btn-preview:hover { background:var(--gold2) }
 .eo-btn-open {
@@ -714,7 +713,7 @@ a { text-decoration:none; color:inherit }
 .fg input, .fg select, .fg textarea {
   width:100%; padding:11px 14px;
   background:var(--card); border:1px solid var(--line);
-  border-radius:2px; color:var(--tx); font-family:'DM Sans',sans-serif; font-size:.88rem;
+  border-radius:2px; color:var(--tx); font-family:'Plus Jakarta Sans',sans-serif; font-size:.88rem;
   transition:all var(--dur);
 }
 .fg input:focus, .fg select:focus, .fg textarea:focus {
@@ -1575,4 +1574,51 @@ body.pl-lock{ overflow:hidden }
   .pl-mark{ width:80px; height:80px }
   .pl-logo{ width:44px; height:44px }
   .pl-word{ font-size:1.25rem }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ══  MOBILE NAV DRAWER — versi lebih premium & jelas terpisah
+   dari konten di belakangnya (scrim blur + shadow + ikon + stagger)
+   ═══════════════════════════════════════════════════════════════ */
+#mobMenuScrim{
+  position:fixed; inset:0; z-index:998; background:rgba(6,9,16,.5);
+  backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  opacity:0; pointer-events:none; transition:opacity .3s var(--ease); display:none;
+}
+@media (max-width:1024px){ #mobMenuScrim{ display:block } }
+#mobMenuScrim.show{ opacity:1; pointer-events:auto }
+
+.mob-menu{
+  border:1px solid var(--line); border-radius:0 0 var(--r-lg) var(--r-lg);
+  box-shadow:var(--shadow-2); padding:14px; gap:4px;
+}
+.mob-menu a{
+  display:flex; align-items:center; gap:12px;
+  padding:13px 14px; border-radius:var(--r-sm); border-bottom:none !important;
+  color:var(--tx2); font-weight:600; font-size:.94rem;
+  transition:background var(--dur), color var(--dur), transform var(--dur), padding-left var(--dur);
+  opacity:0; transform:translateX(-10px);
+}
+.mob-menu a svg{ flex-shrink:0; color:var(--tx3); transition:color var(--dur) }
+.mob-menu.show a{ animation:mobItemIn .4s var(--ease) forwards }
+.mob-menu.show a:nth-child(1){ animation-delay:.04s }
+.mob-menu.show a:nth-child(2){ animation-delay:.08s }
+.mob-menu.show a:nth-child(3){ animation-delay:.12s }
+.mob-menu.show a:nth-child(4){ animation-delay:.16s }
+.mob-menu.show a:nth-child(5){ animation-delay:.20s }
+.mob-menu.show a:nth-child(6){ animation-delay:.24s }
+.mob-menu.show a:nth-child(7){ animation-delay:.28s }
+@keyframes mobItemIn{ to{ opacity:1; transform:translateX(0) } }
+.mob-menu a:hover,.mob-menu a:active{ background:var(--ggold); color:var(--gold); padding-left:18px }
+.mob-menu a:hover svg,.mob-menu a:active svg{ color:var(--gold) }
+
+/* Hamburger -> X saat menu terbuka */
+.hamburger{ position:relative; z-index:1001 }
+.hamburger span{ transform-origin:center }
+.hamburger.active span:nth-child(1){ transform:translateY(6.5px) rotate(45deg) }
+.hamburger.active span:nth-child(2){ opacity:0 }
+.hamburger.active span:nth-child(3){ transform:translateY(-6.5px) rotate(-45deg) }
+
+@media (prefers-reduced-motion: reduce){
+  .mob-menu a{ opacity:1; transform:none; animation:none }
 }
