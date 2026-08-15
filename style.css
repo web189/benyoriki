@@ -1634,3 +1634,66 @@ body.pl-lock{ overflow:hidden }
 @media (prefers-reduced-motion: reduce){
   .mob-menu a{ opacity:1; transform:none; animation:none }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   ══  EMBED PREVIEW OVERLAY — versi premium: glow beraksen warna
+   per-kartu, skeleton mockup halaman di belakang ikon, animasi
+   napas, tombol lebih tegas. ══
+   ═══════════════════════════════════════════════════════════════ */
+.embed-overlay{
+  background:
+    radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--accent, var(--gold)) 16%, transparent), transparent 60%),
+    rgba(11,15,26,.88);
+  overflow:hidden;
+}
+[data-theme="light"] .embed-overlay{
+  background:
+    radial-gradient(circle at 50% 38%, color-mix(in srgb, var(--accent, var(--gold)) 14%, transparent), transparent 60%),
+    rgba(247,245,240,.9);
+}
+
+/* Skeleton "halaman web" samar di belakang, kesan ada konten nyata di baliknya */
+.embed-overlay::before{
+  content:''; position:absolute; inset:14% 16% auto 16%; height:56%;
+  border-radius:var(--r-md);
+  background:
+    linear-gradient(var(--card2) 22px, transparent 0) 0 0/100% 22px no-repeat,
+    repeating-linear-gradient(var(--card2) 0 10px, transparent 10px 22px) 0 40px/70% 100% no-repeat,
+    var(--card);
+  opacity:.55; filter:blur(.3px);
+  mask-image:radial-gradient(ellipse at 50% 30%, #000 0%, transparent 75%);
+  pointer-events:none;
+}
+
+.eo-content{ position:relative; z-index:1; padding:0 20px }
+
+.eo-icon{
+  width:64px; height:64px; margin:0 auto 16px; font-size:1.9rem;
+  display:flex; align-items:center; justify-content:center; border-radius:50%;
+  background:color-mix(in srgb, var(--accent, var(--gold)) 16%, transparent);
+  border:1px solid color-mix(in srgb, var(--accent, var(--gold)) 35%, transparent);
+  box-shadow:0 0 0 8px color-mix(in srgb, var(--accent, var(--gold)) 8%, transparent);
+  animation:eoBreathe 2.6s ease-in-out infinite;
+}
+@keyframes eoBreathe{
+  0%,100%{ transform:scale(1); box-shadow:0 0 0 8px color-mix(in srgb, var(--accent, var(--gold)) 8%, transparent) }
+  50%{ transform:scale(1.06); box-shadow:0 0 0 14px color-mix(in srgb, var(--accent, var(--gold)) 4%, transparent) }
+}
+
+.eo-title{ font-size:1.05rem }
+.eo-sub{ margin-bottom:20px; opacity:.85 }
+
+.eo-btn-preview{
+  background:var(--accent, var(--gold)); color:#0B0F1A; border-radius:var(--r-pill);
+  padding:10px 20px; box-shadow:0 10px 28px -8px color-mix(in srgb, var(--accent, var(--gold)) 55%, transparent);
+}
+.eo-btn-preview:hover{ filter:brightness(1.08); transform:translateY(-2px) }
+.eo-btn-open{
+  border-radius:var(--r-pill); padding:10px 20px;
+  border-color:color-mix(in srgb, var(--accent, var(--gold)) 40%, var(--line));
+}
+.eo-btn-open:hover{ border-color:var(--accent, var(--gold)); color:var(--accent, var(--gold)); background:color-mix(in srgb, var(--accent, var(--gold)) 8%, transparent) }
+
+@media (prefers-reduced-motion: reduce){
+  .eo-icon{ animation:none }
+}
