@@ -54,7 +54,7 @@
 </script>
 
 <link rel="icon" href="favicon.png">
-<link rel="apple-touch-icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
 <meta name="theme-color" content="#0B0F1A" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F7F5F0" media="(prefers-color-scheme: light)">
 
@@ -105,13 +105,21 @@
 <!-- ══ PRELOADER — splash screen bermerek, tampil ±6 detik saat halaman dibuka ══ -->
 <div id="preloader" aria-hidden="true">
   <div class="pl-bg"></div>
+  <div class="pl-aurora pla1"></div>
+  <div class="pl-aurora pla2"></div>
   <div class="pl-grid-scan"></div>
+
+  <!-- HUD bracket frame di 4 sudut layar -->
+  <span class="pl-hud pl-hud-tl"></span>
+  <span class="pl-hud pl-hud-tr"></span>
+  <span class="pl-hud pl-hud-bl"></span>
+  <span class="pl-hud pl-hud-br"></span>
 
   <div class="pl-corner pl-corner-tl"><span class="pl-dot-live"></span>SYSTEM</div>
   <div class="pl-corner pl-corner-tr">v2.0</div>
 
   <div class="pl-content">
-    <div class="pl-mark">
+    <div class="pl-mark" id="plMark">
       <svg viewBox="0 0 100 100" class="pl-ring pl-ring-outer">
         <circle cx="50" cy="50" r="47" class="pl-ring-dash"></circle>
       </svg>
@@ -123,10 +131,13 @@
     </div>
 
     <div class="pl-word"><span>@benyo</span><span class="pl-accent">riki</span></div>
-    <div class="pl-status" id="plStatus">Menyiapkan sistem website Anda…</div>
+    <div class="pl-status" id="plStatus"></div>
 
     <div class="pl-progress-row">
-      <div class="pl-bar"><div class="pl-bar-fill" id="plBarFill"></div></div>
+      <div class="pl-bar">
+        <div class="pl-bar-fill" id="plBarFill"></div>
+        <div class="pl-bar-ticks"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
       <div class="pl-percent" id="plPercent">0%</div>
     </div>
   </div>
@@ -1009,18 +1020,30 @@
 
     <div class="testi-carousel-wrap">
       <div class="testi-img-grid" id="testiGrid">
-        <picture>
-          <source srcset="img/testi1.webp" type="image/webp">
-          <img src="img/testi1.jpg" alt="Testimoni klien 1 via WhatsApp — puas dengan website UMKM" class="testi-img" loading="lazy">
-        </picture>
-        <picture>
-          <source srcset="img/testi2.webp" type="image/webp">
-          <img src="img/testi2.jpg" alt="Testimoni klien 2 via WhatsApp — hasil proyek benyoriki" class="testi-img" loading="lazy">
-        </picture>
-        <picture>
-          <source srcset="img/testi3.webp" type="image/webp">
-          <img src="img/testi3.jpg" alt="Testimoni klien 3 via WhatsApp — review jasa website" class="testi-img" loading="lazy">
-        </picture>
+        <div class="testi-card">
+          <picture>
+            <source srcset="img/testi1.webp" type="image/webp">
+            <img src="img/testi1.jpg" alt="Testimoni klien 1 via WhatsApp — puas dengan website UMKM" class="testi-img" loading="lazy">
+          </picture>
+          <span class="testi-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>WhatsApp Terverifikasi</span>
+          <div class="testi-caption">CV. Asa Mandiri Niaga — Sistem Input Barang &amp; Laba Kas</div>
+        </div>
+        <div class="testi-card">
+          <picture>
+            <source srcset="img/testi2.webp" type="image/webp">
+            <img src="img/testi2.jpg" alt="Testimoni klien 2 via WhatsApp — hasil proyek benyoriki" class="testi-img" loading="lazy">
+          </picture>
+          <span class="testi-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>WhatsApp Terverifikasi</span>
+          <div class="testi-caption">UMKM — Konsultasi &amp; Pembuatan Website Sistem</div>
+        </div>
+        <div class="testi-card">
+          <picture>
+            <source srcset="img/testi3.webp" type="image/webp">
+            <img src="img/testi3.jpg" alt="Testimoni klien 3 via WhatsApp — review jasa website" class="testi-img" loading="lazy">
+          </picture>
+          <span class="testi-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>WhatsApp Terverifikasi</span>
+          <div class="testi-caption">UMKM Studio Tato — Website Portofolio &amp; Galeri</div>
+        </div>
       </div>
     </div>
 

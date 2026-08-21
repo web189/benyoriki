@@ -660,9 +660,9 @@ if (modal) {
   if (!grid || !dots.length) return;
 
   function getActiveIndex() {
-    const imgs = grid.querySelectorAll('.testi-img');
-    if (!imgs.length) return 0;
-    const itemW = imgs[0].offsetWidth + 12; // width + gap
+    const cards = grid.querySelectorAll('.testi-card');
+    if (!cards.length) return 0;
+    const itemW = cards[0].offsetWidth + 12; // width + gap
     return Math.min(Math.round(grid.scrollLeft / itemW), dots.length - 1);
   }
 
@@ -676,9 +676,9 @@ if (modal) {
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
       const idx = parseInt(dot.dataset.index, 10);
-      const imgs = grid.querySelectorAll('.testi-img');
-      if (!imgs.length) return;
-      const itemW = imgs[0].offsetWidth + 12;
+      const cards = grid.querySelectorAll('.testi-card');
+      if (!cards.length) return;
+      const itemW = cards[0].offsetWidth + 12;
       grid.scrollTo({ left: itemW * idx, behavior: 'smooth' });
     });
   });

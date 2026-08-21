@@ -675,13 +675,17 @@ a { text-decoration:none; color:inherit }
 .testi-img-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  gap: 14px;
 }
+.testi-card {
+  position: relative; overflow: hidden; display: flex; flex-direction: column;
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r-md);
+  transition: border-color .3s, box-shadow .3s, transform .3s;
+}
+.testi-card:hover { border-color: rgba(201,168,76,.4); box-shadow: 0 14px 32px -12px rgba(201,168,76,.25); transform: translateY(-3px) }
 /* Bungkus <picture> untuk source WebP+fallback JPG tidak boleh ikut jadi
-   grid/flex item — biarkan .testi-img di dalamnya yang berperan langsung. */
-.testi-img-grid picture { display: contents }
+   flex item — biarkan .testi-img di dalamnya yang berperan langsung. */
+.testi-card picture { display: contents }
 
 .testi-img {
   width: 100%;
@@ -692,7 +696,24 @@ a { text-decoration:none; color:inherit }
   display: block;
   transition: transform .35s cubic-bezier(.34,1.56,.64,1), opacity var(--dur);
 }
-.testi-img:hover { opacity: .88; transform: scale(1.02) }
+.testi-card:hover .testi-img { opacity: .92; transform: scale(1.02) }
+
+/* Badge "WhatsApp Terverifikasi" — kesan bukti asli, bukan sekadar teks */
+.testi-badge {
+  position: absolute; top: 10px; left: 10px; z-index: 2;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(11,15,26,.72); backdrop-filter: blur(4px);
+  border: 1px solid rgba(61,220,132,.4); color: #e8fbee;
+  font-size: .62rem; font-weight: 600; letter-spacing: .1px;
+  padding: 4px 9px 4px 7px; border-radius: 20px;
+}
+.testi-badge svg { color: #3ddc84; flex-shrink: 0 }
+
+/* Caption ringkas di bawah tiap screenshot — konteks proyeknya apa */
+.testi-caption {
+  padding: 10px 12px; font-size: .72rem; line-height: 1.4;
+  color: var(--tx2); background: var(--card2); border-top: 1px solid var(--line);
+}
 
 /* Dots — hidden on desktop */
 .testi-dots {
@@ -1129,15 +1150,17 @@ a { text-decoration:none; color:inherit }
   .testi-img-grid::-webkit-scrollbar { display: none }
 
   .testi-img {
-    flex: 0 0 72vw;
-    max-width: 280px;
     aspect-ratio: 9/16;       /* portrait — alami screenshot WA */
     object-position: top center;
-    scroll-snap-align: center;
-    border-radius: 8px;
-    border: 1px solid var(--line);
     transform: none !important; /* disable hover scale di touch */
   }
+
+  .testi-card {
+    flex: 0 0 72vw;
+    max-width: 280px;
+    scroll-snap-align: center;
+  }
+  .testi-card:hover { transform: none } /* disable hover-lift di touch */
 
   /* Tampilkan dots */
   .testi-dots { display: flex }
