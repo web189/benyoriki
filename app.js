@@ -814,23 +814,89 @@ if (!document.getElementById('rippleStyle')) {
   window.addEventListener('load', snapBack);
 })();
 
-/* ── PRELOADER — tampil ±5 detik lalu fade-out halus ───────────────── */
+/* ── PRELOADER — tampil ±6 detik dengan status & counter dinamis lalu fade-out premium ── */
 (function preloader() {
   const pl = document.getElementById('preloader');
   if (!pl) return;
 
   document.body.classList.add('pl-lock');
 
-  const MIN_DISPLAY_MS = 5000;
+  const MIN_DISPLAY_MS = 6000;
   const start = Date.now();
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Status berganti dengan efek ketik (typewriter) ──
+  const statusEl = document.getElementById('plStatus');
+  const markEl = document.getElementById('plMark');
+  const messages = [
+    'Menyiapkan sistem website Anda…',
+    'Memuat komponen antarmuka…',
+    'Mengoptimalkan tampilan visual…',
+    'Menghubungkan ke server…',
+    'Menyelesaikan sentuhan akhir…',
+    'Semua siap ✓'
+  ];
+  let msgIndex = 0;
+  let typeTimer = null;
+
+  function typeText(text) {
+    if (!statusEl) return;
+    clearInterval(typeTimer);
+    if (reduceMotion) { statusEl.textContent = text; return; }
+    statusEl.textContent = '';
+    let i = 0;
+    typeTimer = setInterval(() => {
+      i++;
+      statusEl.textContent = text.slice(0, i);
+      if (i >= text.length) clearInterval(typeTimer);
+    }, 22);
+  }
+
+  function flashMark() {
+    if (!markEl || reduceMotion) return;
+    markEl.classList.add('pl-flash');
+    setTimeout(() => markEl.classList.remove('pl-flash'), 320);
+  }
+
+  typeText(messages[0]);
+
+  const msgInterval = setInterval(() => {
+    msgIndex++;
+    if (msgIndex >= messages.length) { clearInterval(msgInterval); return; }
+    typeText(messages[msgIndex]);
+    flashMark();
+  }, MIN_DISPLAY_MS / messages.length);
+
+  // ── Percentage counter synced ke MIN_DISPLAY_MS, dengan efek digit-roll tiap angka berubah ──
+  const pctEl = document.getElementById('plPercent');
+  let pctRAF, lastPct = -1;
+  function tickPct() {
+    const elapsed = Date.now() - start;
+    const pct = Math.min(100, Math.floor((elapsed / MIN_DISPLAY_MS) * 100));
+    if (pctEl && pct !== lastPct) {
+      lastPct = pct;
+      pctEl.textContent = pct + '%';
+      if (!reduceMotion) {
+        pctEl.classList.remove('pl-tick');
+        void pctEl.offsetWidth; // reflow supaya animasi bisa retrigger
+        pctEl.classList.add('pl-tick');
+      }
+    }
+    if (pct < 100) { pctRAF = requestAnimationFrame(tickPct); }
+  }
+  tickPct();
 
   function hidePreloader() {
     const elapsed = Date.now() - start;
     const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
     setTimeout(() => {
+      clearInterval(msgInterval);
+      clearInterval(typeTimer);
+      cancelAnimationFrame(pctRAF);
+      if (pctEl) pctEl.textContent = '100%';
       pl.classList.add('pl-hide');
       document.body.classList.remove('pl-lock');
-      setTimeout(() => { pl.remove(); }, 800); // bersihkan dari DOM setelah transisi selesai
+      setTimeout(() => { pl.remove(); }, 900); // bersihkan dari DOM setelah transisi selesai
     }, remaining);
   }
 

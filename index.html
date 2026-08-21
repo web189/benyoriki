@@ -102,21 +102,37 @@
 </head>
 <body>
 
-<!-- ══ PRELOADER — splash screen bermerek, tampil ±5 detik saat halaman dibuka ══ -->
+<!-- ══ PRELOADER — splash screen bermerek, tampil ±6 detik saat halaman dibuka ══ -->
 <div id="preloader" aria-hidden="true">
   <div class="pl-bg"></div>
+  <div class="pl-grid-scan"></div>
+
+  <div class="pl-corner pl-corner-tl"><span class="pl-dot-live"></span>SYSTEM</div>
+  <div class="pl-corner pl-corner-tr">v2.0</div>
+
   <div class="pl-content">
     <div class="pl-mark">
-      <svg viewBox="0 0 100 100" class="pl-ring">
-        <circle cx="50" cy="50" r="42" class="pl-ring-track"></circle>
-        <circle cx="50" cy="50" r="42" class="pl-ring-fill"></circle>
+      <svg viewBox="0 0 100 100" class="pl-ring pl-ring-outer">
+        <circle cx="50" cy="50" r="47" class="pl-ring-dash"></circle>
+      </svg>
+      <svg viewBox="0 0 100 100" class="pl-ring pl-ring-inner">
+        <circle cx="50" cy="50" r="38" class="pl-ring-track"></circle>
+        <circle cx="50" cy="50" r="38" class="pl-ring-fill"></circle>
       </svg>
       <img src="favicon.png" alt="" class="pl-logo">
     </div>
+
     <div class="pl-word"><span>@benyo</span><span class="pl-accent">riki</span></div>
-    <div class="pl-tagline">Menyiapkan sistem website Anda…</div>
-    <div class="pl-bar"><div class="pl-bar-fill"></div></div>
+    <div class="pl-status" id="plStatus">Menyiapkan sistem website Anda…</div>
+
+    <div class="pl-progress-row">
+      <div class="pl-bar"><div class="pl-bar-fill" id="plBarFill"></div></div>
+      <div class="pl-percent" id="plPercent">0%</div>
+    </div>
   </div>
+
+  <div class="pl-corner pl-corner-bl">@benyoriki · Jasa Website</div>
+  <div class="pl-corner pl-corner-br">Build 2026.08</div>
 </div>
 
 <!-- ══ TOPBAR IDENTITY STRIP ══ -->
@@ -402,7 +418,7 @@
             <div class="ei-left">
               <div class="ei-num">01</div>
               <div>
-                <div class="ei-cat">E-Commerce <span class="ei-time">⚡ Setara Paket Standar</span></div>
+                <div class="ei-cat">E-Commerce <span class="ei-time">⚡ Paket Standar</span></div>
                 <h3 class="ei-title">Toko Online Modern</h3>
                 <p class="ei-desc">E-commerce lengkap dengan katalog dinamis, cart system, dan stok real-time.</p>
               </div>
@@ -461,7 +477,7 @@
             <div class="ei-left">
               <div class="ei-num">02</div>
               <div>
-                <div class="ei-cat">Booking Platform <span class="ei-time">⚡ Setara Paket Pro</span></div>
+                <div class="ei-cat">Booking Platform <span class="ei-time">⚡ Paket Pro</span></div>
                 <h3 class="ei-title">Lovia Partner</h3>
                 <p class="ei-desc">Platform booking talent digital dengan sistem chat, jadwal layanan, dan dashboard admin & talent terpisah.</p>
               </div>
@@ -519,7 +535,7 @@
             <div class="ei-left">
               <div class="ei-num">03</div>
               <div>
-                <div class="ei-cat">Travel & Transport <span class="ei-time">⚡ Setara Paket Standar</span></div>
+                <div class="ei-cat">Travel & Transport <span class="ei-time">⚡ Paket Standar</span></div>
                 <h3 class="ei-title">Gilang Trans</h3>
                 <p class="ei-desc">Website travel antar kota dengan pencarian rute, filter harga & fasilitas, dan booking cepat via WhatsApp.</p>
               </div>
@@ -577,7 +593,7 @@
             <div class="ei-left">
               <div class="ei-num">04</div>
               <div>
-                <div class="ei-cat">Layanan Digital <span class="ei-time">⚡ Setara Paket Standar</span></div>
+                <div class="ei-cat">Layanan Digital <span class="ei-time">⚡ Paket Standar</span></div>
                 <h3 class="ei-title">FreshWave Laundry</h3>
                 <p class="ei-desc">Laundry online dengan kalkulator harga otomatis, tracking pesanan real-time, dan cek jangkauan antar-jemput.</p>
               </div>
@@ -635,7 +651,7 @@
             <div class="ei-left">
               <div class="ei-num">05</div>
               <div>
-                <div class="ei-cat">Booking & Wisata <span class="ei-time">⚡ Setara Paket Standar</span></div>
+                <div class="ei-cat">Booking & Wisata <span class="ei-time">⚡ Paket Standar</span></div>
                 <h3 class="ei-title">Pemancingan Gerry</h3>
                 <p class="ei-desc">Website tempat pemancingan dengan booking kolam, galeri foto, harga paket, dan sistem event & lomba.</p>
               </div>
@@ -694,7 +710,7 @@
             <div class="ei-left">
               <div class="ei-num">06</div>
               <div>
-                <div class="ei-cat">Sport App <span class="ei-time">⚡ Setara Paket Pro</span></div>
+                <div class="ei-cat">Sport App <span class="ei-time">⚡ Paket Pro</span></div>
                 <h3 class="ei-title">Duel Boxing Arena</h3>
                 <p class="ei-desc">Aplikasi cari lawan & jadwalkan duel olahraga 1v1 dengan map arena, sistem rating, dan ranking pemain.</p>
               </div>
@@ -752,7 +768,7 @@
             <div class="ei-left">
               <div class="ei-num">07</div>
               <div>
-                <div class="ei-cat">Jasa Digital <span class="ei-time">⚡ Setara Paket Pro</span></div>
+                <div class="ei-cat">Jasa Digital <span class="ei-time">⚡ Paket Pro</span></div>
                 <h3 class="ei-title">JasaDaud Online</h3>
                 <p class="ei-desc">Platform jasa digital dengan manajemen order real-time & dashboard admin.</p>
               </div>
