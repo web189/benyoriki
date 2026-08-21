@@ -440,7 +440,7 @@ a { text-decoration:none; color:inherit }
 
 .embed-card-placeholder { display:none } /* placeholder — see animations block */
 
-.embed-browser { }
+.embed-browser { position:relative }
 .embed-topbar {
   display:flex; align-items:center; gap:10px;
   padding:10px 14px; background:var(--bg3); border-bottom:1px solid var(--b1);
@@ -467,6 +467,10 @@ a { text-decoration:none; color:inherit }
 .embed-overlay.hidden { opacity:0; pointer-events:none }
 .eo-content { text-align:center }
 .eo-icon { font-size:2rem; margin-bottom:10px }
+.eo-hook {
+  font-size:.74rem; font-weight:600; color:var(--accent, var(--gold));
+  margin:0 auto 10px; max-width:220px; line-height:1.4; letter-spacing:.1px;
+}
 .eo-title { font-family:'Sora',sans-serif; font-size:1rem; font-weight:700; margin-bottom:4px; letter-spacing:-.2px }
 .eo-sub { font-size:.76rem; color:var(--tx2); margin-bottom:16px }
 .eo-btns { display:flex; gap:8px; justify-content:center }
@@ -494,13 +498,23 @@ a { text-decoration:none; color:inherit }
 .eb-visit-btn:hover { background:var(--gold2) }
 
 .embed-info {
-  padding:20px 22px; display:flex; justify-content:space-between;
-  align-items:flex-start; gap:12px; border-top:1px solid var(--b1);
+  padding:20px 22px; display:flex; flex-direction:column; gap:16px;
+  border-top:1px solid var(--b1);
   position:relative; z-index:1;
 }
+.ei-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px }
 .ei-left { display:flex; align-items:flex-start; gap:14px }
 .ei-num { font-family:'DM Mono',monospace; font-size:.68rem; color:var(--accent, var(--gold)); font-weight:600; padding-top:2px; flex-shrink:0 }
-.ei-cat { font-size:.62rem; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--accent, var(--gold)); margin-bottom:5px; opacity:.9 }
+.ei-cat {
+  font-size:.62rem; font-weight:700; letter-spacing:.6px; text-transform:uppercase;
+  color:var(--accent, var(--gold)); margin-bottom:6px; opacity:.9;
+  display:flex; align-items:center; flex-wrap:wrap; gap:6px;
+}
+.ei-time {
+  text-transform:none; letter-spacing:.2px; font-weight:600;
+  font-size:.64rem; color:var(--tx3); opacity:1; white-space:nowrap;
+  padding:2px 8px; border:1px solid var(--line); border-radius:20px;
+}
 .ei-title { font-family:'Sora',sans-serif; font-size:.95rem; font-weight:700; margin-bottom:4px; letter-spacing:-.2px }
 .ei-desc { font-size:.78rem; color:var(--tx2); line-height:1.55 }
 .ei-tags { display:flex; flex-wrap:wrap; gap:4px; flex-shrink:0 }
@@ -510,6 +524,21 @@ a { text-decoration:none; color:inherit }
   transition:border-color .25s, color .25s;
 }
 .embed-card:hover .ei-tags span { border-color:var(--accent, var(--line)); color:var(--accent, var(--tx3)) }
+.embed-card:hover .ei-time { border-color:var(--accent, var(--line)); color:var(--accent, var(--tx3)) }
+
+/* ── WhatsApp CTA per project card ── */
+.embed-cta {
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  padding:11px 18px; border-radius:var(--r-pill);
+  background:var(--accent, var(--gold)); color:#fff !important;
+  font-size:.78rem; font-weight:700; letter-spacing:.1px;
+  text-decoration:none; transition:filter .25s, transform .25s, box-shadow .25s;
+  box-shadow:0 8px 22px -8px var(--glow, rgba(0,0,0,.3));
+}
+.embed-cta svg { flex-shrink:0; opacity:.95 }
+.embed-cta span { opacity:.92 }
+.embed-cta:hover { filter:brightness(1.1); transform:translateY(-2px); box-shadow:0 12px 28px -8px var(--glow, rgba(0,0,0,.4)) }
+.embed-cta:active { transform:translateY(0) }
 
 /* ── Glow halo behind each card, tinted by --accent/--glow ── */
 .embed-halo {
@@ -529,7 +558,7 @@ a { text-decoration:none; color:inherit }
 
 /* ── "New" ribbon badge on featured/new projects ── */
 .embed-badge {
-  position:absolute; top:50px; left:13px; z-index:5;
+  position:absolute; top:44px; left:13px; z-index:5;
   background:var(--accent, var(--gold)); color:#fff;
   font-size:.62rem; font-weight:700; letter-spacing:.3px;
   padding:4px 11px; border-radius:20px;
@@ -537,6 +566,37 @@ a { text-decoration:none; color:inherit }
 }
 
 .porto-counter { text-align:center; margin-top:28px; font-size:.8rem; color:var(--tx3); letter-spacing:.5px }
+
+/* ── Porto carousel wrap (bleed container — active only on mobile) ── */
+.porto-carousel-wrap { overflow:visible }
+
+/* ── Swipe hint — hidden by default, shown on mobile only ── */
+.porto-swipe-hint {
+  display:none; align-items:center; gap:6px; margin-bottom:14px;
+  font-size:.78rem; color:var(--tx2); font-weight:500;
+  transition:opacity .4s ease;
+}
+.porto-swipe-hint span { animation:swipeHint 1.8s ease-in-out infinite }
+@keyframes swipeHint {
+  0%,100% { transform:translateX(0); opacity:.75 }
+  50% { transform:translateX(6px); opacity:1 }
+}
+
+/* ── Dots indicator — hidden by default, shown on mobile only ── */
+.porto-dots { display:none; justify-content:center; gap:8px; margin-top:20px }
+.porto-dot {
+  width:8px; height:8px; border-radius:50%; background:var(--tx3);
+  cursor:pointer; transition:background .25s, transform .25s, width .25s;
+  border:none; padding:0; flex-shrink:0;
+}
+.porto-dot.active { background:var(--gold); width:22px; border-radius:5px }
+
+/* ── Idle pulse on preview icon — catches the eye without needing hover (mobile) ── */
+@keyframes idlePulse {
+  0%,100% { box-shadow:0 0 0 0 var(--glow, rgba(201,168,76,.35)) }
+  50% { box-shadow:0 0 0 14px transparent }
+}
+.eo-icon { display:inline-flex; border-radius:50%; animation:idlePulse 2.6s ease-in-out infinite }
 
 /* ═══════════════════════════════════════════════
    PRICING
@@ -1081,6 +1141,60 @@ a { text-decoration:none; color:inherit }
 
   /* Tampilkan dots */
   .testi-dots { display: flex }
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE CAROUSEL PORTOFOLIO — max 768px
+   Scroll snap horizontal + peek + dots + reordered content
+   ───────────────────────────────────────────── */
+@media (max-width:768px) {
+  .porto-swipe-hint { display:flex }
+
+  .porto-carousel-wrap {
+    overflow: hidden;
+    margin: 0 -6%;
+    padding: 0 6%;
+  }
+
+  .porto-embed-grid {
+    display: flex; flex-direction: row; gap: 14px;
+    background: transparent; border: none;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; -ms-overflow-style: none;
+    padding-bottom: 8px;
+  }
+  .porto-embed-grid::-webkit-scrollbar { display: none }
+
+  .embed-card {
+    flex: 0 0 85vw; max-width: 340px;
+    scroll-snap-align: center;
+    display: flex; flex-direction: column;
+  }
+  .embed-card:hover { transform: none !important } /* disable hover-lift on touch */
+
+  /* Reorder: title + description scannable first, live preview second */
+  .embed-info { order: -1; border-top: none; border-bottom: 1px solid var(--b1) }
+  .embed-browser { order: 1 }
+  .embed-frame-wrap { height: 220px }
+  .embed-iframe { height: 220px }
+
+  .ei-tags { display: flex !important } /* re-enable tags on card carousel — room is fine now */
+
+  /* Stack info block vertically so nothing gets squeezed into a narrow column */
+  .ei-top { flex-direction: column; align-items: stretch; gap: 12px }
+  .ei-left { width: 100% }
+  .ei-tags { width: 100% }
+  .ei-cat { flex-wrap: wrap }
+
+  .porto-dots { display: flex }
+  .porto-filter {
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; -ms-overflow-style: none;
+    flex-wrap: nowrap; max-width: 100%;
+  }
+  .porto-filter::-webkit-scrollbar { display: none }
+  .pf-btn { flex-shrink: 0 }
 }
 
 /* ═══════════════════════════════════════════════

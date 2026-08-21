@@ -352,62 +352,17 @@
       <button class="pf-btn" data-filter="app">App</button>
     </div>
 
+    <!-- Swipe hint — mobile only -->
+    <div class="porto-swipe-hint" id="portoSwipeHint">
+      <span>👉 Geser untuk lihat semua proyek</span>
+    </div>
+
     <!-- PORTO EMBED GRID -->
+    <div class="porto-carousel-wrap">
     <div class="porto-embed-grid" id="portoGrid">
 
       <!-- Card 1 -->
-      <div class="embed-card" data-cat="ecommerce" data-num="01" style="--accent:#3B82F6;--glow:rgba(59,130,246,0.35)">
-        <div class="embed-browser">
-          <div class="embed-topbar">
-            <div class="eb-dots"><s></s><s></s><s></s></div>
-            <div class="eb-url">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-              jasadaud.online
-            </div>
-            <div class="eb-actions">
-              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
-              <a href="https://jasadaud.online/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              </a>
-            </div>
-          </div>
-          <div class="embed-frame-wrap">
-            <div class="embed-loading">
-              <div class="embed-spinner"></div>
-              <span>Memuat website...</span>
-            </div>
-            <iframe class="embed-iframe" data-src="https://jasadaud.online/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="JasaDaud Online Preview"></iframe>
-            <div class="embed-overlay">
-              <div class="eo-content">
-                <div class="eo-icon">🌐</div>
-                <div class="eo-title">Klik untuk Preview</div>
-                <div class="eo-sub">Atau buka langsung di tab baru</div>
-                <div class="eo-btns">
-                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
-                  <a href="https://jasadaud.online/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="embed-info">
-          <div class="ei-left">
-            <div class="ei-num">01</div>
-            <div>
-              <div class="ei-cat">Jasa Digital</div>
-              <h3 class="ei-title">JasaDaud Online</h3>
-              <p class="ei-desc">Platform jasa digital dengan manajemen order real-time & dashboard admin.</p>
-            </div>
-          </div>
-          <div class="ei-tags">
-            <span>Real-Time DB</span><span>Firebase</span><span>Dashboard</span>
-          </div>
-        </div>
-        <div class="embed-halo"></div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="embed-card" data-cat="ecommerce" data-num="02" style="--accent:#10B981;--glow:rgba(16,185,129,0.35)">
+      <div class="embed-card" data-cat="ecommerce" data-num="01" style="--accent:#10B981;--glow:rgba(16,185,129,0.35)">
         <div class="embed-browser">
           <div class="embed-topbar">
             <div class="eb-dots"><s></s><s></s><s></s></div>
@@ -431,6 +386,7 @@
             <div class="embed-overlay">
               <div class="eo-content">
                 <div class="eo-icon">🛒</div>
+                <div class="eo-hook">Lihat katalog & cart system-nya</div>
                 <div class="eo-title">Klik untuk Preview</div>
                 <div class="eo-sub">Atau buka langsung di tab baru</div>
                 <div class="eo-btns">
@@ -442,25 +398,31 @@
           </div>
         </div>
         <div class="embed-info">
-          <div class="ei-left">
-            <div class="ei-num">02</div>
-            <div>
-              <div class="ei-cat">E-Commerce</div>
-              <h3 class="ei-title">Toko Online Modern</h3>
-              <p class="ei-desc">E-commerce lengkap dengan katalog dinamis, cart system, dan stok real-time.</p>
+          <div class="ei-top">
+            <div class="ei-left">
+              <div class="ei-num">01</div>
+              <div>
+                <div class="ei-cat">E-Commerce <span class="ei-time">⚡ Setara Paket Standar</span></div>
+                <h3 class="ei-title">Toko Online Modern</h3>
+                <p class="ei-desc">E-commerce lengkap dengan katalog dinamis, cart system, dan stok real-time.</p>
+              </div>
+            </div>
+            <div class="ei-tags">
+              <span>E-Commerce</span><span>Cart</span><span>Stok Live</span>
             </div>
           </div>
-          <div class="ei-tags">
-            <span>E-Commerce</span><span>Cart</span><span>Stok Live</span>
-          </div>
+          <a class="embed-cta" href="https://wa.me/628988995637?text=Halo%20Riki%2C%20saya%20tertarik%20bikin%20website%20mirip%20Toko%20Online%20Modern" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.1 9 9.6 7.8 9.4 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.5.8 3.3 1.3 5.2 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5 1.1 1.1-3.4-.2-.3C3.5 14.5 3 13.3 3 12c0-4.4 3.6-8 9-8s9 3.6 9 8-4.6 9-9 9z"/></svg>
+            Mau seperti ini? <span>Chat Sekarang →</span>
+          </a>
         </div>
         <div class="embed-halo"></div>
       </div>
 
-      <!-- Card 3 -->
-      <div class="embed-card" data-cat="booking" data-num="03" style="--accent:#E11D6B;--glow:rgba(225,29,107,0.35)">
-        <div class="embed-badge">🔥 Terbaru</div>
+      <!-- Card 2 -->
+      <div class="embed-card" data-cat="booking" data-num="02" style="--accent:#E11D6B;--glow:rgba(225,29,107,0.35)">
         <div class="embed-browser">
+          <div class="embed-badge">🔥 Terbaru</div>
           <div class="embed-topbar">
             <div class="eb-dots"><s></s><s></s><s></s></div>
             <div class="eb-url">
@@ -483,6 +445,7 @@
             <div class="embed-overlay">
               <div class="eo-content">
                 <div class="eo-icon">💬</div>
+                <div class="eo-hook">Lihat sistem booking real-time-nya</div>
                 <div class="eo-title">Klik untuk Preview</div>
                 <div class="eo-sub">Atau buka langsung di tab baru</div>
                 <div class="eo-btns">
@@ -494,23 +457,29 @@
           </div>
         </div>
         <div class="embed-info">
-          <div class="ei-left">
-            <div class="ei-num">03</div>
-            <div>
-              <div class="ei-cat">Booking Platform</div>
-              <h3 class="ei-title">Lovia Partner</h3>
-              <p class="ei-desc">Platform booking talent digital dengan sistem chat, jadwal layanan, dan dashboard admin & talent terpisah.</p>
+          <div class="ei-top">
+            <div class="ei-left">
+              <div class="ei-num">02</div>
+              <div>
+                <div class="ei-cat">Booking Platform <span class="ei-time">⚡ Setara Paket Pro</span></div>
+                <h3 class="ei-title">Lovia Partner</h3>
+                <p class="ei-desc">Platform booking talent digital dengan sistem chat, jadwal layanan, dan dashboard admin & talent terpisah.</p>
+              </div>
+            </div>
+            <div class="ei-tags">
+              <span>Booking System</span><span>Multi-Dashboard</span><span>Live Chat</span>
             </div>
           </div>
-          <div class="ei-tags">
-            <span>Booking System</span><span>Multi-Dashboard</span><span>Live Chat</span>
-          </div>
+          <a class="embed-cta" href="https://wa.me/628988995637?text=Halo%20Riki%2C%20saya%20tertarik%20bikin%20website%20mirip%20Lovia%20Partner" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.1 9 9.6 7.8 9.4 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.5.8 3.3 1.3 5.2 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5 1.1 1.1-3.4-.2-.3C3.5 14.5 3 13.3 3 12c0-4.4 3.6-8 9-8s9 3.6 9 8-4.6 9-9 9z"/></svg>
+            Mau seperti ini? <span>Chat Sekarang →</span>
+          </a>
         </div>
         <div class="embed-halo"></div>
       </div>
 
-      <!-- Card 4 -->
-      <div class="embed-card" data-cat="travel" data-num="04" style="--accent:#F59E0B;--glow:rgba(245,158,11,0.35)">
+      <!-- Card 3 -->
+      <div class="embed-card" data-cat="travel" data-num="03" style="--accent:#F59E0B;--glow:rgba(245,158,11,0.35)">
         <div class="embed-browser">
           <div class="embed-topbar">
             <div class="eb-dots"><s></s><s></s><s></s></div>
@@ -534,6 +503,7 @@
             <div class="embed-overlay">
               <div class="eo-content">
                 <div class="eo-icon">🚐</div>
+                <div class="eo-hook">Coba cari & filter rute travelnya</div>
                 <div class="eo-title">Klik untuk Preview</div>
                 <div class="eo-sub">Atau buka langsung di tab baru</div>
                 <div class="eo-btns">
@@ -545,23 +515,29 @@
           </div>
         </div>
         <div class="embed-info">
-          <div class="ei-left">
-            <div class="ei-num">04</div>
-            <div>
-              <div class="ei-cat">Travel & Transport</div>
-              <h3 class="ei-title">Gilang Trans</h3>
-              <p class="ei-desc">Website travel antar kota dengan pencarian rute, filter harga & fasilitas, dan booking cepat via WhatsApp.</p>
+          <div class="ei-top">
+            <div class="ei-left">
+              <div class="ei-num">03</div>
+              <div>
+                <div class="ei-cat">Travel & Transport <span class="ei-time">⚡ Setara Paket Standar</span></div>
+                <h3 class="ei-title">Gilang Trans</h3>
+                <p class="ei-desc">Website travel antar kota dengan pencarian rute, filter harga & fasilitas, dan booking cepat via WhatsApp.</p>
+              </div>
+            </div>
+            <div class="ei-tags">
+              <span>Filter Rute</span><span>Booking WA</span><span>Admin Panel</span>
             </div>
           </div>
-          <div class="ei-tags">
-            <span>Filter Rute</span><span>Booking WA</span><span>Admin Panel</span>
-          </div>
+          <a class="embed-cta" href="https://wa.me/628988995637?text=Halo%20Riki%2C%20saya%20tertarik%20bikin%20website%20mirip%20Gilang%20Trans" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.1 9 9.6 7.8 9.4 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.5.8 3.3 1.3 5.2 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5 1.1 1.1-3.4-.2-.3C3.5 14.5 3 13.3 3 12c0-4.4 3.6-8 9-8s9 3.6 9 8-4.6 9-9 9z"/></svg>
+            Mau seperti ini? <span>Chat Sekarang →</span>
+          </a>
         </div>
         <div class="embed-halo"></div>
       </div>
 
-      <!-- Card 5 -->
-      <div class="embed-card" data-cat="layanan" data-num="05" style="--accent:#06B6D4;--glow:rgba(6,182,212,0.35)">
+      <!-- Card 4 -->
+      <div class="embed-card" data-cat="layanan" data-num="04" style="--accent:#06B6D4;--glow:rgba(6,182,212,0.35)">
         <div class="embed-browser">
           <div class="embed-topbar">
             <div class="eb-dots"><s></s><s></s><s></s></div>
@@ -585,6 +561,7 @@
             <div class="embed-overlay">
               <div class="eo-content">
                 <div class="eo-icon">🧺</div>
+                <div class="eo-hook">Coba kalkulator harga otomatisnya</div>
                 <div class="eo-title">Klik untuk Preview</div>
                 <div class="eo-sub">Atau buka langsung di tab baru</div>
                 <div class="eo-btns">
@@ -596,23 +573,29 @@
           </div>
         </div>
         <div class="embed-info">
-          <div class="ei-left">
-            <div class="ei-num">05</div>
-            <div>
-              <div class="ei-cat">Layanan Digital</div>
-              <h3 class="ei-title">FreshWave Laundry</h3>
-              <p class="ei-desc">Laundry online dengan kalkulator harga otomatis, tracking pesanan real-time, dan cek jangkauan antar-jemput.</p>
+          <div class="ei-top">
+            <div class="ei-left">
+              <div class="ei-num">04</div>
+              <div>
+                <div class="ei-cat">Layanan Digital <span class="ei-time">⚡ Setara Paket Standar</span></div>
+                <h3 class="ei-title">FreshWave Laundry</h3>
+                <p class="ei-desc">Laundry online dengan kalkulator harga otomatis, tracking pesanan real-time, dan cek jangkauan antar-jemput.</p>
+              </div>
+            </div>
+            <div class="ei-tags">
+              <span>Kalkulator Harga</span><span>Order Tracking</span><span>GPS Check</span>
             </div>
           </div>
-          <div class="ei-tags">
-            <span>Kalkulator Harga</span><span>Order Tracking</span><span>GPS Check</span>
-          </div>
+          <a class="embed-cta" href="https://wa.me/628988995637?text=Halo%20Riki%2C%20saya%20tertarik%20bikin%20website%20mirip%20FreshWave%20Laundry" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.1 9 9.6 7.8 9.4 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.5.8 3.3 1.3 5.2 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5 1.1 1.1-3.4-.2-.3C3.5 14.5 3 13.3 3 12c0-4.4 3.6-8 9-8s9 3.6 9 8-4.6 9-9 9z"/></svg>
+            Mau seperti ini? <span>Chat Sekarang →</span>
+          </a>
         </div>
         <div class="embed-halo"></div>
       </div>
 
-      <!-- Card 6 -->
-      <div class="embed-card" data-cat="booking" data-num="06" style="--accent:#22C55E;--glow:rgba(34,197,94,0.35)">
+      <!-- Card 5 -->
+      <div class="embed-card" data-cat="booking" data-num="05" style="--accent:#22C55E;--glow:rgba(34,197,94,0.35)">
         <div class="embed-browser">
           <div class="embed-topbar">
             <div class="eb-dots"><s></s><s></s><s></s></div>
@@ -636,6 +619,7 @@
             <div class="embed-overlay">
               <div class="eo-content">
                 <div class="eo-icon">🎣</div>
+                <div class="eo-hook">Lihat galeri & booking kolamnya</div>
                 <div class="eo-title">Klik untuk Preview</div>
                 <div class="eo-sub">Atau buka langsung di tab baru</div>
                 <div class="eo-btns">
@@ -647,25 +631,31 @@
           </div>
         </div>
         <div class="embed-info">
-          <div class="ei-left">
-            <div class="ei-num">06</div>
-            <div>
-              <div class="ei-cat">Booking & Wisata</div>
-              <h3 class="ei-title">Pemancingan Gerry</h3>
-              <p class="ei-desc">Website tempat pemancingan dengan booking kolam, galeri foto, harga paket, dan sistem event & lomba.</p>
+          <div class="ei-top">
+            <div class="ei-left">
+              <div class="ei-num">05</div>
+              <div>
+                <div class="ei-cat">Booking & Wisata <span class="ei-time">⚡ Setara Paket Standar</span></div>
+                <h3 class="ei-title">Pemancingan Gerry</h3>
+                <p class="ei-desc">Website tempat pemancingan dengan booking kolam, galeri foto, harga paket, dan sistem event & lomba.</p>
+              </div>
+            </div>
+            <div class="ei-tags">
+              <span>Booking Kolam</span><span>Galeri Foto</span><span>Event System</span>
             </div>
           </div>
-          <div class="ei-tags">
-            <span>Booking Kolam</span><span>Galeri Foto</span><span>Event System</span>
-          </div>
+          <a class="embed-cta" href="https://wa.me/628988995637?text=Halo%20Riki%2C%20saya%20tertarik%20bikin%20website%20mirip%20Pemancingan%20Gerry" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.1 9 9.6 7.8 9.4 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.5.8 3.3 1.3 5.2 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5 1.1 1.1-3.4-.2-.3C3.5 14.5 3 13.3 3 12c0-4.4 3.6-8 9-8s9 3.6 9 8-4.6 9-9 9z"/></svg>
+            Mau seperti ini? <span>Chat Sekarang →</span>
+          </a>
         </div>
         <div class="embed-halo"></div>
       </div>
 
-      <!-- Card 7 -->
-      <div class="embed-card" data-cat="app" data-num="07" style="--accent:#EF4444;--glow:rgba(239,68,68,0.35)">
-        <div class="embed-badge">🔥 Terbaru</div>
+      <!-- Card 6 -->
+      <div class="embed-card" data-cat="app" data-num="06" style="--accent:#EF4444;--glow:rgba(239,68,68,0.35)">
         <div class="embed-browser">
+          <div class="embed-badge">🔥 Terbaru</div>
           <div class="embed-topbar">
             <div class="eb-dots"><s></s><s></s><s></s></div>
             <div class="eb-url">
@@ -688,6 +678,7 @@
             <div class="embed-overlay">
               <div class="eo-content">
                 <div class="eo-icon">🥊</div>
+                <div class="eo-hook">Lihat map arena & matchmaking-nya</div>
                 <div class="eo-title">Klik untuk Preview</div>
                 <div class="eo-sub">Atau buka langsung di tab baru</div>
                 <div class="eo-btns">
@@ -699,22 +690,90 @@
           </div>
         </div>
         <div class="embed-info">
-          <div class="ei-left">
-            <div class="ei-num">07</div>
-            <div>
-              <div class="ei-cat">Sport App</div>
-              <h3 class="ei-title">Duel Boxing Arena</h3>
-              <p class="ei-desc">Aplikasi cari lawan & jadwalkan duel olahraga 1v1 dengan map arena, sistem rating, dan ranking pemain.</p>
+          <div class="ei-top">
+            <div class="ei-left">
+              <div class="ei-num">06</div>
+              <div>
+                <div class="ei-cat">Sport App <span class="ei-time">⚡ Setara Paket Pro</span></div>
+                <h3 class="ei-title">Duel Boxing Arena</h3>
+                <p class="ei-desc">Aplikasi cari lawan & jadwalkan duel olahraga 1v1 dengan map arena, sistem rating, dan ranking pemain.</p>
+              </div>
+            </div>
+            <div class="ei-tags">
+              <span>Map Arena</span><span>Matchmaking</span><span>Ranking</span>
             </div>
           </div>
-          <div class="ei-tags">
-            <span>Map Arena</span><span>Matchmaking</span><span>Ranking</span>
+          <a class="embed-cta" href="https://wa.me/628988995637?text=Halo%20Riki%2C%20saya%20tertarik%20bikin%20aplikasi%20mirip%20Duel%20Boxing%20Arena" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.1 9 9.6 7.8 9.4 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.5.8 3.3 1.3 5.2 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5 1.1 1.1-3.4-.2-.3C3.5 14.5 3 13.3 3 12c0-4.4 3.6-8 9-8s9 3.6 9 8-4.6 9-9 9z"/></svg>
+            Mau seperti ini? <span>Chat Sekarang →</span>
+          </a>
+        </div>
+        <div class="embed-halo"></div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="embed-card" data-cat="ecommerce" data-num="07" style="--accent:#3B82F6;--glow:rgba(59,130,246,0.35)">
+        <div class="embed-browser">
+          <div class="embed-topbar">
+            <div class="eb-dots"><s></s><s></s><s></s></div>
+            <div class="eb-url">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              jasadaud.online
+            </div>
+            <div class="eb-actions">
+              <span class="eb-live"><span class="live-dot"></span>LIVE</span>
+              <a href="https://jasadaud.online/" target="_blank" rel="noopener" class="eb-open" title="Buka di tab baru">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
           </div>
+          <div class="embed-frame-wrap">
+            <div class="embed-loading">
+              <div class="embed-spinner"></div>
+              <span>Memuat website...</span>
+            </div>
+            <iframe class="embed-iframe" data-src="https://jasadaud.online/" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" title="JasaDaud Online Preview"></iframe>
+            <div class="embed-overlay">
+              <div class="eo-content">
+                <div class="eo-icon">🌐</div>
+                <div class="eo-hook">Lihat dashboard admin real-time-nya</div>
+                <div class="eo-title">Klik untuk Preview</div>
+                <div class="eo-sub">Atau buka langsung di tab baru</div>
+                <div class="eo-btns">
+                  <button class="eo-btn-preview" onclick="loadEmbed(this)">▶ Tampilkan Preview</button>
+                  <a href="https://jasadaud.online/" target="_blank" rel="noopener" class="eo-btn-open">↗ Buka Website</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="embed-info">
+          <div class="ei-top">
+            <div class="ei-left">
+              <div class="ei-num">07</div>
+              <div>
+                <div class="ei-cat">Jasa Digital <span class="ei-time">⚡ Setara Paket Pro</span></div>
+                <h3 class="ei-title">JasaDaud Online</h3>
+                <p class="ei-desc">Platform jasa digital dengan manajemen order real-time & dashboard admin.</p>
+              </div>
+            </div>
+            <div class="ei-tags">
+              <span>Real-Time DB</span><span>Firebase</span><span>Dashboard</span>
+            </div>
+          </div>
+          <a class="embed-cta" href="https://wa.me/628988995637?text=Halo%20Riki%2C%20saya%20tertarik%20bikin%20website%20mirip%20JasaDaud%20Online" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.1-1.2-.4-2.3-1.4-.9-.8-1.4-1.7-1.6-2-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5C10.1 9 9.6 7.8 9.4 7.3c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s1 2.5 1.1 2.7c.1.2 2 3 4.7 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.6-.3z"/><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.7 1.5 5.3L2 22l4.8-1.5c1.5.8 3.3 1.3 5.2 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.7 0-3.3-.5-4.7-1.3l-.3-.2-3.5 1.1 1.1-3.4-.2-.3C3.5 14.5 3 13.3 3 12c0-4.4 3.6-8 9-8s9 3.6 9 8-4.6 9-9 9z"/></svg>
+            Mau seperti ini? <span>Chat Sekarang →</span>
+          </a>
         </div>
         <div class="embed-halo"></div>
       </div>
 
     </div><!-- /porto-embed-grid -->
+    </div><!-- /porto-carousel-wrap -->
+
+    <!-- Dots indicator — mobile only -->
+    <div class="porto-dots" id="portoDots"></div>
 
     <!-- PORTO COUNTER -->
     <div class="porto-counter">

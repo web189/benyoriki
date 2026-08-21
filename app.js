@@ -684,6 +684,58 @@ if (modal) {
   });
 })();
 
+/* ── PORTFOLIO CAROUSEL DOTS (mobile scroll snap) ── */
+(function() {
+  const grid = document.getElementById('portoGrid');
+  const dotsWrap = document.getElementById('portoDots');
+  const hint = document.getElementById('portoSwipeHint');
+  if (!grid || !dotsWrap) return;
+
+  function visibleCards() {
+    return Array.from(grid.querySelectorAll('.embed-card'))
+      .filter(c => c.style.display !== 'none' && !c.classList.contains('hidden'));
+  }
+
+  function buildDots() {
+    const cards = visibleCards();
+    dotsWrap.innerHTML = '';
+    cards.forEach((card, i) => {
+      const dot = document.createElement('button');
+      dot.className = 'porto-dot' + (i === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Proyek ' + (i + 1));
+      dot.addEventListener('click', () => {
+        const itemW = card.offsetWidth + 14;
+        grid.scrollTo({ left: itemW * i, behavior: 'smooth' });
+      });
+      dotsWrap.appendChild(dot);
+    });
+  }
+
+  function updateActiveDot() {
+    const cards = visibleCards();
+    if (!cards.length) return;
+    const itemW = cards[0].offsetWidth + 14;
+    const idx = Math.min(Math.round(grid.scrollLeft / itemW), cards.length - 1);
+    dotsWrap.querySelectorAll('.porto-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  buildDots();
+  grid.addEventListener('scroll', () => {
+    updateActiveDot();
+    if (hint && grid.scrollLeft > 20) hint.style.opacity = '0';
+  }, { passive: true });
+
+  // Rebuild dots after filter transitions settle (matches ~250ms fade in filter logic above)
+  document.querySelectorAll('.pf-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      grid.scrollTo({ left: 0 });
+      setTimeout(buildDots, 280);
+    });
+  });
+
+  window.addEventListener('resize', buildDots);
+})();
+
 /* ── PAGE LOAD ANIMATION ── */
 document.querySelectorAll('.hero-left > *').forEach((el, i) => {
   el.style.opacity = '0';
