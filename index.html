@@ -116,78 +116,15 @@
 </head>
 <body>
 
-<!-- ══ PRELOADER — splash screen bermerek, tampil ±6 detik saat halaman dibuka ══ -->
-<div id="preloader" aria-hidden="true">
-  <div class="pl-bg"></div>
-  <div class="pl-aurora pla1"></div>
-  <div class="pl-aurora pla2"></div>
-  <div class="pl-grid-scan"></div>
-
-  <!-- HUD bracket frame di 4 sudut layar -->
-  <span class="pl-hud pl-hud-tl"></span>
-  <span class="pl-hud pl-hud-tr"></span>
-  <span class="pl-hud pl-hud-bl"></span>
-  <span class="pl-hud pl-hud-br"></span>
-
-  <div class="pl-corner pl-corner-tl"><span class="pl-dot-live"></span>SYSTEM</div>
-  <div class="pl-corner pl-corner-tr">v2.0</div>
-
-  <div class="pl-content">
-    <div class="pl-mark" id="plMark">
-      <svg viewBox="0 0 100 100" class="pl-ring pl-ring-outer">
-        <circle cx="50" cy="50" r="47" class="pl-ring-dash"></circle>
-      </svg>
-      <svg viewBox="0 0 100 100" class="pl-ring pl-ring-inner">
-        <circle cx="50" cy="50" r="38" class="pl-ring-track"></circle>
-        <circle cx="50" cy="50" r="38" class="pl-ring-fill"></circle>
-      </svg>
-      <img src="favicon.png" alt="" class="pl-logo">
-    </div>
-
-    <div class="pl-word"><span>@benyo</span><span class="pl-accent">riki</span></div>
-    <div class="pl-status" id="plStatus"></div>
-
-    <div class="pl-progress-row">
-      <div class="pl-bar">
-        <div class="pl-bar-fill" id="plBarFill"></div>
-        <div class="pl-bar-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-      </div>
-      <div class="pl-percent" id="plPercent">0%</div>
-    </div>
-  </div>
-
-  <div class="pl-corner pl-corner-bl">@benyoriki · Jasa Website</div>
-  <div class="pl-corner pl-corner-br">Build 2026.08</div>
-</div>
-
-<!-- ══ TOPBAR IDENTITY STRIP ══ -->
-<div class="topbar-strip"></div>
-
-<!-- ══ CURSOR TRAIL ══ -->
-<div id="cursorGlow"></div>
-
-<!-- ══ AURORA BACKGROUND ══ -->
+<!-- ══ SUBTLE STATIC BACKGROUND (no motion) ══ -->
 <div class="bg-wrap" aria-hidden="true">
-  <canvas id="bgCanvas"></canvas>
-  <div class="aurora a1"></div>
-  <div class="aurora a2"></div>
-  <div class="aurora a3"></div>
-  <div class="aurora a4"></div>
-  <div class="flash fl1"></div>
-  <div class="flash fl2"></div>
-  <div class="flash fl3"></div>
-  <div class="shoot sh1"></div>
-  <div class="shoot sh2"></div>
-  <div class="shoot sh3"></div>
   <div class="grid-mesh"></div>
-  <div class="vignette"></div>
 </div>
 
 <!-- ══ NAVBAR ══ -->
 <nav class="navbar" id="navbar">
 <a href="#home" class="nav-brand">
   <img src="favicon.png" alt="Logo Benyoriki" class="brand-logo">
-  <div class="brand-orb"></div>
   <span>@benyo<b>riki</b></span>
 </a>
   <ul class="nav-links" id="navLinks">

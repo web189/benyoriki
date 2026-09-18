@@ -62,24 +62,8 @@ function closeMob() {
 }
 document.addEventListener('click', e => { if (!navbar?.contains(e.target)) closeMob(); });
 
-/* ── SECTION HEADING ENTRANCE OBSERVER ── */
-const headObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.style.opacity = '1';
-      e.target.style.transform = 'none';
-      e.target.style.filter = 'none';
-      headObs.unobserve(e.target);
-    }
-  });
-}, { threshold: .2 });
-document.querySelectorAll('.sec-h2, .sec-label, .sec-sub').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(24px)';
-  el.style.filter = 'blur(3px)';
-  el.style.transition = 'opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1), filter .6s ease';
-  headObs.observe(el);
-});
+/* Section-heading entrance animation removed — headings render at full
+   opacity immediately instead of fading/blurring in on scroll. */
 
 /* ── SMOOTH ANCHOR SCROLL with offset ── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -94,51 +78,6 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     }
   });
 });
-
-/* ── CURSOR GLOW ── */
-const cursorGlow = document.getElementById('cursorGlow');
-let cx = 0, cy = 0, tx = 0, ty = 0;
-document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
-function animCursor() {
-  cx += (tx - cx) * 0.12;
-  cy += (ty - cy) * 0.12;
-  if (cursorGlow) cursorGlow.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
-  requestAnimationFrame(animCursor);
-}
-animCursor();
-// Hide default cursor on desktop
-if (window.innerWidth > 768) document.body.style.cursor = 'auto';
-
-/* ── CANVAS PARTICLES ── */
-const canvas = document.getElementById('bgCanvas');
-const ctx = canvas?.getContext('2d');
-let pts = [];
-
-function resizeC() { if (!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-function mkPt() { return { x: Math.random() * canvas.width, y: Math.random() * canvas.height, vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3, r: Math.random() * 1.3 + .3, a: Math.random() * .4 + .07 }; }
-function initC() { pts = Array.from({ length: 65 }, mkPt); }
-function drawC() {
-  if (!ctx) return;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const light = html.getAttribute('data-theme') === 'light';
-  const rgb = light ? '37,99,235' : '90,150,255';
-  pts.forEach(p => {
-    p.x += p.vx; p.y += p.vy;
-    if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
-    if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
-    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${rgb},${p.a})`; ctx.fill();
-  });
-  pts.forEach((a, i) => {
-    for (let j = i + 1; j < pts.length; j++) {
-      const b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
-      if (d < 115) { ctx.beginPath(); ctx.strokeStyle = `rgba(${rgb},${.055 * (1 - d / 115)})`; ctx.lineWidth = .65; ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
-    }
-  });
-  requestAnimationFrame(drawC);
-}
-resizeC(); initC(); drawC();
-window.addEventListener('resize', () => { resizeC(); initC(); }, { passive: true });
 
 /* ── COUNTER ANIMATION ── */
 function runCounter(el) {
@@ -172,40 +111,20 @@ const cntObs = new IntersectionObserver(entries => {
 }, { threshold: .5 });
 document.querySelectorAll('[data-count]').forEach(el => cntObs.observe(el));
 
-/* ── DB WIDGET LIVE UPDATES ── */
+/* ── DB WIDGET LIVE UPDATES (slow, subtle — signals "real-time" without being distracting) ── */
 setInterval(() => {
   const o = document.getElementById('dbO');
   const r = document.getElementById('dbR');
   if (o) o.textContent = `#${1200 + Math.floor(Math.random() * 150)}`;
   if (r) r.textContent = `Rp ${(2 + Math.random() * .7).toFixed(1)}M`;
-}, 2600);
+}, 6000);
 setInterval(() => {
   const s = document.getElementById('dbS');
-  if (s) { s.textContent = '0ms ago'; setTimeout(() => { if (s) s.textContent = `${Math.floor(Math.random() * 90)}ms ago`; }, 900); }
-}, 1600);
+  if (s) s.textContent = `${Math.floor(Math.random() * 40)}ms ago`;
+}, 5000);
 
-/* ── MOCK BAR CHART ANIMATION ── */
-function animateMockBars() {
-  document.querySelectorAll('.mock-bar').forEach(bar => {
-    const h = 30 + Math.random() * 60;
-    bar.style.height = h + '%';
-  });
-}
-setInterval(animateMockBars, 3000);
-
-/* ── SCROLL REVEAL ── */
-const revObs = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i % 6 * 80);
-      revObs.unobserve(e.target);
-    }
-  });
-}, { threshold: .06 });
-document.querySelectorAll('.srv-card,.tg-item,.kl-list li,.price-card,.ps-content,.testi-card,.manfaat-card,.faq-item,.usp-item').forEach(el => {
-  el.classList.add('reveal');
-  revObs.observe(el);
-});
+/* Scroll-reveal removed — content is visible immediately, no
+   fade/slide-in choreography on every card. */
 
 /* ── 3D TILT ON EMBED CARDS ── */
 document.querySelectorAll('.embed-card').forEach(card => {
@@ -260,17 +179,6 @@ filterBtns.forEach(btn => {
     if (portoCount) setTimeout(() => { portoCount.textContent = visible; }, 100);
   });
 });
-
-/* ── EMBED CARDS ENTRANCE ── */
-const ecObs = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('ec-visible'), i * 80);
-      ecObs.unobserve(e.target);
-    }
-  });
-}, { threshold: .05 });
-embedCards.forEach(card => ecObs.observe(card));
 
 /* ── IFRAME EMBED LOADER — FIXED ── */
 function loadEmbed(btn) {
@@ -736,18 +644,8 @@ if (modal) {
   window.addEventListener('resize', buildDots);
 })();
 
-/* ── PAGE LOAD ANIMATION ── */
-document.querySelectorAll('.hero-left > *').forEach((el, i) => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(28px)';
-  el.style.filter = 'blur(4px)';
-  el.style.transition = `opacity .7s ${i * .13}s cubic-bezier(.16,1,.3,1), transform .7s ${i * .13}s cubic-bezier(.16,1,.3,1), filter .6s ${i * .13}s ease`;
-  requestAnimationFrame(() => setTimeout(() => {
-    el.style.opacity = '1';
-    el.style.transform = 'none';
-    el.style.filter = 'none';
-  }, 80 + i * 130));
-});
+/* Hero load animation removed — hero content is visible immediately
+   instead of materializing element-by-element with blur/slide delays. */
 
 /* ── BUTTON RIPPLE EFFECT ── */
 document.querySelectorAll('.btn-solid, .btn-ghost, .cta-btn, .form-submit, .wa-cta, .pc-btn').forEach(btn => {
@@ -815,96 +713,5 @@ if (!document.getElementById('rippleStyle')) {
 })();
 
 /* ── PRELOADER — tampil ±6 detik dengan status & counter dinamis lalu fade-out premium ── */
-(function preloader() {
-  const pl = document.getElementById('preloader');
-  if (!pl) return;
-
-  document.body.classList.add('pl-lock');
-
-  const MIN_DISPLAY_MS = 6000;
-  const start = Date.now();
-  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // ── Status berganti dengan efek ketik (typewriter) ──
-  const statusEl = document.getElementById('plStatus');
-  const markEl = document.getElementById('plMark');
-  const messages = [
-    'Menyiapkan sistem website Anda…',
-    'Memuat komponen antarmuka…',
-    'Mengoptimalkan tampilan visual…',
-    'Menghubungkan ke server…',
-    'Menyelesaikan sentuhan akhir…',
-    'Semua siap ✓'
-  ];
-  let msgIndex = 0;
-  let typeTimer = null;
-
-  function typeText(text) {
-    if (!statusEl) return;
-    clearInterval(typeTimer);
-    if (reduceMotion) { statusEl.textContent = text; return; }
-    statusEl.textContent = '';
-    let i = 0;
-    typeTimer = setInterval(() => {
-      i++;
-      statusEl.textContent = text.slice(0, i);
-      if (i >= text.length) clearInterval(typeTimer);
-    }, 22);
-  }
-
-  function flashMark() {
-    if (!markEl || reduceMotion) return;
-    markEl.classList.add('pl-flash');
-    setTimeout(() => markEl.classList.remove('pl-flash'), 320);
-  }
-
-  typeText(messages[0]);
-
-  const msgInterval = setInterval(() => {
-    msgIndex++;
-    if (msgIndex >= messages.length) { clearInterval(msgInterval); return; }
-    typeText(messages[msgIndex]);
-    flashMark();
-  }, MIN_DISPLAY_MS / messages.length);
-
-  // ── Percentage counter synced ke MIN_DISPLAY_MS, dengan efek digit-roll tiap angka berubah ──
-  const pctEl = document.getElementById('plPercent');
-  let pctRAF, lastPct = -1;
-  function tickPct() {
-    const elapsed = Date.now() - start;
-    const pct = Math.min(100, Math.floor((elapsed / MIN_DISPLAY_MS) * 100));
-    if (pctEl && pct !== lastPct) {
-      lastPct = pct;
-      pctEl.textContent = pct + '%';
-      if (!reduceMotion) {
-        pctEl.classList.remove('pl-tick');
-        void pctEl.offsetWidth; // reflow supaya animasi bisa retrigger
-        pctEl.classList.add('pl-tick');
-      }
-    }
-    if (pct < 100) { pctRAF = requestAnimationFrame(tickPct); }
-  }
-  tickPct();
-
-  function hidePreloader() {
-    const elapsed = Date.now() - start;
-    const remaining = Math.max(0, MIN_DISPLAY_MS - elapsed);
-    setTimeout(() => {
-      clearInterval(msgInterval);
-      clearInterval(typeTimer);
-      cancelAnimationFrame(pctRAF);
-      if (pctEl) pctEl.textContent = '100%';
-      pl.classList.add('pl-hide');
-      document.body.classList.remove('pl-lock');
-      setTimeout(() => { pl.remove(); }, 900); // bersihkan dari DOM setelah transisi selesai
-    }, remaining);
-  }
-
-  if (document.readyState === 'complete') {
-    hidePreloader();
-  } else {
-    window.addEventListener('load', hidePreloader);
-    // jaring pengaman: jangan sampai preloader nyangkut kalau event 'load' gagal
-    setTimeout(hidePreloader, MIN_DISPLAY_MS + 4000);
-  }
-})();
+/* Preloader removed — the site now renders immediately, which is both
+   faster and less distracting than a branded splash animation. */
