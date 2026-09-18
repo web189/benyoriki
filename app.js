@@ -713,5 +713,25 @@ if (!document.getElementById('rippleStyle')) {
 })();
 
 /* ── PRELOADER — tampil ±6 detik dengan status & counter dinamis lalu fade-out premium ── */
-/* Preloader removed — the site now renders immediately, which is both
-   faster and less distracting than a branded splash animation. */
+/* ── SPLASH SCREEN — shows for ~5s, then fades out (respects reduced motion) ── */
+(function () {
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+  const fill = document.getElementById('spFill');
+  const DURATION = 5000;
+  document.documentElement.classList.add('sp-lock');
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (fill) fill.style.width = '100%';
+  }));
+
+  setTimeout(() => {
+    splash.classList.add('sp-hide');
+    document.documentElement.classList.remove('sp-lock');
+    if (location.hash) {
+      const target = document.querySelector(location.hash);
+      if (target) target.scrollIntoView();
+    }
+    setTimeout(() => splash.remove(), 550);
+  }, DURATION);
+})();

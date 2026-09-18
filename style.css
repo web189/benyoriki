@@ -72,6 +72,39 @@ a { text-decoration:none; color:inherit }
 ::-webkit-scrollbar-track { background:var(--bg) }
 ::-webkit-scrollbar-thumb { background:var(--gold); border-radius:2px }
 
+/* ═══════════════════════════════════════════════
+   SPLASH SCREEN — lightweight, ~5s, no heavy FX
+   ═══════════════════════════════════════════════ */
+#splash {
+  position:fixed; inset:0; z-index:9999;
+  background:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:18px;
+  transition:opacity .5s ease;
+}
+#splash.sp-hide { opacity:0; pointer-events:none }
+html.sp-lock, html.sp-lock body { overflow:hidden; height:100% }
+.sp-mark {
+  width:64px; height:64px; border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  background:var(--card); border:1px solid var(--b2);
+  box-shadow:0 0 0 0 rgba(201,168,76,.35);
+  animation:spPulse 1.8s ease-in-out infinite;
+}
+.sp-mark img { width:38px; height:38px; object-fit:contain }
+@keyframes spPulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(201,168,76,.28) }
+  50%     { box-shadow:0 0 0 10px rgba(201,168,76,0) }
+}
+.sp-word { font-family:'Sora',sans-serif; font-weight:800; font-size:1.15rem; color:var(--tx); letter-spacing:-.2px }
+.sp-word span { color:var(--gold) }
+.sp-bar { width:140px; height:3px; border-radius:2px; background:var(--b1); overflow:hidden }
+.sp-fill { width:0%; height:100%; background:var(--gold); border-radius:2px; transition:width 5s linear }
+@media (prefers-reduced-motion: reduce) {
+  .sp-mark { animation:none }
+  .sp-fill { transition:none }
+}
+
 /* ── BACKGROUND — static, no motion ── */
 .bg-wrap { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden }
 .grid-mesh {
@@ -1559,7 +1592,8 @@ img,svg,video,iframe{ max-width:100%; height:auto }
 }
 .faq-item:hover .faq-q{ background:var(--ggold) }
 
-/* ── Section rhythm & container width polish ── */
+/* ── Alternating section tone for visual rhythm (static, zero cost) ── */
+#portofolio, #estimasi, #faq, #kontak { background:var(--bg2) }
 .section{ padding:132px 0 }
 .wrap{ max-width:1240px }
 .sec-h2{ letter-spacing:-1.2px }
