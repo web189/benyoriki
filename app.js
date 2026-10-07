@@ -718,7 +718,7 @@ if (!document.getElementById('rippleStyle')) {
   const splash = document.getElementById('splash');
   if (!splash) return;
   const fill = document.getElementById('spFill');
-  const DURATION = 5000;
+  const DURATION = 900;
   document.documentElement.classList.add('sp-lock');
 
   requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -735,3 +735,6 @@ if (!document.getElementById('rippleStyle')) {
     setTimeout(() => splash.remove(), 550);
   }, DURATION);
 })();
+
+/* sticky WA CTA: muncul setelah hero */
+(function(){const b=document.querySelector('.m-cta');if(!b)return;const f=()=>b.classList.toggle('show',window.scrollY>420);window.addEventListener('scroll',f,{passive:true});f();})();
