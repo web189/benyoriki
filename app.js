@@ -126,125 +126,6 @@ setInterval(() => {
 /* Scroll-reveal removed — content is visible immediately, no
    fade/slide-in choreography on every card. */
 
-/* ── 3D TILT ON EMBED CARDS ── */
-document.querySelectorAll('.embed-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width - .5;
-    const y = (e.clientY - r.top) / r.height - .5;
-    card.style.transform = `perspective(1200px) rotateY(${x * 5}deg) rotateX(${-y * 4}deg) translateY(-4px)`;
-    card.style.transition = 'transform .08s linear, background var(--dur)';
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-    card.style.transition = 'transform .45s cubic-bezier(.16,1,.3,1), background var(--dur)';
-  });
-});
-
-/* ── PORTFOLIO FILTER (EMBED CARDS) ── */
-const filterBtns = document.querySelectorAll('.pf-btn');
-const embedCards = document.querySelectorAll('.embed-card');
-const portoCount = document.getElementById('portoCount');
-
-filterBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const filter = btn.dataset.filter;
-    filterBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    let visible = 0;
-    embedCards.forEach(card => {
-      const cat = card.dataset.cat;
-      const show = filter === 'all' || cat === filter;
-      if (show) {
-        card.style.display = '';
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(16px)';
-        // Reflow trick untuk re-trigger transition
-        void card.offsetHeight;
-        requestAnimationFrame(() => {
-          card.style.transition = 'opacity .4s ease, transform .4s cubic-bezier(.16,1,.3,1)';
-          card.style.opacity = '1';
-          card.style.transform = '';
-        });
-        visible++;
-      } else {
-        card.style.transition = 'opacity .2s ease';
-        card.style.opacity = '0';
-        setTimeout(() => {
-          card.style.display = 'none';
-          card.style.transition = '';
-        }, 200);
-      }
-    });
-    if (portoCount) setTimeout(() => { portoCount.textContent = visible; }, 100);
-  });
-});
-
-/* ── IFRAME EMBED LOADER — FIXED ── */
-function loadEmbed(btn) {
-  const wrap = btn.closest('.embed-frame-wrap');
-  if (!wrap) return;
-  const overlay = wrap.querySelector('.embed-overlay');
-  const iframe = wrap.querySelector('.embed-iframe');
-  const loading = wrap.querySelector('.embed-loading');
-  if (!iframe || !overlay) return;
-
-  // Prevent double-loading
-  if (wrap.dataset.loaded === '1') {
-    overlay.classList.add('hidden');
-    return;
-  }
-
-  // Hide overlay immediately so user sees loading state
-  overlay.style.display = 'none';
-  loading?.classList.add('active');
-
-  const src = iframe.dataset.src;
-  if (!src) {
-    loading?.classList.remove('active');
-    overlay.style.display = '';
-    return;
-  }
-
-  // Set timeout fallback for blocked sites
-  const timeout = setTimeout(() => {
-    loading?.classList.remove('active');
-    showEmbedFallback(wrap, src);
-  }, 9000);
-
-  iframe.addEventListener('load', () => {
-    clearTimeout(timeout);
-    loading?.classList.remove('active');
-    iframe.classList.add('loaded');
-    wrap.dataset.loaded = '1';
-  }, { once: true });
-
-  iframe.addEventListener('error', () => {
-    clearTimeout(timeout);
-    loading?.classList.remove('active');
-    showEmbedFallback(wrap, src);
-  }, { once: true });
-
-  // Actually set the src — this triggers the load
-  iframe.src = src;
-}
-
-function showEmbedFallback(wrap, url) {
-  if (wrap.querySelector('.embed-blocked')) return;
-  const iframe = wrap.querySelector('.embed-iframe');
-  if (iframe) { iframe.style.display = 'none'; }
-  const blocked = document.createElement('div');
-  blocked.className = 'embed-blocked show';
-  blocked.innerHTML = `
-    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/></svg>
-    <div><strong>Preview tidak tersedia</strong><br>Website ini memblokir tampilan embed.<br>Tapi bisa dikunjungi langsung! ✅</div>
-    <a href="${url}" target="_blank" rel="noopener" class="eb-visit-btn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-      Buka Website Langsung
-    </a>`;
-  wrap.appendChild(blocked);
-}
-
 /* ── CONTACT FORM ── */
 function submitForm() {
   const nameEl = document.getElementById('fName');
@@ -592,58 +473,6 @@ if (modal) {
   });
 })();
 
-/* ── PORTFOLIO CAROUSEL DOTS (mobile scroll snap) ── */
-(function() {
-  const grid = document.getElementById('portoGrid');
-  const dotsWrap = document.getElementById('portoDots');
-  const hint = document.getElementById('portoSwipeHint');
-  if (!grid || !dotsWrap) return;
-
-  function visibleCards() {
-    return Array.from(grid.querySelectorAll('.embed-card'))
-      .filter(c => c.style.display !== 'none' && !c.classList.contains('hidden'));
-  }
-
-  function buildDots() {
-    const cards = visibleCards();
-    dotsWrap.innerHTML = '';
-    cards.forEach((card, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'porto-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Proyek ' + (i + 1));
-      dot.addEventListener('click', () => {
-        const itemW = card.offsetWidth + 14;
-        grid.scrollTo({ left: itemW * i, behavior: 'smooth' });
-      });
-      dotsWrap.appendChild(dot);
-    });
-  }
-
-  function updateActiveDot() {
-    const cards = visibleCards();
-    if (!cards.length) return;
-    const itemW = cards[0].offsetWidth + 14;
-    const idx = Math.min(Math.round(grid.scrollLeft / itemW), cards.length - 1);
-    dotsWrap.querySelectorAll('.porto-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-  }
-
-  buildDots();
-  grid.addEventListener('scroll', () => {
-    updateActiveDot();
-    if (hint && grid.scrollLeft > 20) hint.style.opacity = '0';
-  }, { passive: true });
-
-  // Rebuild dots after filter transitions settle (matches ~250ms fade in filter logic above)
-  document.querySelectorAll('.pf-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      grid.scrollTo({ left: 0 });
-      setTimeout(buildDots, 280);
-    });
-  });
-
-  window.addEventListener('resize', buildDots);
-})();
-
 /* Hero load animation removed — hero content is visible immediately
    instead of materializing element-by-element with blur/slide delays. */
 
@@ -677,23 +506,6 @@ if (!document.getElementById('rippleStyle')) {
   document.head.appendChild(s);
 }
 
-/* ── EMBED CARD HIDDEN — handled via style.display in filter ── */
-
-/* ── EMBED SPINNER CSS inject ── */
-(function() {
-  if (!document.getElementById('spinStyle')) {
-    const s = document.createElement('style');
-    s.id = 'spinStyle';
-    s.textContent = `
-      .embed-spinner{width:24px;height:24px;border:2px solid var(--b2);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
-      @keyframes spin{to{transform:rotate(360deg)}}
-      .embed-loading span{font-size:.72rem;color:var(--tx3)}
-      .embed-blocked.show{display:flex!important}
-      .embed-blocked svg{color:var(--tx3)}
-    `;
-    document.head.appendChild(s);
-  }
-})();
 /* ── LOCK HORIZONTAL SCROLL ──────────────────────────────────────────
    Jaring pengaman terakhir: apapun penyebabnya (elemen yang melebar,
    bug WebView, dsb), posisi geser horizontal dipaksa balik ke 0 setiap
