@@ -60,6 +60,22 @@
   window.addEventListener('resize', buildDots);
   buildDots();
 
+  /* ── STATUS (hasil tools/screenshots.mjs): LIVE hanya untuk website yang terverifikasi ── */
+  function applyStatus() {
+    fetch('img/porto/status.json', { cache: 'no-cache' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      if (!d || !d.projects) return;
+      var shots = 0;
+      cards.forEach(function (c) {
+        var p = d.projects[c.dataset.slug]; if (!p) return;
+        if (p.shot) shots++;
+        var b = c.querySelector('.pc-live');
+        if (p.live && b) { b.dataset.state = 'live'; b.querySelector('b').textContent = 'LIVE'; }
+      });
+      var el = document.getElementById('pstatShot'); if (el) el.textContent = shots;
+    }).catch(function () {});
+  }
+  (window.requestIdleCallback || function (f) { setTimeout(f, 800); })(applyStatus);
+
   /* ── MODAL ── */
   var pm = document.getElementById('pm');
   if (!pm) return;
@@ -82,7 +98,7 @@
     $('pmHost').textContent = d.host;
     $('pmOpen').href = d.url; $('pmFbOpen').href = d.url; $('pmWa').href = d.wa;
     pm.style.setProperty('--glow', card.style.getPropertyValue('--glow'));
-    $('pmFbPh').textContent = (card.querySelector('.pc-ph-ic') || {}).textContent || '🌐';
+    $('pmFbPh').textContent = 'Screenshot belum tersedia';
     var img = $('pmFbImg'); img.hidden = true; img.alt = 'Screenshot website ' + title;
     img.onload = function () { img.hidden = false; }; img.onerror = function () { img.hidden = true; };
     img.src = 'img/porto/' + d.slug + '.webp';
