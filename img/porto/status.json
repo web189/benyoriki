@@ -1,0 +1,119 @@
+{
+ "note": "live=true hanya jika screenshot diambil dari URL live oleh tools/screenshots.mjs (HTTP < 400). source=repo: dirender dari kode repo GitHub secara lokal, belum memverifikasi website live. source=user: screenshot dikirim pemilik situs.",
+ "projects": {
+  "barbershop": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "belajarbermain": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "bengkel": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "boxing": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "ebook": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "gym": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "kontrakan": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "kopdar": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "laundry": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "martabak": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "mbe": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "pemancingan-gerry": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "restoran": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "spklu": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "toko-online": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "tokobangunan": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "travel": {
+   "shot": true,
+   "live": false,
+   "source": "repo",
+   "checkedAt": "2026-10-29"
+  },
+  "nabilove": {
+   "shot": true,
+   "live": false,
+   "source": "user",
+   "checkedAt": "2026-10-29"
+  },
+  "jasadaud": {
+   "shot": true,
+   "live": false,
+   "source": "user",
+   "checkedAt": "2026-10-29"
+  }
+ }
+}
