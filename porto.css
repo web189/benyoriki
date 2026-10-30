@@ -133,3 +133,10 @@ html.pm-lock,html.pm-lock body{overflow:hidden}
   .pm-foot{flex-direction:column;align-items:stretch;gap:8px}.pm-foot-act{justify-content:space-between}
 }
 @media(prefers-reduced-motion:reduce){.pc,.pc *,.pm-box{animation:none!important;transition:none!important}}
+
+/* tombol "Lihat Semua" */
+.porto-more{display:flex;justify-content:center;margin-top:20px}
+.porto-more[hidden]{display:none}
+.porto-more-btn{padding:13px 28px;font-size:.92rem;border-radius:99px;box-shadow:0 10px 30px rgba(212,175,85,.25)}
+.porto-more-btn .i{width:16px;height:16px;transition:transform .3s}
+.porto-more-btn.open .i{transform:rotate(180deg)}

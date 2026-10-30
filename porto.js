@@ -11,17 +11,25 @@
   var hint = document.getElementById('portoSwipeHint');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── FILTER ── */
+  /* ── FILTER + "LIHAT SEMUA" (awal: 6 kartu = 2 baris x 3) ── */
+  var LIMIT = 6, filter = 'all', expanded = false, firstRender = true;
+  var more = document.getElementById('portoMore'), moreBtn = document.getElementById('portoMoreBtn'), moreTx = document.getElementById('portoMoreTx');
   function visible() { return cards.filter(function (c) { return !c.hidden; }); }
-  function applyFilter(f) {
-    var n = 0;
+  function render(animate) {
+    var matches = cards.filter(function (c) { return filter === 'all' || c.dataset.cat === filter; });
+    var shown = expanded ? matches : matches.slice(0, LIMIT);
     cards.forEach(function (c) {
-      var show = f === 'all' || c.dataset.cat === f;
-      c.hidden = !show;
-      c.classList.remove('pc-in');
-      if (show) { n++; if (!reduce) { void c.offsetWidth; c.classList.add('pc-in'); } }
+      var show = shown.indexOf(c) > -1, was = !c.hidden;
+      c.hidden = !show; c.classList.remove('pc-in');
+      if (show && !was && animate && !reduce) { void c.offsetWidth; c.classList.add('pc-in'); }
     });
-    if (countEl) countEl.textContent = n;
+    if (countEl) countEl.textContent = shown.length;
+    if (more) {
+      more.hidden = matches.length <= LIMIT;
+      moreBtn.setAttribute('aria-expanded', expanded);
+      moreTx.textContent = expanded ? 'Tampilkan Lebih Sedikit' : 'Lihat Semua ' + matches.length + ' Proyek';
+      moreBtn.classList.toggle('open', expanded);
+    }
     grid.scrollLeft = 0;
     buildDots();
   }
@@ -29,8 +37,12 @@
     b.addEventListener('click', function () {
       btns.forEach(function (x) { x.classList.remove('active'); x.setAttribute('aria-pressed', 'false'); });
       b.classList.add('active'); b.setAttribute('aria-pressed', 'true');
-      applyFilter(b.dataset.filter);
+      filter = b.dataset.filter; expanded = false; render(true);
     });
+  });
+  if (moreBtn) moreBtn.addEventListener('click', function () {
+    expanded = !expanded; render(true);
+    if (!expanded) { var f = document.getElementById('portoFilter'); if (f) f.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' }); }
   });
 
   /* ── DOTS (carousel HP) ── */
@@ -58,7 +70,7 @@
     });
   }, { passive: true });
   window.addEventListener('resize', buildDots);
-  buildDots();
+  render(false);
 
   /* ── STATUS (hasil tools/screenshots.mjs): LIVE hanya untuk website yang terverifikasi ── */
   function applyStatus() {
