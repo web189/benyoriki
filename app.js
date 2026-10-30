@@ -179,15 +179,15 @@ IDENTITAS:
 - Spesialisasi: Sistem website real-time, kasir online, toko digital, dashboard bisnis
 
 PAKET HARGA (SELALU SEBUT INI JIKA DITANYA HARGA):
-- Basic: Mulai Rp 200rb → Landing Page/Profil Bisnis, Hosting+Domain 1 tahun GRATIS, selesai 2–3 hari kerja
+- Basic: Mulai Rp 200rb → Landing Page/Profil Bisnis, hosting gratis (GitHub/Netlify) + subdomain gratis, domain kustom terpisah, selesai 2–3 hari kerja, 1x revisi
 - Standar: Mulai Rp 1,2jt → Toko Online, Katalog Produk, Sistem Login, selesai 3–5 hari kerja
 - Pro: Mulai Rp 3jt → Kasir Online, Dashboard Real-Time, Multi-Cabang, selesai 5–10 hari kerja
-- SEMUA paket: Demo dulu sebelum bayar, support pasca-launch termasuk
+- SEMUA paket: DP 50% di muka, sisa 50% setelah demo & Anda puas; perbaikan bug gratis 30 hari pertama
 
 KEUNGGULAN UTAMA (selalu tekankan):
-- Website bisnis siap 2–6 hari kerja
-- Harga mulai di bawah Rp 200rb, hosting+domain gratis di paket Basic
-- Demo sistem sebelum bayar — tidak puas, tidak bayar
+- Website bisnis siap 2–10 hari kerja (Basic 2–3, Standar 3–5, Pro 5–10)
+- Harga mulai Rp 200rb (paket Basic) dengan hosting gratis
+- Demo sistem sebelum pelunasan — sisa 50% dibayar setelah Anda puas
 - Support & revisi pasca-launch
 - Bisa diakses dari HP kapan saja
 
@@ -259,26 +259,26 @@ async function getAIReply(userMessage) {
 function getFallbackReply(txt) {
   const t = txt.toLowerCase();
   if (t.includes('kasir') || t.includes('pos') || t.includes('inventory'))
-    return `🛒 <strong>Sistem Kasir Online</strong> adalah layanan paling diminati kami! Cocok banget untuk warung, toko, atau bisnis multi-cabang — stok update otomatis, laporan harian, bisa diakses dari HP. Harga tergantung fitur & kerumitan sistem, estimasi mulai <strong>Rp 2–5 juta</strong>. Hosting & domain dihitung terpisah untuk paket ini. Mau konsultasi gratis dulu? 😊`;
+    return `🛒 <strong>Sistem Kasir Online</strong> adalah layanan paling diminati kami! Cocok banget untuk warung, toko, atau bisnis multi-cabang — stok update otomatis, laporan harian, bisa diakses dari HP. Harga tergantung fitur & kerumitan sistem, mulai dari <strong>Rp 3 juta</strong> (Paket Pro). Hosting & domain dihitung terpisah untuk paket ini. Mau konsultasi gratis dulu? 😊`;
   if (t.includes('toko') || t.includes('online') || t.includes('shop') || t.includes('ecommerce'))
-    return `🌐 <strong>Toko Online</strong> kami dibuat khusus untuk UMKM — tampil profesional tanpa harga selangit! Katalog produk, keranjang belanja, order via WhatsApp, semua bisa disesuaikan. Harga tergantung banyaknya fitur, mulai dari <strong>di bawah Rp 200rb</strong> untuk yang sederhana (sudah termasuk hosting & domain gratis). Produk apa yang mau Anda jual? 🎯`;
+    return `🌐 <strong>Toko Online</strong> kami dibuat khusus untuk UMKM — tampil profesional tanpa harga selangit! Katalog produk, keranjang belanja, order via WhatsApp, semua bisa disesuaikan. Toko online lengkap ada di Paket Standar mulai <strong>Rp 1,2jt</strong>; untuk halaman sederhana, Paket Basic mulai <strong>Rp 200rb</strong> (hosting gratis). Produk apa yang mau Anda jual? 🎯`;
   if (t.includes('harga') || t.includes('biaya') || t.includes('berapa') || t.includes('budget') || t.includes('murah') || t.includes('mahal') || t.includes('paket'))
-    return `💰 Kami punya 3 paket dengan harga transparan:<br><br>📌 <strong>Basic</strong>: Mulai Rp 200rb → Landing Page + Hosting & Domain Gratis (2–3 hari selesai)<br>📌 <strong>Standar</strong>: Mulai Rp 1,2jt → Toko Online + Sistem Login (3–5 hari selesai)<br>📌 <strong>Pro</strong>: Mulai Rp 3jt → Kasir + Dashboard Real-Time + Multi-Cabang (5–10 hari selesai)<br><br>Semua paket: <strong>demo dulu sebelum bayar</strong>. Mau tahu lebih detail? <a href='https://wa.me/628988995637' target='_blank'>Chat Riki sekarang →</a> 🚀`;
+    return `💰 Kami punya 3 paket dengan harga transparan:<br><br>📌 <strong>Basic</strong>: Mulai Rp 200rb → Landing Page + Hosting Gratis (2–3 hari selesai)<br>📌 <strong>Standar</strong>: Mulai Rp 1,2jt → Toko Online + Sistem Login (3–5 hari selesai)<br>📌 <strong>Pro</strong>: Mulai Rp 3jt → Kasir + Dashboard Real-Time + Multi-Cabang (5–10 hari selesai)<br><br>Semua paket: <strong>DP 50% di muka, sisa 50% setelah demo & Anda puas</strong>. Mau tahu lebih detail? <a href='https://wa.me/628988995637' target='_blank'>Chat Riki sekarang →</a> 🚀`;
   if (t.includes('hosting') || t.includes('domain'))
-    return `🌐 Soal hosting & domain, begini ketentuannya: untuk paket website <strong>di bawah Rp 200rb</strong>, hosting & domain sudah <strong>GRATIS</strong> termasuk dalam paket! Untuk proyek yang lebih kompleks dengan kebutuhan server lebih besar, hosting & domain dihitung <strong>terpisah</strong> dari harga jasa pembuatan. Mau tahu lebih lanjut? Yuk konsultasi gratis! 😊`;
+    return `🌐 Soal hosting & domain, begini ketentuannya: paket <strong>Basic</strong> sudah termasuk <strong>hosting gratis</strong> (GitHub/Netlify) dan subdomain gratis; domain kustom (.com/.id) dibeli terpisah. Untuk paket Standar dan Pro, hosting & domain dihitung <strong>terpisah</strong> dari harga jasa, dan kami bantu setup. Mau tahu lebih lanjut? Yuk konsultasi gratis! 😊`;
   if (t.includes('dashboard') || t.includes('laporan') || t.includes('analitik'))
     return `📊 <strong>Dashboard bisnis real-time</strong> bisa pantau omzet, stok, dan transaksi dari mana saja langsung dari HP Anda! Grafik live, laporan otomatis, export PDF/Excel. Harga tergantung fitur & kerumitan, estimasi mulai <strong>Rp 3–7 juta</strong> (hosting & domain terpisah). Sangat cocok untuk pemilik bisnis yang sering mobile. Bisnis Anda di bidang apa? 🏪`;
   if (t.includes('lama') || t.includes('waktu') || t.includes('kapan') || t.includes('selesai'))
-    return `⏱️ Waktu pengerjaan tergantung kompleksitas sistem. Website sederhana bisa <strong>3–5 hari kerja</strong>, toko online <strong>7–10 hari</strong>, kasir/dashboard real-time <strong>10–14 hari</strong>. Kami juga kasih demo dulu sebelum sistem diluncurkan, jadi Anda bisa lihat hasilnya sebelum bayar penuh! 🚀`;
+    return `⏱️ Waktu pengerjaan tergantung kompleksitas sistem. Landing page sederhana <strong>2–3 hari kerja</strong>, toko online <strong>3–5 hari kerja</strong>, kasir/dashboard real-time <strong>5–10 hari kerja</strong>. Ada demo sebelum launch, jadi Anda bisa lihat hasilnya sebelum pelunasan! 🚀`;
   if (t.includes('portfolio') || t.includes('portofolio') || t.includes('contoh') || t.includes('hasil'))
     return `👀 Portofolio kami bisa dilihat langsung di halaman ini — <strong>bukan sekadar screenshot, tapi website asli yang bisa dibuka!</strong> Scroll ke bagian Portofolio ya. Ada toko online, kasir, UMKM makanan & minuman, dan lainnya. Mau saya rekomendasikan yang paling mirip dengan bisnis Anda? 😊`;
   if (/halo|hai|hi|hello|selamat|pagi|siang|malam/.test(t))
-    return `Halo! Selamat datang di layanan website Riki 👋 Kami spesialis pembuatan sistem web untuk <strong>UMKM & bisnis lokal</strong> — harga mulai <strong>di bawah Rp 200rb</strong>, sudah termasuk hosting & domain gratis untuk paket dasar! Ada yang bisa saya bantu hari ini? 😊`;
+    return `Halo! Selamat datang di layanan website Riki 👋 Kami spesialis pembuatan sistem web untuk <strong>UMKM & bisnis lokal</strong> — harga mulai <strong>Rp 200rb</strong> (paket Basic, hosting gratis)! Ada yang bisa saya bantu hari ini? 😊`;
   if (t.includes('revisi') || t.includes('support') || t.includes('maintenance') || t.includes('after'))
     return `🛡️ Tenang, kami tidak tinggalkan Anda setelah selesai! Setiap proyek sudah termasuk <strong>support & revisi</strong> pasca-launch. Jika ada bug atau perlu penyesuaian, kami siap bantu. Untuk maintenance jangka panjang juga tersedia paket bulanan. Tidak perlu khawatir soal itu! 💪`;
   if (t.includes('gratis') || t.includes('free'))
-    return `🎁 Ada yang gratis nih! Untuk paket website <strong>di bawah Rp 200rb</strong>, sudah termasuk <strong>hosting & domain GRATIS</strong>. Selain itu, konsultasi awal dan demo sistem sebelum deal juga gratis! Untuk paket yang lebih kompleks, hosting & domain dihitung terpisah sesuai kebutuhan. Tertarik? 😊`;
-  return `Terima kasih sudah menghubungi kami! 🙏 Kami spesialis <strong>sistem website untuk UMKM & bisnis</strong> — harga rata-rata <strong>di bawah Rp 200rb</strong> dengan hosting & domain gratis untuk paket dasar. Harga bisa lebih tergantung fitur & kerumitan sistem. Boleh ceritakan bisnis Anda? Biar saya rekomendasikan solusi yang paling tepat 💡`;
+    return `🎁 Ada yang gratis nih! Paket <strong>Basic</strong> (mulai Rp 200rb) sudah termasuk <strong>hosting gratis</strong> dan subdomain gratis. Konsultasi awal juga gratis! Untuk paket yang lebih kompleks, hosting & domain dihitung terpisah sesuai kebutuhan. Tertarik? 😊`;
+  return `Terima kasih sudah menghubungi kami! 🙏 Kami spesialis <strong>sistem website untuk UMKM & bisnis</strong> — harga mulai <strong>Rp 200rb</strong> (paket Basic, hosting gratis). Harga bisa lebih tergantung fitur & kerumitan sistem. Boleh ceritakan bisnis Anda? Biar saya rekomendasikan solusi yang paling tepat 💡`;
 }
 
 async function processAndReply(userText) {
@@ -346,13 +346,13 @@ function sendChat() {
       if (f === 'landing') {
         minHarga = 'Rp 200rb'; maxHarga = 'Rp 500rb';
         paket = 'Paket Basic';
-        note = 'Landing page profesional dengan form order WA. Hosting & domain gratis 1 tahun. Selesai 2–3 hari kerja.';
+        note = 'Landing page profesional dengan form order WA. Hosting gratis (subdomain); domain kustom terpisah. Selesai 2–3 hari kerja.';
       } else if (f === 'toko') {
         minHarga = 'Rp 1,2jt'; maxHarga = 'Rp 2,5jt';
         paket = 'Paket Standar';
         note = 'Toko online lengkap: katalog produk, cart, checkout WA, sistem login member. Selesai 3–5 hari kerja.';
       } else if (f === 'kasir') {
-        if (c === '1') { minHarga = 'Rp 2jt'; maxHarga = 'Rp 3,5jt'; }
+        if (c === '1') { minHarga = 'Rp 3jt'; maxHarga = 'Rp 3,5jt'; }
         else if (c === '2-5') { minHarga = 'Rp 3jt'; maxHarga = 'Rp 5jt'; }
         else { minHarga = 'Rp 4jt'; maxHarga = 'Rp 7jt+'; }
         paket = 'Paket Pro';

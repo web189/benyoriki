@@ -4,7 +4,7 @@
   'use strict';
   var grid = document.getElementById('portoGrid');
   if (!grid) return;
-  var cards = Array.prototype.slice.call(grid.querySelectorAll('.pc'));
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.pj'));
   var btns = document.querySelectorAll('.pf-btn');
   var countEl = document.getElementById('portoCount');
   var dotsWrap = document.getElementById('portoDots');
@@ -20,8 +20,8 @@
     var shown = expanded ? matches : matches.slice(0, LIMIT);
     cards.forEach(function (c) {
       var show = shown.indexOf(c) > -1, was = !c.hidden;
-      c.hidden = !show; c.classList.remove('pc-in');
-      if (show && !was && animate && !reduce) { void c.offsetWidth; c.classList.add('pc-in'); }
+      c.hidden = !show; c.classList.remove('pj-in');
+      if (show && !was && animate && !reduce) { void c.offsetWidth; c.classList.add('pj-in'); }
     });
     if (countEl) countEl.textContent = shown.length;
     if (more) {
@@ -80,7 +80,7 @@
       cards.forEach(function (c) {
         var p = d.projects[c.dataset.slug]; if (!p) return;
         if (p.shot) shots++;
-        var b = c.querySelector('.pc-live');
+        var b = c.querySelector('.pj-live');
         if (p.live && b) { b.dataset.state = 'live'; b.querySelector('b').textContent = 'LIVE'; }
       });
       var el = document.getElementById('pstatShot'); if (el) el.textContent = shots;
@@ -104,9 +104,9 @@
 
   function load(card) {
     cur = card; loaded = false; stopTimer();
-    var d = card.dataset, title = card.querySelector('.pc-title').textContent;
+    var d = card.dataset, title = card.querySelector('.pj-title').textContent;
     $('pmTitle').textContent = title;
-    $('pmDesc').textContent = card.querySelector('.pc-desc').textContent;
+    $('pmDesc').textContent = card.querySelector('.pj-desc').textContent;
     $('pmHost').textContent = d.host;
     $('pmOpen').href = d.url; $('pmFbOpen').href = d.url; $('pmWa').href = d.wa;
     pm.style.setProperty('--glow', card.style.getPropertyValue('--glow'));
@@ -141,7 +141,7 @@
 
   grid.addEventListener('click', function (e) {
     var t = e.target.closest('[data-open]');
-    if (t) open(t.closest('.pc'));
+    if (t) open(t.closest('.pj'));
   });
   pm.addEventListener('click', function (e) {
     if (e.target.closest('[data-close]')) close();
