@@ -90,7 +90,7 @@
 .pm-backdrop{position:absolute;inset:0;background:rgba(3,5,10,.82)}
 .pm-box{position:relative;display:flex;flex-direction:column;width:min(1200px,100%);height:min(860px,100%);background:var(--card);border:1px solid var(--b3);border-radius:18px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.6),0 0 0 1px var(--b1);animation:pmIn .3s cubic-bezier(.16,1,.3,1)}
 @keyframes pmIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
-html.pm-lock,html.pm-lock body{overflow:hidden}
+html.pm-lock{overflow:hidden}html.pm-lock body{position:fixed;left:0;right:0;width:100%;overflow:hidden}
 .pm-head{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--card2);border-bottom:1px solid var(--b1)}
 .pm-url{flex:1;min-width:0;display:flex;align-items:center;gap:6px;font:400 .72rem var(--fm);color:var(--tx2);background:var(--b1);border-radius:99px;padding:5px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pm-url .i{width:11px;height:11px;flex:none}
@@ -140,3 +140,74 @@ html.pm-lock,html.pm-lock body{overflow:hidden}
 .porto-more-btn{padding:13px 28px;font-size:.92rem;border-radius:99px;box-shadow:0 10px 30px rgba(212,175,85,.25)}
 .porto-more-btn .i{width:16px;height:16px;transition:transform .3s}
 .porto-more-btn.open .i{transform:rotate(180deg)}
+
+/* ── MODAL PREVIEW: tampilan lebih modern + tombol tutup jelas ── */
+.pm-backdrop{background:rgba(3,5,10,.72);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.pm-box{border-radius:22px;border-color:var(--b2);box-shadow:0 40px 120px rgba(0,0,0,.65),0 0 0 1px var(--b1),0 0 80px -20px var(--glow,rgba(212,175,85,.3))}
+.pm-head{gap:12px;padding:10px 12px;background:linear-gradient(180deg,var(--card2),var(--card))}
+.pm-url{height:36px;padding:0 14px;font-size:.76rem;background:var(--bg2);border:1px solid var(--b1)}
+.pm-url .i{color:var(--green)}
+.pm-ib,.pm-seg button{width:36px;height:36px;border-radius:12px}
+.pm-seg{padding:3px;background:var(--bg2);border:1px solid var(--b1);border-radius:14px}
+.pm-seg button{width:32px;height:30px;border:0;background:transparent;border-radius:10px}
+.pm-open{height:36px;border-radius:12px;padding:0 14px}
+.pm-grab{display:none}
+
+/* tombol tutup (X): besar, kontras tinggi, area sentuh 44px */
+.pm-close{flex:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;height:44px;padding:0 16px 0 12px;border:0;border-radius:14px;background:var(--tx);color:var(--bg);font:700 .82rem var(--f);cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .2s,background .2s,box-shadow .2s;-webkit-tap-highlight-color:transparent}
+.pm-close .i{width:20px;height:20px;stroke-width:2.6;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.pm-close:hover{background:#EF4444;color:#fff;box-shadow:0 8px 24px rgba(239,68,68,.45)}
+.pm-close:hover .i{transform:rotate(90deg)}
+.pm-close:active{transform:scale(.92)}
+.pm-close:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+.pm-foot{padding:12px 16px;background:linear-gradient(0deg,var(--card2),var(--card))}
+.pm-wa{border-radius:12px;padding:10px 16px;background:#25D366;color:#06210f;border-color:transparent;box-shadow:0 8px 22px rgba(37,211,102,.28)}
+[data-theme=light] .pm-wa{color:#fff;background:#12803f}
+
+@media(max-width:719px){
+  .pm{align-items:flex-end;padding:max(10px,env(safe-area-inset-top)) 0 0}
+  .pm-box{height:100%;border-radius:24px 24px 0 0;border:1px solid var(--b2);border-bottom:0}
+  .pm-grab{display:block;flex:none;width:44px;height:5px;margin:8px auto 0;border-radius:99px;background:var(--b3);opacity:.7}
+  .pm-head{padding:8px 10px 10px;gap:8px}
+  .pm-url{height:44px;border-radius:14px}
+  .pm-open{width:44px;height:44px;border-radius:14px}
+  .pm-close{width:44px;padding:0;border-radius:50%}
+  .pm-close span{display:none}
+  .pm-foot{padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+  .pm-foot-act{gap:12px}.pm-wa{flex:1;justify-content:center}
+}
+@media(min-width:720px){.pm-close kbd{display:none}}
+
+/* ── MODAL v3: header jelas, pembatas tegas antara "chrome" & website ── */
+.pm{--pm-a:var(--gold)}
+.pm-url-tx{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+.pm-url-tx b{font:700 .84rem var(--fh);color:var(--tx);overflow:hidden;text-overflow:ellipsis}
+.pm-url-tx>span{font:400 .68rem var(--fm);color:var(--tx2);overflow:hidden;text-overflow:ellipsis}
+@media(min-width:720px){.pm-url-tx b{display:none}.pm-url-tx>span{font-size:.72rem}}
+.pm-head{position:relative;z-index:3;border-bottom:0;box-shadow:0 10px 24px -8px rgba(0,0,0,.55)}
+.pm-head::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,transparent,var(--pm-a,var(--gold)) 20%,var(--pm-a,var(--gold)) 80%,transparent)}
+.pm-foot{position:relative;z-index:3;border-top:0;box-shadow:0 -10px 24px -8px rgba(0,0,0,.55)}
+.pm-foot::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--pm-a,var(--gold)) 25%,var(--pm-a,var(--gold)) 75%,transparent);opacity:.7}
+
+@media(max-width:719px){
+  .pm-box{background:#1B2540;background:linear-gradient(180deg,var(--card2),var(--card));border-color:var(--b3)}
+  .pm-grab{width:48px;height:5px;margin:9px auto 2px;background:rgba(255,255,255,.4);opacity:1}
+  .pm-head{padding:6px 12px 13px;gap:10px;background:transparent}
+  .pm-url{height:52px;padding:0 14px;gap:10px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--b2)}
+  .pm-url .i{width:16px;height:16px;padding:6px;box-sizing:content-box;margin:-6px 0 -6px -6px;border-radius:50%;background:rgba(52,211,153,.14)}
+  .pm-open{width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid var(--b3);color:var(--gold2);box-shadow:none}
+  .pm-open .i{width:20px;height:20px}
+  .pm-close{width:52px;height:52px;border-radius:16px;background:#F3EEE0;color:#111}
+  .pm-close .i{width:22px;height:22px}
+  /* website tampil di dalam bingkai sendiri */
+  .pm-stage{padding:10px 10px 10px;background:#05070D}
+  .pm-stage iframe{border-radius:16px;box-shadow:0 0 0 1px var(--pm-a,var(--gold)),0 10px 30px rgba(0,0,0,.5)}
+  .pm-loading,.pm-fallback{inset:10px;border-radius:16px}
+  .pm-foot{padding:12px 14px calc(12px + env(safe-area-inset-bottom));gap:10px}
+  .pm-info{flex-direction:row;align-items:center;gap:8px}
+  .pm-info strong{font-size:.98rem}
+  .pm-foot-act{display:grid;grid-template-columns:auto 1fr;gap:10px}
+  .pm-link{height:46px;padding:0 14px;border-radius:14px;border:1px solid var(--b3);background:rgba(255,255,255,.04);text-decoration:none;color:var(--tx);font-size:.78rem}
+  .pm-wa{height:46px;border-radius:14px;font-size:.88rem}
+}

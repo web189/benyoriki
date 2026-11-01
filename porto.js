@@ -108,8 +108,10 @@
     $('pmTitle').textContent = title;
     $('pmDesc').textContent = card.querySelector('.pj-desc').textContent;
     $('pmHost').textContent = d.host;
+    $('pmHeadTitle').textContent = title;
     $('pmOpen').href = d.url; $('pmFbOpen').href = d.url; $('pmWa').href = d.wa;
     pm.style.setProperty('--glow', card.style.getPropertyValue('--glow'));
+    pm.style.setProperty('--pm-a', card.style.getPropertyValue('--accent') || '');
     $('pmFbPh').textContent = 'Screenshot belum tersedia';
     var img = $('pmFbImg'); img.hidden = true; img.alt = 'Screenshot website ' + title;
     img.onload = function () { img.hidden = false; }; img.onerror = function () { img.hidden = true; };
@@ -117,23 +119,54 @@
     hideFallback();
     loading.hidden = false; frame.classList.remove('ready');
     frame.title = 'Preview ' + title;
-    frame.onload = function () { if (frame.src === 'about:blank' || !cur) return; loaded = true; stopTimer(); loading.hidden = true; frame.classList.add('ready'); };
+    frame.onload = function () { if (!cur) return; loaded = true; stopTimer(); loading.hidden = true; frame.classList.add('ready'); };
+    if (!navigator.onLine) { showFallback(); } else
     timer = setTimeout(function () { if (!loaded) showFallback(); }, 10000);
-    frame.src = d.url;
+    try { frame.contentWindow.location.replace(d.url); } catch (e) { frame.src = d.url; }
     var v = visible(), i = v.indexOf(card);
     $('pmPrev').disabled = $('pmNext').disabled = v.length < 2;
   }
+  /* ── BUKA / TUTUP — posisi scroll dikunci & dipulihkan, tombol Back HP menutup preview ── */
+  var savedY = 0, pushed = false;
+  function lockScroll() {
+    savedY = window.pageYOffset || document.documentElement.scrollTop || 0;
+    document.body.style.top = (-savedY) + 'px';
+    document.documentElement.classList.add('pm-lock');
+  }
+  function unlockScroll() {
+    var de = document.documentElement;
+    de.classList.remove('pm-lock'); document.body.style.top = '';
+    de.style.scrollBehavior = 'auto';           /* matikan smooth sementara agar tidak "terbang" ke atas */
+    window.scrollTo(0, savedY);
+    requestAnimationFrame(function () { de.style.scrollBehavior = ''; });
+  }
   function open(card) {
     lastFocus = document.activeElement;
-    pm.hidden = false; document.documentElement.classList.add('pm-lock');
+    lockScroll();
+    pm.hidden = false;
     load(card);
-    pm.querySelector('.pm-open').focus({ preventScroll: true });
+    try { history.pushState({ pm: 1 }, ''); pushed = true; } catch (e) { pushed = false; }
+    pm.querySelector('.pm-close').focus({ preventScroll: true });
   }
-  function close() {
-    stopTimer(); cur = null; frame.onload = null; frame.src = 'about:blank';
-    pm.hidden = true; document.documentElement.classList.remove('pm-lock');
+  function finish() {
+    if (pm.hidden) return;
+    var card = cur;
+    stopTimer(); cur = null; frame.onload = null;
+    try { frame.contentWindow.location.replace('about:blank'); } catch (e) { frame.src = 'about:blank'; }
+    pm.hidden = true; pushed = false;
+    unlockScroll();
+    /* kembali ke kartu proyek terakhir yang dilihat (bagian "Hasil Karya Nyata") */
+    if (card) {
+      var r = card.getBoundingClientRect();
+      if (r.bottom < 60 || r.top > window.innerHeight - 60) card.scrollIntoView({ block: 'center', inline: 'center', behavior: 'auto' });
+    }
     if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
   }
+  function close() {
+    if (pushed && history.state && history.state.pm) history.back();   /* popstate -> finish() */
+    else finish();
+  }
+  window.addEventListener('popstate', finish);
   function go(dir) {
     var v = visible(); if (v.length < 2 || !cur) return;
     load(v[(v.indexOf(cur) + dir + v.length) % v.length]);
@@ -167,4 +200,16 @@
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
   });
+
+  /* geser ke bawah dari header untuk menutup (HP) */
+  (function () {
+    var head = pm.querySelector('.pm-head'), grab = pm.querySelector('.pm-grab'), y0 = null;
+    [head, grab].forEach(function (el) {
+      el.addEventListener('touchstart', function (e) { y0 = e.touches[0].clientY; }, { passive: true });
+      el.addEventListener('touchend', function (e) {
+        if (y0 !== null && e.changedTouches[0].clientY - y0 > 70) close();
+        y0 = null;
+      }, { passive: true });
+    });
+  })();
 })();

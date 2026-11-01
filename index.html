@@ -832,9 +832,10 @@
 <div class="pm" id="pm" role="dialog" aria-modal="true" aria-labelledby="pmTitle" hidden>
   <div class="pm-backdrop" data-close></div>
   <div class="pm-box">
+    <div class="pm-grab" aria-hidden="true"></div>
     <div class="pm-head">
       <span class="pm-dots"><s></s><s></s><s></s></span>
-      <span class="pm-url"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span id="pmHost"></span></span>
+      <span class="pm-url"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span class="pm-url-tx"><b id="pmHeadTitle"></b><span id="pmHost"></span></span></span>
       <div class="pm-tools">
         <div class="pm-seg" role="group" aria-label="Ukuran tampilan">
           <button type="button" data-view="desktop" class="on" aria-label="Tampilan desktop" aria-pressed="true"><svg class="i" aria-hidden="true"><use href="#i-mon"/></svg></button>
@@ -843,7 +844,7 @@
         <button type="button" id="pmPrev" class="pm-ib" aria-label="Proyek sebelumnya"><svg class="i" aria-hidden="true"><use href="#i-prev"/></svg></button>
         <button type="button" id="pmNext" class="pm-ib" aria-label="Proyek berikutnya"><svg class="i" aria-hidden="true"><use href="#i-next"/></svg></button>
         <a id="pmOpen" class="pm-open" href="#" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-ext"/></svg><span>Buka Website</span></a>
-        <button type="button" class="pm-ib" data-close aria-label="Tutup preview"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+        <button type="button" class="pm-close" data-close aria-label="Tutup preview dan kembali ke Hasil Karya Nyata"><svg class="i" aria-hidden="true" viewBox="0 0 24 24"><use href="#i-x"/></svg><span>Tutup</span></button>
       </div>
     </div>
     <div class="pm-stage" data-view="desktop">
@@ -1420,5 +1421,6 @@
 
 <script src="app.js"></script>
 <script src="porto.js" defer></script>
+<script src="pwa.js" defer></script>
 </body>
 </html>
