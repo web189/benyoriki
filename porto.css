@@ -211,3 +211,9 @@ html.pm-lock{overflow:hidden}html.pm-lock body{position:fixed;left:0;right:0;wid
   .pm-link{height:46px;padding:0 14px;border-radius:14px;border:1px solid var(--b3);background:rgba(255,255,255,.04);text-decoration:none;color:var(--tx);font-size:.78rem}
   .pm-wa{height:46px;border-radius:14px;font-size:.88rem}
 }
+
+/* HP: semua proyek dalam satu carousel — tombol "Lihat Semua" khusus PC */
+.porto-dots.many{gap:5px}
+.porto-dots.many .porto-dot{width:6px;height:6px}
+.porto-dots.many .porto-dot.active{width:18px}
+@media(max-width:719px){.porto-more{display:none!important}}

@@ -11,13 +11,17 @@
   var hint = document.getElementById('portoSwipeHint');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* ── FILTER + "LIHAT SEMUA" (awal: 6 kartu = 2 baris x 3) ── */
+  /* ── FILTER + "LIHAT SEMUA" ──
+     PC (>=720px): awal 6 kartu, sisanya lewat tombol "Lihat Semua".
+     HP (<720px): semua kartu langsung ada di carousel, tinggal digeser sampai habis — tanpa tombol. */
   var LIMIT = 6, filter = 'all', expanded = false, firstRender = true;
+  var desktopMQ = window.matchMedia('(min-width: 720px)');
   var more = document.getElementById('portoMore'), moreBtn = document.getElementById('portoMoreBtn'), moreTx = document.getElementById('portoMoreTx');
   function visible() { return cards.filter(function (c) { return !c.hidden; }); }
   function render(animate) {
     var matches = cards.filter(function (c) { return filter === 'all' || c.dataset.cat === filter; });
-    var shown = expanded ? matches : matches.slice(0, LIMIT);
+    var isDesktop = desktopMQ.matches;
+    var shown = (expanded || !isDesktop) ? matches : matches.slice(0, LIMIT);
     cards.forEach(function (c) {
       var show = shown.indexOf(c) > -1, was = !c.hidden;
       c.hidden = !show; c.classList.remove('pj-in');
@@ -25,7 +29,7 @@
     });
     if (countEl) countEl.textContent = shown.length;
     if (more) {
-      more.hidden = matches.length <= LIMIT;
+      more.hidden = !isDesktop || matches.length <= LIMIT;
       moreBtn.setAttribute('aria-expanded', expanded);
       moreTx.textContent = expanded ? 'Tampilkan Lebih Sedikit' : 'Lihat Semua ' + matches.length + ' Proyek';
       moreBtn.classList.toggle('open', expanded);
@@ -33,6 +37,9 @@
     grid.scrollLeft = 0;
     buildDots();
   }
+  /* pindah ukuran layar (rotasi HP / resize jendela) -> susun ulang tampilan */
+  var onMQ = function () { expanded = false; render(false); };
+  if (desktopMQ.addEventListener) desktopMQ.addEventListener('change', onMQ); else if (desktopMQ.addListener) desktopMQ.addListener(onMQ);
   btns.forEach(function (b) {
     b.addEventListener('click', function () {
       btns.forEach(function (x) { x.classList.remove('active'); x.setAttribute('aria-pressed', 'false'); });
@@ -50,6 +57,7 @@
   function buildDots() {
     if (!dotsWrap) return;
     dotsWrap.textContent = '';
+    dotsWrap.classList.toggle('many', visible().length > 8);   /* titik lebih kecil kalau proyek banyak */
     visible().forEach(function (c, i) {
       var d = document.createElement('button');
       d.type = 'button'; d.className = 'porto-dot' + (i === 0 ? ' active' : '');

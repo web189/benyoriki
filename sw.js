@@ -1,11 +1,12 @@
 /* Service Worker benyoriki.com — akses offline + update otomatis.
    Ubah VERSION setiap kali ada rilis besar agar semua pengunjung otomatis memperbarui tampilan. */
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.1.0';
+const NET_TIMEOUT = 4500;   /* sinyal lemah: lewat batas ini, pakai versi tersimpan dulu */
 const CORE = 'by-core-' + VERSION;
 const RUNTIME = 'by-runtime';
 const PRECACHE = [
   '/', '/index.html', '/style.css', '/porto.css', '/polish.css', '/app.js', '/porto.js', '/pwa.js',
-  '/manifest.json', '/favicon.ico', '/favicon.png', '/icon-192.png', '/icon-512.png', '/apple-touch-icon.png',
+  '/manifest.json', '/favicon.ico', '/favicon.png', '/icon-192.png', '/icon-512.png', '/icon-maskable-192.png', '/icon-maskable-512.png', '/apple-touch-icon.png', '/favicon-32.png', '/favicon-48.png',
   '/img/hero/hp-store.webp', '/img/hero/pc-sambal.webp',
   '/img/testi1.jpg', '/img/testi2.jpg', '/img/testi3.jpg',
   '/img/porto/status.json'
@@ -33,15 +34,20 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('message', e => { if (e.data === 'SKIP_WAITING') self.skipWaiting(); });
 
-/* network-first: selalu ambil versi terbaru kalau online, cadangan dari cache kalau offline */
+/* network-first: ambil versi terbaru kalau online; kalau offline ATAU sinyal sangat lemah -> pakai cadangan dari cache */
 async function networkFirst(req, fallbackUrl, preload) {
   const cache = await caches.open(CORE);
-  try {
+  const net = (async () => {
     const res = (preload && await preload) || await fetch(req);
     if (res && res.ok) cache.put(req, res.clone());
     return res;
+  })();
+  net.catch(() => {});                                   /* cegah unhandled rejection saat kalah balapan */
+  const backup = async () => (await cache.match(req, { ignoreSearch: true })) || (fallbackUrl && await cache.match(fallbackUrl));
+  try {
+    return await Promise.race([net, new Promise((_, rej) => setTimeout(() => rej(new Error('slow')), NET_TIMEOUT))]);
   } catch (err) {
-    return (await cache.match(req, { ignoreSearch: true })) || (fallbackUrl && await cache.match(fallbackUrl)) || Response.error();
+    return (await backup()) || net.catch(() => Response.error());
   }
 }
 /* stale-while-revalidate: cepat dari cache, diam-diam diperbarui di belakang */
